@@ -10,10 +10,10 @@ import {createPostDetailsTemplate} from "./view/post-details.js";
 import {createPostsListContainerTemplate} from "./view/posts-list-container.js";
 import {generatePost} from "./mock/post.js";
 
-const NUM_OF_POSTS = 5;
+const POST_COUNT_PER_STEP = 5;
+const POSTS_COUNT = 20;
 const NUM_OF_EXTRA_POSTS = 2;
-const posts = new Array(11).fill().map(() => generatePost());
-console.log(posts);
+const posts = new Array(POSTS_COUNT).fill().map(() => generatePost());
 
 const body = document.querySelector(`body`);
 const header = body.querySelector(`header`);
@@ -31,15 +31,29 @@ render(postsContainer, createPostsListContainerTemplate(``,`visually-hidden`, 'A
 render(postsContainer, createPostsListContainerTemplate(`films-list--extra`, '', 'Top rated'));
 render(postsContainer, createPostsListContainerTemplate(`films-list--extra`, '', 'Most commented'));
 
-for (let i = 1 ; i< NUM_OF_POSTS; i++) {
+for (let i = 1 ; i < POST_COUNT_PER_STEP + 1; i++) {
   render(postsContainer.firstElementChild.lastElementChild, createPostTemplate(posts[i]));
 }
 
-render(postsContainer.firstElementChild, buttonTemplate);
+if (posts.length > POST_COUNT_PER_STEP) {
+  let renderedPostsCount = POST_COUNT_PER_STEP;
+  render(postsContainer.firstElementChild, buttonTemplate);
+
+  postsContainer.addEventListener(`click`, (event) => {
+    if (event.target.classList.contains(`films-list__show-more`)) {
+      posts
+        .slice(renderedPostsCount, renderedPostsCount + POST_COUNT_PER_STEP)
+        .forEach((post) => render(postsContainer.children[0].children[1], createPostTemplate(post)));
+        renderedPostsCount += POST_COUNT_PER_STEP;
+    };
+    if (renderedPostsCount >= posts.length) event.target.remove();
+  });
+};
+
 for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
   render(postsContainer.children[1].lastElementChild, createPostTemplate(posts[i]));
   render(postsContainer.children[2].lastElementChild, createPostTemplate(posts[i]));
 }
 render (footerStats, footerStatsTemplate)
 
-render(body, createPostDetailsTemplate(posts[0]));
+//render(body, createPostDetailsTemplate(posts[0]));

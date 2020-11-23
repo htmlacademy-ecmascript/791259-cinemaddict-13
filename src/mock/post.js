@@ -31,7 +31,7 @@ export const generatePost = () => {
     text: generateDescription(),
     emotion: generateRandomItem(emotions),
     author: `author`,
-    date: `date`,
+    date: `2019/12/31 23:59`,
     };
   };
 
@@ -50,6 +50,7 @@ export const generatePost = () => {
     duration: generateRandomItem(durations),
     genre: genres.slice(getRandomIntInclusive(0, genres.length - 1)).join(`, `),
   	description: generateDescription(),
+    ageRestriction: `18+`,
   	comments: comments,
   }
 };
