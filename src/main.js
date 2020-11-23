@@ -30,9 +30,12 @@ const postsContainer = main.querySelector(`.films`);
 render(postsContainer, createPostsListContainerTemplate(``,`visually-hidden`, 'All movies. Upcoming'));
 render(postsContainer, createPostsListContainerTemplate(`films-list--extra`, '', 'Top rated'));
 render(postsContainer, createPostsListContainerTemplate(`films-list--extra`, '', 'Most commented'));
+const postsContainerMain = postsContainer.querySelector(`.films-list:nth-of-type(1) .films-list__container`);
+const postsContainerTopRated = postsContainer.querySelector(`.films-list:nth-of-type(2) .films-list__container`);
+const postsContainerMostCommented = postsContainer.querySelector(`.films-list:nth-of-type(3) .films-list__container`);
 
 for (let i = 1 ; i < POST_COUNT_PER_STEP + 1; i++) {
-  render(postsContainer.firstElementChild.lastElementChild, createPostTemplate(posts[i]));
+  render(postsContainerMain, createPostTemplate(posts[i]));
 }
 
 if (posts.length > POST_COUNT_PER_STEP) {
@@ -43,7 +46,7 @@ if (posts.length > POST_COUNT_PER_STEP) {
     if (event.target.classList.contains(`films-list__show-more`)) {
       posts
         .slice(renderedPostsCount, renderedPostsCount + POST_COUNT_PER_STEP)
-        .forEach((post) => render(postsContainer.children[0].children[1], createPostTemplate(post)));
+        .forEach((post) => render(postsContainerMain, createPostTemplate(post)));
         renderedPostsCount += POST_COUNT_PER_STEP;
     };
     if (renderedPostsCount >= posts.length) event.target.remove();
@@ -51,8 +54,8 @@ if (posts.length > POST_COUNT_PER_STEP) {
 };
 
 for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
-  render(postsContainer.children[1].lastElementChild, createPostTemplate(posts[i]));
-  render(postsContainer.children[2].lastElementChild, createPostTemplate(posts[i]));
+  render(postsContainerTopRated, createPostTemplate(posts[i]));
+  render(postsContainerMostCommented, createPostTemplate(posts[i]));
 }
 render (footerStats, footerStatsTemplate)
 

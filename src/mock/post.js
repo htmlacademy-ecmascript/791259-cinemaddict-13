@@ -35,7 +35,7 @@ export const generatePost = () => {
     };
   };
 
-  const comments = new Array(getRandomIntInclusive(1, 5)).fill().map(() => generateComment());
+  const comments = new Array(getRandomIntInclusive(0, 5)).fill().map(() => generateComment());
 
   return {
   	poster: generateRandomItem(posterTitles),
