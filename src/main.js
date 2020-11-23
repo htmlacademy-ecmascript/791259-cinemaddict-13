@@ -6,7 +6,7 @@ import {createPostTemplate} from "./view/post.js";
 import {buttonTemplate} from "./view/button.js";
 import {extraTemplate} from "./view/extra.js";
 import {footerStatsTemplate} from "./view/footer-stats.js";
-import {postDetailsTemplate} from "./view/post-details.js";
+import {createPostDetailsTemplate} from "./view/post-details.js";
 import {createPostsListContainerTemplate} from "./view/posts-list-container.js";
 import {generatePost} from "./mock/post.js";
 
@@ -31,7 +31,7 @@ render(postsContainer, createPostsListContainerTemplate(``,`visually-hidden`, 'A
 render(postsContainer, createPostsListContainerTemplate(`films-list--extra`, '', 'Top rated'));
 render(postsContainer, createPostsListContainerTemplate(`films-list--extra`, '', 'Most commented'));
 
-for (let i = 0 ; i< NUM_OF_POSTS; i++) {
+for (let i = 1 ; i< NUM_OF_POSTS; i++) {
   render(postsContainer.firstElementChild.lastElementChild, createPostTemplate(posts[i]));
 }
 
@@ -42,4 +42,4 @@ for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
 }
 render (footerStats, footerStatsTemplate)
 
-//render(body, postDetailsTemplate);
+render(body, createPostDetailsTemplate(posts[0]));

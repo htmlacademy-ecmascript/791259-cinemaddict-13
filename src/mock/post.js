@@ -43,13 +43,13 @@ export const generatePost = () => {
     originalTitle: generateRandomItem(titles),
     rating: generateRandomItem(ratings),
     director: `Anthony Mann`,
-    writers: [`Anne Wigton, Heinz Herald`, `Richard Weil`],
-    actors: [`Erich von Stroheim`, `Mary Beth Hughes`, `Dan Duryea`],
+    writers: [`Anne Wigton, Heinz Herald`, `Richard Weil`].join(`, `),
+    actors: [`Erich von Stroheim`, `Mary Beth Hughes`, `Dan Duryea`].join(`, `),
     country: `USA`,
     productionDate: generateRandomItem(productionDates),
     duration: generateRandomItem(durations),
     genre: genres.slice(getRandomIntInclusive(0, genres.length - 1)).join(`, `),
   	description: generateDescription(),
-  	comments: comments.length,
+  	comments: comments,
   }
 };
