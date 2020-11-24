@@ -11,6 +11,10 @@ export const createPostTemplate = (post) => {
   ? `film-card__controls-item--active`
   : ``;
 
+  let shortDescription = description;
+  if (shortDescription.length > 140) shortDescription = shortDescription.slice(0, 139) + `...` ;
+
+
   return `<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
           <p class="film-card__rating">${rating}</p>
@@ -20,7 +24,7 @@ export const createPostTemplate = (post) => {
             <span class="film-card__genre">${genre}</span>
           </p>
           <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-          <p class="film-card__description">${description}</p>
+          <p class="film-card__description">${shortDescription}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <div class="film-card__controls">
             <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${addToWatchlistClassName}" type="button">Add to watchlist</button>

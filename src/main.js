@@ -1,5 +1,5 @@
 import {userTemplate} from "./view/user.js";
-import {menuTemplate} from "./view/menu.js";
+import {createMenuTemplate} from "./view/menu.js";
 import {sortTemplate} from "./view/sort.js"
 import {postsContainerTemplate} from "./view/posts-container.js"
 import {createPostTemplate} from "./view/post.js";
@@ -23,7 +23,7 @@ const footerStats = body.querySelector(`.footer__statistics`);
 const render = (element, template, place = `beforeend`) => element.insertAdjacentHTML(place, template);
 
 render(header, userTemplate);
-render(main, menuTemplate);
+render(main, createMenuTemplate(posts));
 render(main, sortTemplate);
 render(main, postsContainerTemplate);
 const postsContainer = main.querySelector(`.films`);
@@ -59,4 +59,4 @@ for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
 }
 render (footerStats, footerStatsTemplate)
 
-//render(body, createPostDetailsTemplate(posts[0]));
+render(body, createPostDetailsTemplate(posts[0]));
