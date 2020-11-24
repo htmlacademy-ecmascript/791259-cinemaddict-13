@@ -52,5 +52,8 @@ export const generatePost = () => {
   	description: generateDescription(),
     ageRestriction: `18+`,
   	comments: comments,
+    isAddedtoWatchList: Boolean(getRandomIntInclusive(0,1)),
+    isWatched: Boolean(getRandomIntInclusive(0,1)),
+    isFavorite: Boolean(getRandomIntInclusive(0,1)),
   }
 };
