@@ -1,5 +1,13 @@
 export const createPostDetailsTemplate = (post) => {
-const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genre, poster, ageRestriction, description, comments} = post;
+  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments} = post;
+
+  let genresForm;
+  genres.length > 1 ? genresForm = `Genres` : genresForm =`Genre`;
+
+  const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
+  const genreList = genres.map((item) => createGenresTemplate(item)).join(``);
+
+
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -51,11 +59,8 @@ const {title, originalTitle, country, rating, director, writers, actors, product
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
-              <td class="film-details__cell">
-                <span class="film-details__genre">Drama</span>
-                <span class="film-details__genre">Film-Noir</span>
-                <span class="film-details__genre">Mystery</span></td>
+              <td class="film-details__term">${genresForm}</td>
+              <td class="film-details__cell">${genreList}</td>
             </tr>
           </table>
 

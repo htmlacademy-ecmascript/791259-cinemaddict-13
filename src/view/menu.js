@@ -1,8 +1,8 @@
 export const createMenuTemplate = (posts) => {
 
-  const countIsWatched = posts.filter(item => item.isWatched).length;
-  const countIsAddedtoWatchList = posts.filter(item => item.isAddedtoWatchList).length;
-  const countIsFavorite = posts.filter(item => item.isFavorite).length;
+  const countIsWatched = posts.filter((item) => item.isWatched).length;
+  const countIsAddedtoWatchList = posts.filter((item) => item.isAddedtoWatchList).length;
+  const countIsFavorite = posts.filter((item) => item.isFavorite).length;
 
   return `
   <nav class="main-navigation">

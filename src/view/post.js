@@ -1,20 +1,22 @@
 import dayjs from "dayjs";
 export const createPostTemplate = (post) => {
-  const {title, rating, productionDate, duration, genre,poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
+  const {title, rating, productionDate, duration, genres, poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
   const productionYear = dayjs(productionDate).format(`YYYY`);
+
+  const genreList = genres.join(`, `);
 
   const favoriteClassName = isFavorite
     ? `film-card__controls-item--active`
     : ``;
   const addToWatchlistClassName = isAddedtoWatchList
-  ? `film-card__controls-item--active`
-  : ``;
+    ? `film-card__controls-item--active`
+    : ``;
   const markAswatchedClassName = isWatched
-  ? `film-card__controls-item--active`
-  : ``;
+    ? `film-card__controls-item--active`
+    : ``;
 
   let shortDescription = description;
-  if (shortDescription.length > 140) shortDescription = shortDescription.slice(0, 139) + `...` ;
+  if (shortDescription.length > 140) {shortDescription = shortDescription.slice(0, 139) + `...`};
 
   return `<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
@@ -22,7 +24,7 @@ export const createPostTemplate = (post) => {
           <p class="film-card__info">
             <span class="film-card__year">${productionYear}</span>
             <span class="film-card__duration">${duration}</span>
-            <span class="film-card__genre">${genre}</span>
+            <span class="film-card__genre">${genreList}</span>
           </p>
           <img src="./images/posters/${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${shortDescription}</p>
