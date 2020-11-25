@@ -9,17 +9,16 @@ import {footerStatsTemplate} from "./view/footer-stats.js";
 import {createPostDetailsTemplate} from "./view/post-details.js";
 import {createPostsListContainerTemplate} from "./view/posts-list-container.js";
 import {generatePost} from "./mock/post.js";
+import {createPostComment} from "./view/comment.js";
 
 const POST_COUNT_PER_STEP = 5;
 const POSTS_COUNT = 20;
 const NUM_OF_EXTRA_POSTS = 2;
 const posts = new Array(POSTS_COUNT).fill().map(() => generatePost());
-
 const body = document.querySelector(`body`);
 const header = body.querySelector(`header`);
 const main = body.querySelector(`main`);
 const footerStats = body.querySelector(`.footer__statistics`);
-
 const render = (element, template, place = `beforeend`) => element.insertAdjacentHTML(place, template);
 
 render(header, userTemplate);
@@ -60,3 +59,8 @@ for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
 render (footerStats, footerStatsTemplate)
 
 render(body, createPostDetailsTemplate(posts[0]));
+const commentContaier = body.querySelector(`.film-details__comments-list`);
+
+for (let comment of posts[0].comments) {
+  render(commentContaier, createPostComment(comment));
+}

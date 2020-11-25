@@ -1,5 +1,7 @@
+import dayjs from "dayjs";
 export const createPostTemplate = (post) => {
   const {title, rating, productionDate, duration, genre,poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
+  const productionYear = dayjs(productionDate).format(`YYYY`);
 
   const favoriteClassName = isFavorite
     ? `film-card__controls-item--active`
@@ -14,12 +16,11 @@ export const createPostTemplate = (post) => {
   let shortDescription = description;
   if (shortDescription.length > 140) shortDescription = shortDescription.slice(0, 139) + `...` ;
 
-
   return `<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
-            <span class="film-card__year">${productionDate}</span>
+            <span class="film-card__year">${productionYear}</span>
             <span class="film-card__duration">${duration}</span>
             <span class="film-card__genre">${genre}</span>
           </p>
@@ -31,4 +32,5 @@ export const createPostTemplate = (post) => {
             <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${markAswatchedClassName}" type="button">Mark as watched</button>
             <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassName}" type="button">Mark as favorite</button>
           </div>
-        </article>`};
+        </article>`;
+};
