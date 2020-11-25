@@ -2,7 +2,7 @@ export const createPostDetailsTemplate = (post) => {
   const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments} = post;
 
   let genresForm;
-  genres.length > 1 ? genresForm = `Genres` : genresForm =`Genre`;
+  (genres.length > 1) ? genresForm = `Genres` : genresForm = `Genre`;
 
   const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
   const genreList = genres.map((item) => createGenresTemplate(item)).join(``);
