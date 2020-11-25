@@ -23,7 +23,7 @@ export const generatePost = () => {
       emotion: generateRandomItem([`smile`, `sleeping`, `puke`, `angry`]),
       author: generateRandomItem([`Tim Macoveev`, `John Doe`, `Andre Right`, `Greg Malkovich`]),
       date: dayjs(generateRandomDate(new Date(2012, 0, 1), new Date())).format(`YYYY/MM/DD h:mm`),
-    }
+    };
   };
 
   const comments = new Array(getRandomIntInclusive(0, 5)).fill().map(() => generateComment());

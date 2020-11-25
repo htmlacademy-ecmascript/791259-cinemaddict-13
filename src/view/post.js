@@ -16,7 +16,9 @@ export const createPostTemplate = (post) => {
     : ``;
 
   let shortDescription = description;
-  if (shortDescription.length > 140) {shortDescription = shortDescription.slice(0, 139) + `...`};
+  if (shortDescription.length > 140) {
+    shortDescription = shortDescription.slice(0, 139) + `...`;
+  }
 
   return `<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
