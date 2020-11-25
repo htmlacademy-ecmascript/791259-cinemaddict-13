@@ -4,13 +4,12 @@ export const createPostDetailsTemplate = (post) => {
   let genresForm;
   if (genres.length > 1) {
     genresForm = `Genres`;
-  else {
+  } else {
     genresForm = `Genre`;
   }
 
   const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
   const genreList = genres.map((item) => createGenresTemplate(item)).join(``);
-
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
