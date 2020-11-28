@@ -1,5 +1,4 @@
-import dayjs from "dayjs";
-import {generateRandomItem, getRandomIntInclusive, generateRandomDate, generateDescription} from "../utils.js";
+import {generateRandomItem, getRandomIntInclusive, generateDescription} from "../utils.js";
 
 const titles = [`The Dance of Life`, `Sagebrush Trail`, `The Man with the Golden Arm`, `Santa Claus Conquers the Martians`, `Popeye the Sailor Meets Sindbad the Sailor`, `The Great Flamarion`];
 
@@ -12,9 +11,9 @@ const generateCommentsIds = () => {
   for (let i = 0; i < NUM_OF_COMMENTS; i++) {
     commentsIds.push(i);
   }
-   commentsIds.splice(getRandomIntInclusive(0, NUM_OF_COMMENTS), getRandomIntInclusive(0, NUM_OF_COMMENTS));
-   return commentsIds;
-}
+    commentsIds.splice(getRandomIntInclusive(0, NUM_OF_COMMENTS), getRandomIntInclusive(0, NUM_OF_COMMENTS));
+    return commentsIds;
+};
 
 export const generatePost = () => {
 

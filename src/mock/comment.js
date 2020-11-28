@@ -1,4 +1,4 @@
-import {generateRandomItem, getRandomIntInclusive, generateRandomDate, generateDescription} from "../utils.js";
+import {generateRandomItem, generateRandomDate, generateDescription} from "../utils.js";
 import dayjs from "dayjs";
 
 export const generateComment = (index) => {
