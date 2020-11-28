@@ -11,8 +11,8 @@ const generateCommentsIds = () => {
   for (let i = 0; i < NUM_OF_COMMENTS; i++) {
     commentsIds.push(i);
   }
-    commentsIds.splice(getRandomIntInclusive(0, NUM_OF_COMMENTS), getRandomIntInclusive(0, NUM_OF_COMMENTS));
-    return commentsIds;
+  commentsIds.splice(getRandomIntInclusive(0, NUM_OF_COMMENTS), getRandomIntInclusive(0, NUM_OF_COMMENTS));
+  return commentsIds;
 };
 
 export const generatePost = () => {
