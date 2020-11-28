@@ -1,5 +1,5 @@
 import {userTemplate} from "./view/user.js";
-import {createMenuTemplate} from "./view/menu.js";
+import {createFilterTemplate} from "./view/filter.js";
 import {sortTemplate} from "./view/sort.js"
 import {postsContainerTemplate} from "./view/posts-container.js"
 import {createPostTemplate} from "./view/post.js";
@@ -9,20 +9,23 @@ import {footerStatsTemplate} from "./view/footer-stats.js";
 import {createPostDetailsTemplate} from "./view/post-details.js";
 import {createPostsListContainerTemplate} from "./view/posts-list-container.js";
 import {generatePost} from "./mock/post.js";
+import {generateComment} from "./mock/comment.js";
 import {createPostComment} from "./view/comment.js";
+import {generateFilter} from "./mock/filter.js";
 
 const POST_COUNT_PER_STEP = 5;
 const POSTS_COUNT = 20;
 const NUM_OF_EXTRA_POSTS = 2;
 const posts = new Array(POSTS_COUNT).fill().map(() => generatePost());
+const filters = generateFilter(posts);
 const body = document.querySelector(`body`);
 const header = body.querySelector(`header`);
 const main = body.querySelector(`main`);
 const footerStats = body.querySelector(`.footer__statistics`);
 const render = (element, template, place = `beforeend`) => element.insertAdjacentHTML(place, template);
-
+const comments = new Array(5).fill().map((item, index) => generateComment(index));
 render(header, userTemplate);
-render(main, createMenuTemplate(posts));
+render(main, createFilterTemplate(filters));
 render(main, sortTemplate);
 render(main, postsContainerTemplate);
 const postsContainer = main.querySelector(`.films`);
@@ -61,6 +64,8 @@ render (footerStats, footerStatsTemplate)
 render(body, createPostDetailsTemplate(posts[0]));
 const commentContaier = body.querySelector(`.film-details__comments-list`);
 
-for (let comment of posts[0].comments) {
-  render(commentContaier, createPostComment(comment));
+for (let commentId of posts[0].comments) {
+  for(let comment of comments) {
+    if (commentId == comment.id) render(commentContaier, createPostComment(comment));
+  }
 }
