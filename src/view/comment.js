@@ -1,7 +1,8 @@
-export const createPostComment = (comment) => {
+import {createElement} from "../utils.js";
+
+const createPostComment = (comment) => {
   const {text, emotion, author, date} = comment;
-  return `
-  <li class="film-details__comment">
+  return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
     </span>
@@ -15,3 +16,26 @@ export const createPostComment = (comment) => {
     </div>
   </li>`;
 };
+
+export class CommentView {
+  constructor(comment) {
+    this._element = null;
+    this._comment = comment;
+  }
+
+  getTemplate() {
+    return createPostComment(this._comment);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
-export const createPostTemplate = (post) => {
+import {createElement} from "../utils.js";
+
+const createPostTemplate = (post) => {
   const {title, rating, productionDate, duration, genres, poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
   const productionYear = dayjs(productionDate).format(`YYYY`);
 
@@ -38,3 +40,26 @@ export const createPostTemplate = (post) => {
           </div>
         </article>`;
 };
+
+export class PostView {
+  constructor(post) {
+    this._element = null;
+    this._post = post;
+  }
+
+  getTemplate() {
+    return createPostTemplate(this._post);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
