@@ -25,32 +25,76 @@ const footerStats = body.querySelector(`.footer__statistics`);
 const comments = new Array(5).fill().map((item, index) => generateComment(index));
 const postsContainerComponent = new PostsContainerView();
 render(header, new UserView().getElement());
-render(main, new FilterView().getElement());
+render(main, new FilterView(filters).getElement());
 render(main, new SortView().getElement());
 render(main, postsContainerComponent.getElement());
-const postsContainer = main.querySelector(`.films`);
 render(postsContainerComponent.getElement(), new PostListContainerView(``,`visually-hidden`, 'All movies. Upcoming').getElement());
 render(postsContainerComponent.getElement(), new PostListContainerView(`films-list--extra`, '', 'Top rated').getElement());
 render(postsContainerComponent.getElement(), new PostListContainerView(`films-list--extra`, '', 'Most commented').getElement());
-const postsContainerMain = postsContainer.querySelector(`.films-list:nth-of-type(1) .films-list__container`);
-const postsContainerTopRated = postsContainer.querySelector(`.films-list:nth-of-type(2) .films-list__container`);
-const postsContainerMostCommented = postsContainer.querySelector(`.films-list:nth-of-type(3) .films-list__container`);
+const postsContainerMain = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(1) .films-list__container`);
+const postsContainerTopRated = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(2) .films-list__container`);
+const postsContainerMostCommented = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(3) .films-list__container`);
 
-for (let i = 1 ; i < POST_COUNT_PER_STEP + 1; i++) {
-  render(postsContainerMain, new PostView(posts[i]).getElement());
+const renderPost = (postListContainer, post) => {
+  const postComponent = new PostView(post);
+  const postDetailsComponent = new PostDetailsView(post);
+
+  const showPostDetails = (postListContainer = body) => {
+
+    render(postListContainer, postDetailsComponent.getElement());
+
+    for (let commentId of postDetailsComponent._post.comments) {
+      for(let comment of comments) {
+        if (commentId == comment.id) render(postDetailsComponent.getElement().querySelector(`.film-details__comments-list`), new CommentView(comment).getElement());
+      }
+    }
+  };
+
+  const returnToPost = (postListContainer = body) => {
+    postDetailsComponent.getElement().remove();
+    postDetailsComponent.removeElement();
+  };
+
+  const onEscKeyDown = (evt) => {
+     if (evt.key === `Escape` || evt.key === `Esc`) {
+       evt.preventDefault();
+       returnToPost();
+       document.removeEventListener(`keydown`, onEscKeyDown);
+     }
+   };
+
+  const postClickableItems = [`film-card__poster`, `film-card__title`, `film-card__comments`];
+
+  postComponent.getElement().addEventListener(`click`, (event) => {
+    for (let item of postClickableItems) {
+      if (event.target.classList.contains(item)) {
+        showPostDetails();
+        document.addEventListener(`keydown`, onEscKeyDown);
+      }
+    }
+  });
+
+  postDetailsComponent.getElement().querySelector(`.film-details__close`).addEventListener(`click`, () => {
+    returnToPost();
+  });
+
+  render(postListContainer, postComponent.getElement());
+};
+
+for (let i = 0 ; i < POST_COUNT_PER_STEP; i++) {
+  renderPost(postsContainerMain, posts[i]);
 }
 
 if (posts.length > POST_COUNT_PER_STEP) {
   let renderedPostsCount = POST_COUNT_PER_STEP;
 
+  render(postsContainerComponent.getElement().firstElementChild, new LoadMoreButtonView().getElement());
 
-render(postsContainer.firstElementChild, new LoadMoreButtonView().getElement());
-
-  postsContainer.addEventListener(`click`, (event) => {
+  postsContainerComponent.getElement().addEventListener(`click`, (event) => {
     if (event.target.classList.contains(`films-list__show-more`)) {
       posts
         .slice(renderedPostsCount, renderedPostsCount + POST_COUNT_PER_STEP)
-        .forEach((post) => render(postsContainerMain, new PostView(post).getElement()));
+        .forEach((post) => renderPost(postsContainerMain, post));
         renderedPostsCount += POST_COUNT_PER_STEP;
     };
     if (renderedPostsCount >= posts.length) {
@@ -62,16 +106,7 @@ render(postsContainer.firstElementChild, new LoadMoreButtonView().getElement());
 };
 
 for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
-  render(postsContainerTopRated, new PostView(posts[i]).getElement());
-  render(postsContainerMostCommented, new PostView(posts[i]).getElement());
+  renderPost(postsContainerTopRated, posts[i]);
+  renderPost(postsContainerMostCommented, posts[i]);
 }
 render(footerStats, new FooterStatsView().getElement());
-
-/*render(body, new PostDetailsView(posts[0]).getElement());
-const commentContaier = body.querySelector(`.film-details__comments-list`);
-
-for (let commentId of posts[0].comments) {
-  for(let comment of comments) {
-    if (commentId == comment.id) render(commentContaier, new CommentView(comment).getElement());
-  }
-}*/
