@@ -40,7 +40,7 @@ const renderPost = (postListContainer, post) => {
   const postDetailsComponent = new PostDetailsView(post);
 
   const showPostDetails = (postListContainer = body) => {
-
+    postListContainer.classList.add(`hide-overflow`);
     render(postListContainer, postDetailsComponent.getElement());
 
     for (let commentId of postDetailsComponent._post.comments) {
@@ -51,6 +51,7 @@ const renderPost = (postListContainer, post) => {
   };
 
   const returnToPost = (postListContainer = body) => {
+    postListContainer.classList.remove(`hide-overflow`);
     postDetailsComponent.getElement().remove();
     postDetailsComponent.removeElement();
   };
