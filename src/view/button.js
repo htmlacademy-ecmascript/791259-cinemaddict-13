@@ -1,5 +1,5 @@
 import {createElement} from "../utils.js";
-const createLoadMoreButtonTemplate = () =>  `<button class="films-list__show-more">Show more</button>`;
+const createLoadMoreButtonTemplate = () => `<button class="films-list__show-more">Show more</button>`;
 
 export class LoadMoreButtonView {
   constructor() {
