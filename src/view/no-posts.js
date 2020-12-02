@@ -6,14 +6,14 @@ const createNoPostsTemplate = () =>
     </section>`;
 
 export class NoPostsView {
-  constructor () {
+  constructor() {
     this._element = null;
   }
-  getTemplate () {
+  getTemplate() {
     return createNoPostsTemplate();
   }
   getElement() {
-    if(!this._element) {
+    if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
     return this._element;
