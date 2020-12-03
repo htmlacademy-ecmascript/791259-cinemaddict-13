@@ -1,25 +1,23 @@
 import {createElement} from "../utils.js";
 
-const createFooterStatsTemplate = (count) => `<p>${count} movies inside</p>`;
+const createNoPostsTemplate = () =>
+  `<section class="films-list">
+    <h2 class="films-list__title">There are no movies in our database</h2>
+    </section>`;
 
-export class FooterStatsView {
-  constructor(count) {
+export class NoPostsView {
+  constructor() {
     this._element = null;
-    this._count = count;
   }
-
   getTemplate() {
-    return createFooterStatsTemplate(this._count);
+    return createNoPostsTemplate();
   }
-
   getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
-
     return this._element;
   }
-
   removeElement() {
     this._element = null;
   }
