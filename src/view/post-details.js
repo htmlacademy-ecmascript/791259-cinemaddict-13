@@ -1,4 +1,4 @@
-import {figureCorrectPluralForm} from "../utils.js";
+import {figureCorrectPluralForm} from "../utils/common.js";
 import {AbstractView} from "./abstract.js";
 
 const createPostDetailsTemplate = (post) => {
@@ -125,9 +125,20 @@ export class PostDetailsView extends AbstractView {
   constructor(post) {
     super();
     this._post = post;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createPostDetailsTemplate(this._post);
+  }
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click(evt);
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-details__close`).addEventListener(`click`, this._clickHandler);
   }
 }

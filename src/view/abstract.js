@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import {createElement} from "../utils/render.js";
 
 
 export class AbstractView {
@@ -7,6 +7,7 @@ export class AbstractView {
       throw new Error(`Cannot instantiate AbstactView, only concrete one.`);
     }
     this._element = null;
+    this._callback = {};
   }
 
   getTemplate() {

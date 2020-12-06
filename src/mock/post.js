@@ -1,4 +1,4 @@
-import {generateRandomItem, getRandomIntInclusive, generateDescription} from "../utils.js";
+import {generateRandomItem, getRandomIntInclusive, generateDescription} from "../utils/common.js";
 
 const titles = [`The Dance of Life`, `Sagebrush Trail`, `The Man with the Golden Arm`, `Santa Claus Conquers the Martians`, `Popeye the Sailor Meets Sindbad the Sailor`, `The Great Flamarion`];
 

@@ -12,7 +12,7 @@ import {CommentView} from "./view/comment.js";
 import {generateFilter} from "./mock/filter.js";
 import {generatePost} from "./mock/post.js";
 import {generateComment} from "./mock/comment.js";
-import {render, RenderPosition} from "./utils.js"
+import {render} from "./utils/render.js"
 
 
 const POST_COUNT_PER_STEP = 5;
@@ -65,7 +65,7 @@ const renderPost = (postListContainer, post) => {
 
   const postClickableItems = [`film-card__poster`, `film-card__title`, `film-card__comments`];
 
-  postComponent.getElement().addEventListener(`click`, (event) => {
+  postComponent.setClickHandler( (event) => {
     for (let item of postClickableItems) {
       if (event.target.classList.contains(item)) {
         showPostDetails();
@@ -74,7 +74,7 @@ const renderPost = (postListContainer, post) => {
     }
   });
 
-  postDetailsComponent.getElement().querySelector(`.film-details__close`).addEventListener(`click`, () => {
+  postDetailsComponent.setClickHandler( () => {
     returnToPost();
   });
 
@@ -96,24 +96,19 @@ if (posts.length <= 0) {
 
   if (posts.length > POST_COUNT_PER_STEP) {
     let renderedPostsCount = POST_COUNT_PER_STEP;
+    const buttonComponent = new LoadMoreButtonView();
 
-    render(postsContainerComponent.getElement().firstElementChild, new LoadMoreButtonView().getElement());
+    render(postsContainerComponent.getElement().firstElementChild, buttonComponent.getElement());
 
-    postsContainerComponent.getElement().addEventListener(`click`, (event) => {
-
-      if (event.target.classList.contains(`films-list__show-more`)) {
-        posts
-          .slice(renderedPostsCount, renderedPostsCount + POST_COUNT_PER_STEP)
-          .forEach((post) => renderPost(postsContainerMain, post));
+    buttonComponent.setClickHandler( () => {
+      posts
+        .slice(renderedPostsCount, renderedPostsCount + POST_COUNT_PER_STEP)
+        .forEach((post) => renderPost(postsContainerMain, post));
           renderedPostsCount += POST_COUNT_PER_STEP;
-      };
-
       if (renderedPostsCount >= posts.length) {
-        event.target.remove();
-        new LoadMoreButtonView().getElement().remove();
-        new LoadMoreButtonView().removeElement();
+        buttonComponent.getElement().remove();
+        buttonComponent.removeElement();
       };
-
     });
   };
 
