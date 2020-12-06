@@ -17,7 +17,7 @@ const createPostComment = (comment) => {
   </li>`;
 };
 
-export class CommentView extends AbstractView{
+export class CommentView extends AbstractView {
   constructor(comment) {
     super();
     this._comment = comment;
