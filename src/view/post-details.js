@@ -1,5 +1,5 @@
 import {figureCorrectPluralForm} from "../utils.js";
-import {createElement} from "../utils.js";
+import {AbstractView} from "./abstract.js";
 
 const createPostDetailsTemplate = (post) => {
   const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments} = post;
@@ -121,25 +121,13 @@ const createPostDetailsTemplate = (post) => {
 </section>`;
 };
 
-export class PostDetailsView {
+export class PostDetailsView extends AbstractView {
   constructor(post) {
-    this._element = null;
+    super();
     this._post = post;
   }
 
   getTemplate() {
     return createPostDetailsTemplate(this._post);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

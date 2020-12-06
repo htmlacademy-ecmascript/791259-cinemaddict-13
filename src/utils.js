@@ -31,4 +31,5 @@ export const createElement = (template) => {
 };
 
 
-export const render = (element, template, place = `beforeend`) => element.insertAdjacentElement(place, template);
+export const render = (element, template, place = `beforeend`) => {
+  element.insertAdjacentElement(place, template);}

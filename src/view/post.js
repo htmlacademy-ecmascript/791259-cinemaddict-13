@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {createElement} from "../utils.js";
+import {AbstractView} from "./abstract.js";
 
 const createPostTemplate = (post) => {
   const {title, rating, productionDate, duration, genres, poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
@@ -41,25 +41,13 @@ const createPostTemplate = (post) => {
         </article>`;
 };
 
-export class PostView {
+export class PostView extends AbstractView {
   constructor(post) {
-    this._element = null;
+    super();
     this._post = post;
   }
 
   getTemplate() {
     return createPostTemplate(this._post);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
