@@ -27,11 +27,11 @@ const footerStats = body.querySelector(`.footer__statistics`);
 const comments = new Array(5).fill().map((item, index) => generateComment(index));
 const postsContainerComponent = new PostsContainerView();
 
-render(header, new UserView().getElement());
-render(main, new FilterView(filters).getElement());
-render(main, new SortView().getElement());
-render(main, postsContainerComponent.getElement());
-render(postsContainerComponent.getElement(), new PostListContainerView(``,`visually-hidden`, 'All movies. Upcoming').getElement());
+render(header, new UserView());
+render(main, new FilterView(filters));
+render(main, new SortView());
+render(main, postsContainerComponent);
+render(postsContainerComponent, new PostListContainerView(``,`visually-hidden`, 'All movies. Upcoming'));
 const postsContainerMain = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(1) .films-list__container`);
 
 const renderPost = (postListContainer, post) => {
@@ -40,11 +40,11 @@ const renderPost = (postListContainer, post) => {
 
   const showPostDetails = (postListContainer = body) => {
     postListContainer.classList.add(`hide-overflow`);
-    render(postListContainer, postDetailsComponent.getElement());
+    render(postListContainer, postDetailsComponent);
 
     for (let commentId of postDetailsComponent._post.comments) {
       for(let comment of comments) {
-        if (commentId == comment.id) render(postDetailsComponent.getElement().querySelector(`.film-details__comments-list`), new CommentView(comment).getElement());
+        if (commentId == comment.id) render(postDetailsComponent.getElement().querySelector(`.film-details__comments-list`), new CommentView(comment));
       }
     }
   };
@@ -78,15 +78,15 @@ const renderPost = (postListContainer, post) => {
     returnToPost();
   });
 
-  render(postListContainer, postComponent.getElement());
+  render(postListContainer, postComponent);
 };
 
 if (posts.length <= 0) {
-  render(postsContainerMain, new NoPostsView().getElement());
-  render(footerStats, new FooterStatsView(`0`).getElement());
+  render(postsContainerMain, new NoPostsView());
+  render(footerStats, new FooterStatsView(`0`));
 } else {
-  render(postsContainerComponent.getElement(), new PostListContainerView(`films-list--extra`, '', 'Top rated').getElement());
-  render(postsContainerComponent.getElement(), new PostListContainerView(`films-list--extra`, '', 'Most commented').getElement());
+  render(postsContainerComponent, new PostListContainerView(`films-list--extra`, '', 'Top rated'));
+  render(postsContainerComponent, new PostListContainerView(`films-list--extra`, '', 'Most commented'));
   const postsContainerTopRated = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(2) .films-list__container`);
   const postsContainerMostCommented = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(3) .films-list__container`);
 
@@ -98,7 +98,7 @@ if (posts.length <= 0) {
     let renderedPostsCount = POST_COUNT_PER_STEP;
     const buttonComponent = new LoadMoreButtonView();
 
-    render(postsContainerComponent.getElement().firstElementChild, buttonComponent.getElement());
+    render(postsContainerMain, buttonComponent, `afterend`);
 
     buttonComponent.setClickHandler( () => {
       posts
@@ -117,5 +117,5 @@ if (posts.length <= 0) {
     renderPost(postsContainerMostCommented, posts[i]);
   }
 
-  render(footerStats, new FooterStatsView(`130 291`).getElement());
+  render(footerStats, new FooterStatsView(`130 291`));
 };

@@ -1,3 +1,5 @@
+import {AbstractView} from "../view/abstract.js";
+
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
@@ -6,6 +8,14 @@ export const createElement = (template) => {
 };
 
 
-export const render = (element, template, place = `beforeend`) => {
-  element.insertAdjacentElement(place, template);
+export const render = (element, child, place = `beforeend`) => {
+  if (element instanceof AbstractView) {
+    element = element.getElement();
+  }
+
+  if (child instanceof AbstractView) {
+    child = child.getElement();
+  }
+
+  element.insertAdjacentElement(place, child);
 };
