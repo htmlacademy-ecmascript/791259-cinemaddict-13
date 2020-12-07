@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import {AbstractView} from "./abstract.js";
 
 const createPostsListContainerTemplate = (sectionClass, headerClass, title) =>
   `<section class="films-list ${sectionClass}">
@@ -7,9 +7,9 @@ const createPostsListContainerTemplate = (sectionClass, headerClass, title) =>
   </section>`;
 
 
-export class PostListContainerView {
+export class PostListContainerView extends AbstractView {
   constructor(sectionClass, headerClass, title) {
-    this._element = null;
+    super();
     this._sectionClass = sectionClass;
     this._headerClass = headerClass;
     this._title = title;
@@ -17,17 +17,5 @@ export class PostListContainerView {
 
   getTemplate() {
     return createPostsListContainerTemplate(this._sectionClass, this._headerClass, this._title);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,5 +1,5 @@
-import {figureCorrectPluralForm} from "../utils.js";
-import {createElement} from "../utils.js";
+import {figureCorrectPluralForm} from "../utils/common.js";
+import {AbstractView} from "./abstract.js";
 
 const createPostDetailsTemplate = (post) => {
   const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments} = post;
@@ -121,25 +121,24 @@ const createPostDetailsTemplate = (post) => {
 </section>`;
 };
 
-export class PostDetailsView {
+export class PostDetailsView extends AbstractView {
   constructor(post) {
-    this._element = null;
+    super();
     this._post = post;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createPostDetailsTemplate(this._post);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click(evt);
   }
 
-  removeElement() {
-    this._element = null;
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-details__close`).addEventListener(`click`, this._clickHandler);
   }
 }

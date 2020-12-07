@@ -12,7 +12,7 @@ import {CommentView} from "./view/comment.js";
 import {generateFilter} from "./mock/filter.js";
 import {generatePost} from "./mock/post.js";
 import {generateComment} from "./mock/comment.js";
-import {render, RenderPosition} from "./utils.js"
+import {render} from "./utils/render.js"
 
 
 const POST_COUNT_PER_STEP = 5;
@@ -27,11 +27,11 @@ const footerStats = body.querySelector(`.footer__statistics`);
 const comments = new Array(5).fill().map((item, index) => generateComment(index));
 const postsContainerComponent = new PostsContainerView();
 
-render(header, new UserView().getElement());
-render(main, new FilterView(filters).getElement());
-render(main, new SortView().getElement());
-render(main, postsContainerComponent.getElement());
-render(postsContainerComponent.getElement(), new PostListContainerView(``,`visually-hidden`, 'All movies. Upcoming').getElement());
+render(header, new UserView());
+render(main, new FilterView(filters));
+render(main, new SortView());
+render(main, postsContainerComponent);
+render(postsContainerComponent, new PostListContainerView(``,`visually-hidden`, 'All movies. Upcoming'));
 const postsContainerMain = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(1) .films-list__container`);
 
 const renderPost = (postListContainer, post) => {
@@ -40,11 +40,11 @@ const renderPost = (postListContainer, post) => {
 
   const showPostDetails = (postListContainer = body) => {
     postListContainer.classList.add(`hide-overflow`);
-    render(postListContainer, postDetailsComponent.getElement());
+    render(postListContainer, postDetailsComponent);
 
     for (let commentId of postDetailsComponent._post.comments) {
       for(let comment of comments) {
-        if (commentId == comment.id) render(postDetailsComponent.getElement().querySelector(`.film-details__comments-list`), new CommentView(comment).getElement());
+        if (commentId == comment.id) render(postDetailsComponent.getElement().querySelector(`.film-details__comments-list`), new CommentView(comment));
       }
     }
   };
@@ -65,7 +65,7 @@ const renderPost = (postListContainer, post) => {
 
   const postClickableItems = [`film-card__poster`, `film-card__title`, `film-card__comments`];
 
-  postComponent.getElement().addEventListener(`click`, (event) => {
+  postComponent.setClickHandler( (event) => {
     for (let item of postClickableItems) {
       if (event.target.classList.contains(item)) {
         showPostDetails();
@@ -74,19 +74,19 @@ const renderPost = (postListContainer, post) => {
     }
   });
 
-  postDetailsComponent.getElement().querySelector(`.film-details__close`).addEventListener(`click`, () => {
+  postDetailsComponent.setClickHandler( () => {
     returnToPost();
   });
 
-  render(postListContainer, postComponent.getElement());
+  render(postListContainer, postComponent);
 };
 
 if (posts.length <= 0) {
-  render(postsContainerMain, new NoPostsView().getElement());
-  render(footerStats, new FooterStatsView(`0`).getElement());
+  render(postsContainerMain, new NoPostsView());
+  render(footerStats, new FooterStatsView(`0`));
 } else {
-  render(postsContainerComponent.getElement(), new PostListContainerView(`films-list--extra`, '', 'Top rated').getElement());
-  render(postsContainerComponent.getElement(), new PostListContainerView(`films-list--extra`, '', 'Most commented').getElement());
+  render(postsContainerComponent, new PostListContainerView(`films-list--extra`, '', 'Top rated'));
+  render(postsContainerComponent, new PostListContainerView(`films-list--extra`, '', 'Most commented'));
   const postsContainerTopRated = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(2) .films-list__container`);
   const postsContainerMostCommented = postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(3) .films-list__container`);
 
@@ -96,24 +96,19 @@ if (posts.length <= 0) {
 
   if (posts.length > POST_COUNT_PER_STEP) {
     let renderedPostsCount = POST_COUNT_PER_STEP;
+    const buttonComponent = new LoadMoreButtonView();
 
-    render(postsContainerComponent.getElement().firstElementChild, new LoadMoreButtonView().getElement());
+    render(postsContainerMain, buttonComponent, `afterend`);
 
-    postsContainerComponent.getElement().addEventListener(`click`, (event) => {
-
-      if (event.target.classList.contains(`films-list__show-more`)) {
-        posts
-          .slice(renderedPostsCount, renderedPostsCount + POST_COUNT_PER_STEP)
-          .forEach((post) => renderPost(postsContainerMain, post));
+    buttonComponent.setClickHandler( () => {
+      posts
+        .slice(renderedPostsCount, renderedPostsCount + POST_COUNT_PER_STEP)
+        .forEach((post) => renderPost(postsContainerMain, post));
           renderedPostsCount += POST_COUNT_PER_STEP;
-      };
-
       if (renderedPostsCount >= posts.length) {
-        event.target.remove();
-        new LoadMoreButtonView().getElement().remove();
-        new LoadMoreButtonView().removeElement();
+        buttonComponent.getElement().remove();
+        buttonComponent.removeElement();
       };
-
     });
   };
 
@@ -122,5 +117,5 @@ if (posts.length <= 0) {
     renderPost(postsContainerMostCommented, posts[i]);
   }
 
-  render(footerStats, new FooterStatsView(`130 291`).getElement());
+  render(footerStats, new FooterStatsView(`130 291`));
 };
