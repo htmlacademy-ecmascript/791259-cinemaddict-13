@@ -1,27 +1,33 @@
-import {UserView} from "./view/user.js";
-import {FilterView} from "./view/filter.js";
-import {SortView} from "./view/sort.js"
-import {PostsContainerView} from "./view/posts-container.js"
-import {PostView} from "./view/post.js";
-import {LoadMoreButtonView} from "./view/button.js";
-import {FooterStatsView} from "./view/footer-stats.js";
-import {PostDetailsView} from "./view/post-details.js";
-import {PostListContainerView} from "./view/posts-list-container.js";
-import {NoPostsView} from "./view/no-posts.js";
-import {CommentView} from "./view/comment.js";
+//import {FilterView} from "./view/filter.js";
+//import {SortView} from "./view/sort.js"
+//import {PostsContainerView} from "./view/posts-container.js"
+//import {PostView} from "./view/post.js";
+//import {LoadMoreButtonView} from "./view/button.js";
+//import {FooterStatsView} from "./view/footer-stats.js";
+//import {PostDetailsView} from "./view/post-details.js";
+//import {PostListContainerView} from "./view/posts-list-container.js";
+//import {NoPostsView} from "./view/no-posts.js";
+//import {CommentView} from "./view/comment.js";
 import {generateFilter} from "./mock/filter.js";
 import {generatePost} from "./mock/post.js";
 import {generateComment} from "./mock/comment.js";
-import {render} from "./utils/render.js"
+//import {render} from "./utils/render.js"
+import {SitePresenter} from "./presenter/sitePresenter.js";
 
 
-const POST_COUNT_PER_STEP = 5;
+//const POST_COUNT_PER_STEP = 5;
 const POSTS_COUNT = 20;
-const NUM_OF_EXTRA_POSTS = 2;
+//const NUM_OF_EXTRA_POSTS = 2;
 const posts = new Array(POSTS_COUNT).fill().map(() => generatePost());
 const filters = generateFilter(posts);
 const body = document.querySelector(`body`);
-const header = body.querySelector(`header`);
+const comments = new Array(5).fill().map((item, index) => generateComment(index));
+
+const sitePresenter = new SitePresenter(body, filters, comments);
+sitePresenter.init(posts);
+
+
+/*
 const main = body.querySelector(`main`);
 const footerStats = body.querySelector(`.footer__statistics`);
 const comments = new Array(5).fill().map((item, index) => generateComment(index));
@@ -119,3 +125,4 @@ if (posts.length <= 0) {
 
   render(footerStats, new FooterStatsView(`130 291`));
 };
+*/
