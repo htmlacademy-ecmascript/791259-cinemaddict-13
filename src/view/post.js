@@ -53,7 +53,7 @@ export class PostView extends AbstractView {
   }
 
   _clickHandler(evt) {
-    evt.preventDefault();
+    evt.preventDefault(evt);
     this._callback.click(evt);
   }
 

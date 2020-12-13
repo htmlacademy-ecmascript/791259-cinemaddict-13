@@ -4,11 +4,12 @@ import {FooterView} from "../view/footer.js";
 import {UserView} from "../view/user.js";
 import {FilterView} from "../view/filter.js";
 import {SortView} from "../view/sort.js"
-import {PostsContainerView} from "../view/posts-container.js"
-import {PostView} from "../view/post.js";
+import {PostsContainerView} from "../view/posts-container.js";
+import {PostPresenter} from "./postPresenter.js";
+
 import {LoadMoreButtonView} from "../view/button.js";
 import {FooterStatsView} from "../view/footer-stats.js";
-import {PostDetailsView} from "../view/post-details.js";
+
 import {PostListContainerView} from "../view/posts-list-container.js";
 import {NoPostsView} from "../view/no-posts.js";
 import {CommentView} from "../view/comment.js";
@@ -21,6 +22,8 @@ const NUM_OF_EXTRA_POSTS = 2;
 export class SitePresenter {
   constructor(bodyContainer, filters, comments) {
     this._bodyContainer = bodyContainer;
+    this._renderedPostsCount = POST_COUNT_PER_STEP;
+
     this._filters = filters.slice();
     this._comments = comments.slice();
     this._headerComponent = new HeaderView();
@@ -35,6 +38,10 @@ export class SitePresenter {
     this._postListMain = new PostListContainerView(``,`visually-hidden`, 'All movies. Upcoming');
     this._postListTopRated = new PostListContainerView(`films-list--extra`, '', 'Top rated');
     this._postListMostCommented = new PostListContainerView(`films-list--extra`, '', 'Most commented');
+    this._footerStatsComponent = new FooterStatsView();
+
+    this._loadMoreButtonComponent = new LoadMoreButtonView();
+    this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
 
   }
 
@@ -54,81 +61,44 @@ export class SitePresenter {
   }
 
   _renderPost(postListContainer, bodyPost) {
-
-    const postComponent = new PostView(bodyPost);
-    const postDetailsComponent = new PostDetailsView(bodyPost);
-
-    const showPostDetails = (postListContainer = this._bodyContainer) => {
-      postListContainer.classList.add(`hide-overflow`);
-      render(postListContainer, postDetailsComponent);
-
-      for (let commentId of postDetailsComponent._post.comments) {
-        for(let comment of this._comments) {
-          if (commentId == comment.id) render(postDetailsComponent.getElement().querySelector(`.film-details__comments-list`), new CommentView(comment));
-        }
-      }
-    };
-
-
-    const returnToPost = (postListContainer = this._bodyContainer) => {
-      postListContainer.classList.remove(`hide-overflow`);
-      postDetailsComponent.getElement().remove();
-      postDetailsComponent.removeElement();
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        evt.preventDefault();
-        returnToPost();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const postClickableItems = [`film-card__poster`, `film-card__title`, `film-card__comments`];
-
-    postComponent.setClickHandler( (event) => {
-      for (let item of postClickableItems) {
-        if (event.target.classList.contains(item)) {
-          showPostDetails();
-          document.addEventListener(`keydown`, onEscKeyDown);
-        }
-      }
-    });
-
-    postDetailsComponent.setClickHandler( () => {
-      returnToPost();
-    });
-
-    render(postListContainer, postComponent);
+    const postPresenter = new PostPresenter();
+    postPresenter.init(postListContainer, bodyPost);
   }
 
-  _renderLoadMoreButton(container) {
-    let renderedPostsCount = POST_COUNT_PER_STEP;
-    const buttonComponent = new LoadMoreButtonView();
 
-    render(container, buttonComponent, `afterend`);
 
-    buttonComponent.setClickHandler( () => {
-      this._bodyPosts
-        .slice(renderedPostsCount, renderedPostsCount + POST_COUNT_PER_STEP)
-        .forEach((post) => this._renderPost(container, post));
-          renderedPostsCount += POST_COUNT_PER_STEP;
+  _handleLoadMoreButtonClick() {
+    this._bodyPosts
+      .slice(this._renderedPostsCount, this._renderedPostsCount + POST_COUNT_PER_STEP)
+      .forEach((post) => this._renderPost(this._postListMain.getElement().children[1], post));
+        this._renderedPostsCount += POST_COUNT_PER_STEP;
 
-      if (renderedPostsCount >= this._bodyPosts.length) {
-        buttonComponent.getElement().remove();
-        buttonComponent.removeElement();
-      };
-    });
+    if (this._renderedPostsCount >= this._bodyPosts.length) {
+      this._loadMoreButtonComponent.getElement().remove();
+      this._loadMoreButtonComponent.removeElement();
+    };
+
+  }
+
+  _renderLoadMoreButton() {
+    render(this._postListMain.getElement().children[1], this._loadMoreButtonComponent, `afterend`);
+    this._loadMoreButtonComponent.setClickHandler(this._handleLoadMoreButtonClick);
   }
 
   _renderNoPosts() {
     render(this._postsContainerComponent, this._noPostsComponent);
   }
 
+  _renderFooterStats(count) {
+    render(this._footerComponent, new FooterStatsView(count));
+  }
+
   _renderMain() {
 
     if (this._bodyPosts.length <= 0) {
       this._renderNoPosts();
+      this._renderFooterStats(`0`);
+
     } else {
       render(this._postsContainerComponent, this._postListMain);
       render(this._postsContainerComponent, this._postListTopRated);
@@ -136,20 +106,22 @@ export class SitePresenter {
 
       const postsContainerTopRated = this._postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(2) .films-list__container`);
       const postsContainerMostCommented = this._postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(3) .films-list__container`);
-      const postsContainerMain = this._postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(1) .films-list__container`);
+
 
       for (let i = 0 ; i < POST_COUNT_PER_STEP; i++) {
-        this._renderPost(postsContainerMain, this._bodyPosts[i]);
+        this._renderPost(this._postListMain.getElement().children[1], this._bodyPosts[i]);
       };
 
       if (this._bodyPosts.length > POST_COUNT_PER_STEP) {
-        this._renderLoadMoreButton(postsContainerMain);
+        this._renderLoadMoreButton();
       };
 
       for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
         this._renderPost(postsContainerTopRated, this._bodyPosts[i]);
         this._renderPost(postsContainerMostCommented, this._bodyPosts[i]);
-      }
+      };
+
+      this._renderFooterStats(`130 291`);
     }
   }
 }
