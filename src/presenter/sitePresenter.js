@@ -135,7 +135,7 @@ export class SitePresenter {
       this._renderLoadMoreButton();
     }
 
-    for (let i = 0; i< NUM_OF_EXTRA_POSTS; i++) {
+    for (let i = 0; i < NUM_OF_EXTRA_POSTS; i++) {
       this._renderPost(this._postListTopRated.getElement().children[1], this._bodyPosts[i]);
       this._renderPost(this._postListMostCommented.getElement().children[1], this._bodyPosts[i]);
     }
