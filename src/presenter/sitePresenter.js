@@ -3,7 +3,7 @@ import {HeaderView} from "../view/header.js";
 import {FooterView} from "../view/footer.js";
 import {UserView} from "../view/user.js";
 import {FilterView} from "../view/filter.js";
-import {SortView} from "../view/sort.js"
+import {SortView} from "../view/sort.js";
 import {PostsContainerView} from "../view/posts-container.js";
 import {PostPresenter} from "./postPresenter.js";
 
@@ -15,7 +15,7 @@ import {NoPostsView} from "../view/no-posts.js";
 
 
 import {render, remove} from "../utils/render.js";
-import {updateItem} from "../utils/common.js"
+import {updateItem} from "../utils/common.js";
 const POST_COUNT_PER_STEP = 5;
 const NUM_OF_EXTRA_POSTS = 2;
 
@@ -37,9 +37,9 @@ export class SitePresenter {
     this._postsContainerComponent = new PostsContainerView();
     this._postsListContainerComponent = new PostListContainerView();
     this._noPostsComponent = new NoPostsView();
-    this._postListMain = new PostListContainerView(``,`visually-hidden`, 'All movies. Upcoming');
-    this._postListTopRated = new PostListContainerView(`films-list--extra`, '', 'Top rated');
-    this._postListMostCommented = new PostListContainerView(`films-list--extra`, '', 'Most commented');
+    this._postListMain = new PostListContainerView(``, `visually-hidden`, `All movies. Upcoming`);
+    this._postListTopRated = new PostListContainerView(`films-list--extra`, ``, `Top rated`);
+    this._postListMostCommented = new PostListContainerView(`films-list--extra`, ``, `Most commented`);
     this._footerStatsComponent = new FooterStatsView();
 
     this._loadMoreButtonComponent = new LoadMoreButtonView();
@@ -89,7 +89,7 @@ export class SitePresenter {
   }
 
   _renderPosts(from, to) {
-   this._bodyPosts
+    this._bodyPosts
      .slice(from, to)
      .forEach((post) => this._renderPost(this._postListMain.getElement().children[1], post));
   }
@@ -100,7 +100,7 @@ export class SitePresenter {
 
     if (this._renderedPostsCount >= this._bodyPosts.length) {
       remove(this._loadMoreButtonComponent);
-    };
+    }
   }
 
   _renderLoadMoreButton() {
@@ -127,18 +127,18 @@ export class SitePresenter {
     render(this._postsContainerComponent, this._postListTopRated);
     render(this._postsContainerComponent, this._postListMostCommented);
 
-    for (let i = 0 ; i < POST_COUNT_PER_STEP; i++) {
+    for (let i = 0; i < POST_COUNT_PER_STEP; i++) {
       this._renderPost(this._postListMain.getElement().children[1], this._bodyPosts[i]);
-    };
+    }
 
     if (this._bodyPosts.length > POST_COUNT_PER_STEP) {
       this._renderLoadMoreButton();
-    };
+    }
 
-    for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
+    for (let i = 0; i< NUM_OF_EXTRA_POSTS; i++) {
       this._renderPost(this._postListTopRated.getElement().children[1], this._bodyPosts[i]);
       this._renderPost(this._postListMostCommented.getElement().children[1], this._bodyPosts[i]);
-    };
+    }
 
     this._renderFooterStats(`130 291`);
   }

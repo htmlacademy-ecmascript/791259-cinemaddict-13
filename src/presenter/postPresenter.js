@@ -77,45 +77,47 @@ export class PostPresenter {
   }
 
   _handlePanelClick(event) {
-     if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`)  || event.target.classList.contains(`film-details__control-label--watchlist`)) {
-       this._changeData(
-         Object.assign(
-           {},
-           this._post,
-           {
-             isAddedtoWatchList: !this._post.isAddedtoWatchList
-           }
-         )
+    if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || event.target.classList.contains(`film-details__control-label--watchlist`)) {
+     this._changeData(
+       Object.assign(
+         {},
+         this._post,
+         {
+           isAddedtoWatchList: !this._post.isAddedtoWatchList
+         }
        )
-     };
+     );
+    }
 
-     if (event.target.classList.contains(`film-card__controls-item--mark-as-watched`) || event.target.classList.contains(`film-details__control-label--watched`)) {
-       this._changeData(
-         Object.assign(
-           {},
-           this._post,
-           {
-             isWatched: !this._post.isWatched
-           }
-         )
+    if (event.target.classList.contains(`film-card__controls-item--mark-as-watched`) || event.target.classList.contains(`film-details__control-label--watched`)) {
+     this._changeData(
+       Object.assign(
+         {},
+         this._post,
+         {
+           isWatched: !this._post.isWatched
+         }
        )
-     };
+     );
+    }
 
-     if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
-       this._changeData(
-         Object.assign(
-           {},
-           this._post,
-           {
-             isFavorite: !this._post.isFavorite
-           }
-         )
+    if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
+      this._changeData(
+       Object.assign(
+         {},
+         this._post,
+         {
+           isFavorite: !this._post.isFavorite
+         }
        )
-     };
+     );
+    }
   }
 
   resetView() {
-    if (this._mode !== Mode.DEFAULT) this._handleReturnToPost();
+    if (this._mode !== Mode.DEFAULT) {
+      this._handleReturnToPost();
+    }
   }
 
   _handleShowPostDetails() {
