@@ -12,20 +12,22 @@ import {FooterStatsView} from "../view/footer-stats.js";
 
 import {PostListContainerView} from "../view/posts-list-container.js";
 import {NoPostsView} from "../view/no-posts.js";
-import {CommentView} from "../view/comment.js";
 
-import {render} from "../utils/render.js"
+
+import {render, remove} from "../utils/render.js";
+import {updateItem} from "../utils/common.js"
 const POST_COUNT_PER_STEP = 5;
 const NUM_OF_EXTRA_POSTS = 2;
 
 
 export class SitePresenter {
-  constructor(bodyContainer, filters, comments) {
+  constructor(bodyContainer, filters) {
     this._bodyContainer = bodyContainer;
     this._renderedPostsCount = POST_COUNT_PER_STEP;
 
     this._filters = filters.slice();
-    this._comments = comments.slice();
+    this._postPresenter = {};
+
     this._headerComponent = new HeaderView();
     this._mainComponent = new MainView();
     this._footerComponent = new FooterView();
@@ -41,8 +43,9 @@ export class SitePresenter {
     this._footerStatsComponent = new FooterStatsView();
 
     this._loadMoreButtonComponent = new LoadMoreButtonView();
+    this._handlePostChange = this._handlePostChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
-
   }
 
   init(bodyPosts) {
@@ -57,27 +60,47 @@ export class SitePresenter {
     render(this._bodyContainer, this._footerComponent);
 
     this._renderMain();
+  }
 
+  _handleModeChange() {
+    Object
+      .values(this._postPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
+  _handlePostChange(updatedTask) {
+    this._bodyPosts = updateItem(this._bodyPosts, updatedTask);
+    this._postPresenter[updatedTask.id].init(updatedTask);
   }
 
   _renderPost(postListContainer, bodyPost) {
-    const postPresenter = new PostPresenter();
-    postPresenter.init(postListContainer, bodyPost);
+    const postPresenter = new PostPresenter(this._bodyContainer, postListContainer, this._handlePostChange, this._handleModeChange);
+    postPresenter.init(bodyPost);
+    this._postPresenter[bodyPost.id] = postPresenter;
   }
 
+  _clearPostList() {
+    Object
+      .values(this._postPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._postPresenter = {};
+    this._renderedPostsCount = POST_COUNT_PER_STEP;
+    remove(this._loadMoreButtonComponent);
+  }
 
+  _renderPosts(from, to) {
+   this._bodyPosts
+     .slice(from, to)
+     .forEach((post) => this._renderPost(this._postListMain.getElement().children[1], post));
+  }
 
   _handleLoadMoreButtonClick() {
-    this._bodyPosts
-      .slice(this._renderedPostsCount, this._renderedPostsCount + POST_COUNT_PER_STEP)
-      .forEach((post) => this._renderPost(this._postListMain.getElement().children[1], post));
-        this._renderedPostsCount += POST_COUNT_PER_STEP;
+    this._renderPosts(this._renderedPostsCount, this._renderedPostsCount + POST_COUNT_PER_STEP);
+    this._renderedPostsCount += POST_COUNT_PER_STEP;
 
     if (this._renderedPostsCount >= this._bodyPosts.length) {
-      this._loadMoreButtonComponent.getElement().remove();
-      this._loadMoreButtonComponent.removeElement();
+      remove(this._loadMoreButtonComponent);
     };
-
   }
 
   _renderLoadMoreButton() {
@@ -94,34 +117,29 @@ export class SitePresenter {
   }
 
   _renderMain() {
-
     if (this._bodyPosts.length <= 0) {
       this._renderNoPosts();
       this._renderFooterStats(`0`);
-
-    } else {
-      render(this._postsContainerComponent, this._postListMain);
-      render(this._postsContainerComponent, this._postListTopRated);
-      render(this._postsContainerComponent, this._postListMostCommented);
-
-      const postsContainerTopRated = this._postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(2) .films-list__container`);
-      const postsContainerMostCommented = this._postsContainerComponent.getElement().querySelector(`.films-list:nth-of-type(3) .films-list__container`);
-
-
-      for (let i = 0 ; i < POST_COUNT_PER_STEP; i++) {
-        this._renderPost(this._postListMain.getElement().children[1], this._bodyPosts[i]);
-      };
-
-      if (this._bodyPosts.length > POST_COUNT_PER_STEP) {
-        this._renderLoadMoreButton();
-      };
-
-      for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
-        this._renderPost(postsContainerTopRated, this._bodyPosts[i]);
-        this._renderPost(postsContainerMostCommented, this._bodyPosts[i]);
-      };
-
-      this._renderFooterStats(`130 291`);
+      return;
     }
+
+    render(this._postsContainerComponent, this._postListMain);
+    render(this._postsContainerComponent, this._postListTopRated);
+    render(this._postsContainerComponent, this._postListMostCommented);
+
+    for (let i = 0 ; i < POST_COUNT_PER_STEP; i++) {
+      this._renderPost(this._postListMain.getElement().children[1], this._bodyPosts[i]);
+    };
+
+    if (this._bodyPosts.length > POST_COUNT_PER_STEP) {
+      this._renderLoadMoreButton();
+    };
+
+    for (let i = 0 ; i< NUM_OF_EXTRA_POSTS; i++) {
+      this._renderPost(this._postListTopRated.getElement().children[1], this._bodyPosts[i]);
+      this._renderPost(this._postListMostCommented.getElement().children[1], this._bodyPosts[i]);
+    };
+
+    this._renderFooterStats(`130 291`);
   }
 }

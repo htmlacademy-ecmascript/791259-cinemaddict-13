@@ -46,6 +46,7 @@ export class PostView extends AbstractView {
     super();
     this._post = post;
     this._clickHandler = this._clickHandler.bind(this);
+    this._controlsPanelClickHandler = this._controlsPanelClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -57,8 +58,18 @@ export class PostView extends AbstractView {
     this._callback.click(evt);
   }
 
+  _controlsPanelClickHandler(evt) {
+    evt.preventDefault(evt);
+    this._callback.controlsClick(evt);
+  }
+
   setClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().addEventListener(`click`, this._clickHandler);
+  }
+
+  setPostControlsClickHandler(callback) {
+    this._callback.controlsClick = callback;
+    this.getElement().addEventListener(`click`, this._controlsPanelClickHandler);
   }
 }

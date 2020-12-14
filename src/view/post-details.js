@@ -2,7 +2,7 @@ import {figureCorrectPluralForm} from "../utils/common.js";
 import {AbstractView} from "./abstract.js";
 
 const createPostDetailsTemplate = (post) => {
-  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments} = post;
+  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
   const genresForm = figureCorrectPluralForm(genres, `Genre`);
 
   const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
@@ -69,13 +69,13 @@ const createPostDetailsTemplate = (post) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isAddedtoWatchList ? `checked` : ``}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
@@ -126,6 +126,8 @@ export class PostDetailsView extends AbstractView {
     super();
     this._post = post;
     this._clickHandler = this._clickHandler.bind(this);
+    this._controlsPanelClickHandler = this._controlsPanelClickHandler.bind(this);
+
   }
 
   getTemplate() {
@@ -137,8 +139,18 @@ export class PostDetailsView extends AbstractView {
     this._callback.click(evt);
   }
 
+  _controlsPanelClickHandler(evt) {
+    evt.preventDefault(evt);
+    this._callback.controlsClick(evt);
+  }
+
   setClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector(`.film-details__close`).addEventListener(`click`, this._clickHandler);
+  }
+
+  setPostControlsClickHandler(callback) {
+    this._callback.controlsClick = callback;
+    this.getElement().addEventListener(`click`, this._controlsPanelClickHandler);
   }
 }
