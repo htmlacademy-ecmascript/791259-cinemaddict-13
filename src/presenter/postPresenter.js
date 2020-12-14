@@ -102,14 +102,14 @@ export class PostPresenter {
     }
 
     if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
-       this._changeData(
-            Object.assign(
-            {},
-            this._post,
-            {
+      this._changeData(
+          Object.assign(
+              {},
+              this._post,
+              {
                 isFavorite: !this._post.isFavorite
-            }
-        )
+              }
+          )
       );
     }
   }
@@ -127,8 +127,10 @@ export class PostPresenter {
     this._mode = Mode.VIEWING;
 
     for (let commentId of this._postDetailsComponent._post.comments) {
-      let comment = comments.find(item => item.id === commentId);
-      if (!comment) continue;
+      let comment = comments.find((item) => item.id === commentId);
+      if (!comment) {
+        continue;
+      }
       render(this._postDetailsComponent.getElement().querySelector(`.film-details__comments-list`), new CommentView(comment));
     }
   }
