@@ -63,7 +63,7 @@ export class FilmView extends AbstractView {
     this._callback.watchListClick(evt);
   }
 
- _isWatchedClickHandler(evt) {
+  _isWatchedClickHandler(evt) {
     this._callback.isWatchedClick(evt);
   }
 
@@ -81,7 +81,7 @@ export class FilmView extends AbstractView {
     this.getElement().addEventListener(`click`, this._watchListClickHandler);
   }
 
- setIsWatchedClickHandler(callback) {
+  setIsWatchedClickHandler(callback) {
     this._callback.isWatchedClick = callback;
     this.getElement().addEventListener(`click`, this._isWatchedClickHandler);
   }
