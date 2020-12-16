@@ -1,6 +1,6 @@
 import {AbstractView} from "./abstract.js";
 
-const createPostComment = (comment) => {
+const createFilmComment = (comment) => {
   const {text, emotion, author, date} = comment;
   return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
@@ -24,6 +24,6 @@ export class CommentView extends AbstractView {
   }
 
   getTemplate() {
-    return createPostComment(this._comment);
+    return createFilmComment(this._comment);
   }
 }

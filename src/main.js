@@ -1,12 +1,12 @@
 import {generateFilter} from "./mock/filter.js";
-import {generatePost} from "./mock/post.js";
-import {SitePresenter} from "./presenter/sitePresenter.js";
+import {generateFilm} from "./mock/film.js";
+import {SitePresenter} from "./presenter/site-presenter.js";
 
 const POSTS_COUNT = 20;
 
-const posts = new Array(POSTS_COUNT).fill().map(() => generatePost());
-const filters = generateFilter(posts);
+const films = new Array(POSTS_COUNT).fill().map(() => generateFilm());
+const filters = generateFilter(films);
 const body = document.querySelector(`body`);
 
 const sitePresenter = new SitePresenter(body, filters);
-sitePresenter.init(posts);
+sitePresenter.init(films);

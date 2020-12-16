@@ -17,7 +17,7 @@ const generateCommentsIds = () => {
   return commentsIds;
 };
 
-export const generatePost = () => {
+export const generateFilm = () => {
 
   return {
     id: generateId(),

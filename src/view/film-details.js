@@ -1,8 +1,8 @@
 import {figureCorrectPluralForm} from "../utils/common.js";
 import {AbstractView} from "./abstract.js";
 
-const createPostDetailsTemplate = (post) => {
-  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
+const createFilmDetailsTemplate = (film) => {
+  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments, isAddedtoWatchList, isWatched, isFavorite} = film;
   const genresForm = figureCorrectPluralForm(genres, `Genre`);
 
   const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
@@ -121,36 +121,54 @@ const createPostDetailsTemplate = (post) => {
 </section>`;
 };
 
-export class PostDetailsView extends AbstractView {
-  constructor(post) {
+export class FilmDetailsView extends AbstractView {
+  constructor(film) {
     super();
-    this._post = post;
+    this._film = film;
     this._clickHandler = this._clickHandler.bind(this);
-    this._controlsPanelClickHandler = this._controlsPanelClickHandler.bind(this);
+    this._watchListClickHandler = this._watchListClickHandler.bind(this);
+    this._isWatchedClickHandler = this._isWatchedClickHandler.bind(this);
+    this._isFavoriteClickHandler = this._isFavoriteClickHandler.bind(this);
 
   }
 
   getTemplate() {
-    return createPostDetailsTemplate(this._post);
+    return createFilmDetailsTemplate(this._film);
   }
 
   _clickHandler(evt) {
-    evt.preventDefault();
     this._callback.click(evt);
   }
 
-  _controlsPanelClickHandler(evt) {
-    evt.preventDefault(evt);
-    this._callback.controlsClick(evt);
+  _watchListClickHandler(evt) {
+    this._callback.watchListClick(evt);
+  }
+
+ _isWatchedClickHandler(evt) {
+    this._callback.isWatchedClick(evt);
+  }
+
+  _isFavoriteClickHandler(evt) {
+    this._callback.isFavoriteClick(evt);
   }
 
   setClickHandler(callback) {
     this._callback.click = callback;
-    this.getElement().querySelector(`.film-details__close`).addEventListener(`click`, this._clickHandler);
+    this.getElement().addEventListener(`click`, this._clickHandler);
   }
 
-  setPostControlsClickHandler(callback) {
-    this._callback.controlsClick = callback;
-    this.getElement().addEventListener(`click`, this._controlsPanelClickHandler);
+  setWatchListClickHandler(callback) {
+    this._callback.watchListClick = callback;
+    this.getElement().addEventListener(`click`, this._watchListClickHandler);
+  }
+
+ setIsWatchedClickHandler(callback) {
+    this._callback.isWatchedClick = callback;
+    this.getElement().addEventListener(`click`, this._isWatchedClickHandler);
+  }
+
+  setIsFavoriteClickHandler(callback) {
+    this._callback.isFavoriteClick = callback;
+    this.getElement().addEventListener(`click`, this._isFavoriteClickHandler);
   }
 }
