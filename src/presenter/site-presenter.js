@@ -17,8 +17,6 @@ import {NoFilmsView} from "../view/no-films.js";
 import {render, remove} from "../utils/render.js";
 import {updateItem} from "../utils/common.js";
 const POST_COUNT_PER_STEP = 5;
-const NUM_OF_EXTRA_POSTS = 2;
-
 
 export class SitePresenter {
   constructor(bodyContainer, filters) {
@@ -38,10 +36,6 @@ export class SitePresenter {
     this._noFilmsComponent = new NoFilmsView();
 
     this._filmsListContainer = new FilmListContainerView().getElement().querySelector(`.films-list__container`);
-
-
-//    this._footerStatsComponent = new FooterStatsView();
-
     this._loadMoreButtonComponent = new LoadMoreButtonView();
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
@@ -112,9 +106,8 @@ export class SitePresenter {
     render(this._filmsContainerComponent, this._noFilmsComponent);
   }
 
-  _renderFooterStats(count) {
-    this._count = this._bodyFilms.length;
-    render(this._footerComponent, new FooterStatsView(this._count));
+  _renderFooterStats() {
+    render(this._footerComponent, new FooterStatsView(this._bodyFilms.length));
   }
 
   _renderMain() {

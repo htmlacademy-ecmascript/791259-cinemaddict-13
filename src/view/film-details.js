@@ -2,7 +2,7 @@ import {figureCorrectPluralForm} from "../utils/common.js";
 import {AbstractView} from "./abstract.js";
 
 const createFilmDetailsTemplate = (film) => {
-  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments, isAddedtoWatchList, isWatched, isFavorite} = film;
+  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, isAddedtoWatchList, isWatched, isFavorite} = film;
   const genresForm = figureCorrectPluralForm(genres, `Genre`);
 
   const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
@@ -108,7 +108,7 @@ export class FilmDetailsView extends AbstractView {
     this._callback.watchListClick(evt);
   }
 
- _isWatchedClickHandler(evt) {
+  _isWatchedClickHandler(evt) {
     this._callback.isWatchedClick(evt);
   }
 
@@ -126,7 +126,7 @@ export class FilmDetailsView extends AbstractView {
     this.getElement().addEventListener(`click`, this._watchListClickHandler);
   }
 
- setIsWatchedClickHandler(callback) {
+  setIsWatchedClickHandler(callback) {
     this._callback.isWatchedClick = callback;
     this.getElement().addEventListener(`click`, this._isWatchedClickHandler);
   }
