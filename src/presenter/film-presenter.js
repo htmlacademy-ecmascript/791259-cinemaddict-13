@@ -80,11 +80,11 @@ export class FilmPresenter {
   _handleWatchListClick(event) {
     if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || event.target.classList.contains(`film-details__control-label--watchlist`)) {
       this._changeData(
-        Object.assign({},
-          this._film, {
-            isAddedtoWatchList: !this._film.isAddedtoWatchList
-          }
-        )
+          Object.assign({},
+              this._film, {
+                isAddedtoWatchList: !this._film.isAddedtoWatchList
+              }
+          )
       );
     }
   }
@@ -92,11 +92,11 @@ export class FilmPresenter {
   _handleIsWatchedClick() {
     if (event.target.classList.contains(`film-card__controls-item--mark-as-watched`) || event.target.classList.contains(`film-details__control-label--watched`)) {
       this._changeData(
-        Object.assign({},
-          this._film, {
-            isWatched: !this._film.isWatched
-          }
-        )
+          Object.assign({},
+              this._film, {
+                isWatched: !this._film.isWatched
+              }
+          )
       );
     }
   }
@@ -104,11 +104,11 @@ export class FilmPresenter {
   _handleIsFavoriteClick() {
     if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
       this._changeData(
-        Object.assign({},
-          this._film, {
-            isFavorite: !this._film.isFavorite
-          }
-        )
+          Object.assign({},
+              this._film, {
+                isFavorite: !this._film.isFavorite
+              }
+          )
       );
     }
   }
