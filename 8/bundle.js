@@ -108,20 +108,20 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mock_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mock/filter.js */ "./src/mock/filter.js");
-/* harmony import */ var _mock_post_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mock/post.js */ "./src/mock/post.js");
-/* harmony import */ var _presenter_sitePresenter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./presenter/sitePresenter.js */ "./src/presenter/sitePresenter.js");
+/* harmony import */ var _mock_film_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mock/film.js */ "./src/mock/film.js");
+/* harmony import */ var _presenter_site_presenter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./presenter/site-presenter.js */ "./src/presenter/site-presenter.js");
 
 
 
 
 const POSTS_COUNT = 20;
 
-const posts = new Array(POSTS_COUNT).fill().map(() => Object(_mock_post_js__WEBPACK_IMPORTED_MODULE_1__["generatePost"])());
-const filters = Object(_mock_filter_js__WEBPACK_IMPORTED_MODULE_0__["generateFilter"])(posts);
+const films = new Array(POSTS_COUNT).fill().map(() => Object(_mock_film_js__WEBPACK_IMPORTED_MODULE_1__["generateFilm"])());
+const filters = Object(_mock_filter_js__WEBPACK_IMPORTED_MODULE_0__["generateFilter"])(films);
 const body = document.querySelector(`body`);
 
-const sitePresenter = new _presenter_sitePresenter_js__WEBPACK_IMPORTED_MODULE_2__["SitePresenter"](body, filters);
-sitePresenter.init(posts);
+const sitePresenter = new _presenter_site_presenter_js__WEBPACK_IMPORTED_MODULE_2__["SitePresenter"](body, filters);
+sitePresenter.init(films);
 
 
 /***/ }),
@@ -156,45 +156,16 @@ const generateComment = (index) => {
 
 /***/ }),
 
-/***/ "./src/mock/filter.js":
-/*!****************************!*\
-  !*** ./src/mock/filter.js ***!
-  \****************************/
-/*! exports provided: generateFilter */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateFilter", function() { return generateFilter; });
-const postToFilterMap = {
-  [`all movies`]: (posts) => posts.length,
-  watchlist: (posts) => posts.filter((item) => item.isAddedtoWatchList).length,
-  history: (posts) => posts.filter((item) => item.isWatched).length,
-  favorites: (posts) => posts.filter((item) => item.isFavotire).length,
-};
-
-const generateFilter = (posts) => {
-  return Object.entries(postToFilterMap).map(([filterName, countPosts]) => {
-    return {
-      name: filterName[0].toUpperCase() + filterName.slice(1),
-      count: countPosts(posts),
-    };
-  });
-};
-
-
-/***/ }),
-
-/***/ "./src/mock/post.js":
+/***/ "./src/mock/film.js":
 /*!**************************!*\
-  !*** ./src/mock/post.js ***!
+  !*** ./src/mock/film.js ***!
   \**************************/
-/*! exports provided: generatePost */
+/*! exports provided: generateFilm */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generatePost", function() { return generatePost; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateFilm", function() { return generateFilm; });
 /* harmony import */ var _utils_common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/common.js */ "./src/utils/common.js");
 
 
@@ -215,7 +186,7 @@ const generateCommentsIds = () => {
   return commentsIds;
 };
 
-const generatePost = () => {
+const generateFilm = () => {
 
   return {
     id: generateId(),
@@ -242,88 +213,119 @@ const generatePost = () => {
 
 /***/ }),
 
-/***/ "./src/presenter/postPresenter.js":
-/*!****************************************!*\
-  !*** ./src/presenter/postPresenter.js ***!
-  \****************************************/
-/*! exports provided: PostPresenter */
+/***/ "./src/mock/filter.js":
+/*!****************************!*\
+  !*** ./src/mock/filter.js ***!
+  \****************************/
+/*! exports provided: generateFilter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostPresenter", function() { return PostPresenter; });
-/* harmony import */ var _view_post_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../view/post.js */ "./src/view/post.js");
-/* harmony import */ var _view_post_details_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../view/post-details.js */ "./src/view/post-details.js");
-/* harmony import */ var _view_comment_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/comment.js */ "./src/view/comment.js");
-/* harmony import */ var _utils_render_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/render.js */ "./src/utils/render.js");
-/* harmony import */ var _mock_comment_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mock/comment.js */ "./src/mock/comment.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateFilter", function() { return generateFilter; });
+const filmToFilterMap = {
+  [`all movies`]: (films) => films.length,
+  watchlist: (films) => films.filter((item) => item.isAddedtoWatchList).length,
+  history: (films) => films.filter((item) => item.isWatched).length,
+  favorites: (films) => films.filter((item) => item.isFavotire).length,
+};
+
+const generateFilter = (films) => {
+  return Object.entries(filmToFilterMap).map(([filterName, countFilms]) => {
+    return {
+      name: filterName[0].toUpperCase() + filterName.slice(1),
+      count: countFilms(films),
+    };
+  });
+};
+
+
+/***/ }),
+
+/***/ "./src/presenter/film-presenter.js":
+/*!*****************************************!*\
+  !*** ./src/presenter/film-presenter.js ***!
+  \*****************************************/
+/*! exports provided: FilmPresenter */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FilmPresenter", function() { return FilmPresenter; });
+/* harmony import */ var _view_film_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../view/film.js */ "./src/view/film.js");
+/* harmony import */ var _view_film_details_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../view/film-details.js */ "./src/view/film-details.js");
+/* harmony import */ var _view_new_comment_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/new-comment.js */ "./src/view/new-comment.js");
+/* harmony import */ var _view_film_comments_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../view/film-comments.js */ "./src/view/film-comments.js");
+/* harmony import */ var _utils_render_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/render.js */ "./src/utils/render.js");
+/* harmony import */ var _mock_comment_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../mock/comment.js */ "./src/mock/comment.js");
 
 
 
 
 
 
-const comments = new Array(5).fill().map((item, index) => Object(_mock_comment_js__WEBPACK_IMPORTED_MODULE_4__["generateComment"])(index));
+
+const comments = new Array(5).fill().map((item, index) => Object(_mock_comment_js__WEBPACK_IMPORTED_MODULE_5__["generateComment"])(index));
+
 const Mode = {
   DEFAULT: `DEFAULT`,
   VIEWING: `VIEWING`,
 };
 
-class PostPresenter {
-  constructor(bodyContainer, postListContainer, changeData, changeMode) {
+class FilmPresenter {
+  constructor(bodyContainer, filmListContainer, changeData, changeMode) {
     this._bodyContainer = bodyContainer;
-    this._postListContainer = postListContainer;
+    this._filmListContainer = filmListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
-    this._postComponent = null;
-    this._postDetailsComponent = null;
+    this._filmComponent = null;
+    this._filmDetailsComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._handleShowPostDetails = this._handleShowPostDetails.bind(this);
-    this._handleReturnToPost = this._handleReturnToPost.bind(this);
+    this._handleShowFilmDetails = this._handleShowFilmDetails.bind(this);
+    this._handleReturnToFilm = this._handleReturnToFilm.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
-    this._handleClickOnPost = this._handleClickOnPost.bind(this);
-    this._handlePanelClick = this._handlePanelClick.bind(this);
+    this._handleClickOnFilm = this._handleClickOnFilm.bind(this);
     this._handleClickOnX = this._handleClickOnX.bind(this);
-
+    this._handleWatchListClick = this._handleWatchListClick.bind(this);
+    this._handleIsWatchedClick = this._handleIsWatchedClick.bind(this);
+    this._handleIsFavoriteClick = this._handleIsFavoriteClick.bind(this);
   }
 
-  init(post) {
-    this._post = post;
+  init(film) {
+    this._film = film;
 
-    const prevPostComponent = this._postComponent;
-    const prevPostDetailsComponent = this._postDetailsComponent;
+    const prevFilmComponent = this._filmComponent;
 
-    this._postComponent = new _view_post_js__WEBPACK_IMPORTED_MODULE_0__["PostView"](post);
-    this._postDetailsComponent = new _view_post_details_js__WEBPACK_IMPORTED_MODULE_1__["PostDetailsView"](post);
-    this._postComponent.setClickHandler(this._handleClickOnPost);
-    this._postComponent.setPostControlsClickHandler(this._handlePanelClick);
-    this._postDetailsComponent.setClickHandler(this._handleClickOnX);
-    this._postDetailsComponent.setPostControlsClickHandler(this._handlePanelClick);
+    this._filmComponent = new _view_film_js__WEBPACK_IMPORTED_MODULE_0__["FilmView"](film);
+    this._filmComponent.setClickHandler(this._handleClickOnFilm);
 
-    if (prevPostComponent === null || prevPostDetailsComponent === null) {
-      Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["render"])(this._postListContainer, this._postComponent);
+    this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
+    this._filmComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
+    this._filmComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
+
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["render"])(this._filmListContainer, this._filmComponent);
+
+    if (prevFilmComponent === null) {
+      Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["render"])(this._filmListContainer, this._filmComponent);
       return;
     }
 
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["replace"])(this._postComponent, prevPostComponent);
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["replace"])(this._postDetailsComponent, prevPostDetailsComponent);
-
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["remove"])(prevPostComponent);
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["remove"])(prevPostDetailsComponent);
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["replace"])(this._filmComponent, prevFilmComponent);
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["remove"])(prevFilmComponent);
   }
 
   destroy() {
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["remove"])(this._postComponent);
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["remove"])(this._postDetailsComponent);
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["remove"])(this._filmComponent);
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["remove"])(this._filmDetailsComponent);
   }
 
-  _handleClickOnPost(event) {
-    const postClickableItems = [`film-card__poster`, `film-card__title`, `film-card__comments`];
-    for (let item of postClickableItems) {
+  _handleClickOnFilm(event) {
+    const filmClickableItems = [`film-card__poster`, `film-card__title`, `film-card__comments`];
+    for (let item of filmClickableItems) {
       if (event.target.classList.contains(item)) {
-        this._handleShowPostDetails();
+        this._handleShowFilmDetails();
         document.addEventListener(`keydown`, this._handleEscKeyDown);
       }
     }
@@ -331,42 +333,40 @@ class PostPresenter {
 
   _handleClickOnX(event) {
     if (event.target.classList.contains(`film-details__close-btn`)) {
-      this._handleReturnToPost();
+      this._handleReturnToFilm();
     }
   }
 
-  _handlePanelClick(event) {
+  _handleWatchListClick(event) {
     if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || event.target.classList.contains(`film-details__control-label--watchlist`)) {
       this._changeData(
-          Object.assign(
-              {},
-              this._post,
-              {
-                isAddedtoWatchList: !this._post.isAddedtoWatchList
+          Object.assign({},
+              this._film, {
+                isAddedtoWatchList: !this._film.isAddedtoWatchList
               }
           )
       );
     }
+  }
 
+  _handleIsWatchedClick() {
     if (event.target.classList.contains(`film-card__controls-item--mark-as-watched`) || event.target.classList.contains(`film-details__control-label--watched`)) {
       this._changeData(
-          Object.assign(
-              {},
-              this._post,
-              {
-                isWatched: !this._post.isWatched
+          Object.assign({},
+              this._film, {
+                isWatched: !this._film.isWatched
               }
           )
       );
     }
+  }
 
+  _handleIsFavoriteClick() {
     if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
       this._changeData(
-          Object.assign(
-              {},
-              this._post,
-              {
-                isFavorite: !this._post.isFavorite
+          Object.assign({},
+              this._film, {
+                isFavorite: !this._film.isFavorite
               }
           )
       );
@@ -375,35 +375,48 @@ class PostPresenter {
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._handleReturnToPost();
+      this._handleReturnToFilm();
     }
   }
 
-  _handleShowPostDetails() {
+  _handleShowFilmDetails() {
     this._bodyContainer.classList.add(`hide-overflow`);
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["render"])(this._bodyContainer, this._postDetailsComponent);
+    this._filmDetailsComponent = new _view_film_details_js__WEBPACK_IMPORTED_MODULE_1__["FilmDetailsView"](this._film);
+    this._newCommentComponent = new _view_new_comment_js__WEBPACK_IMPORTED_MODULE_2__["NewCommentView"]();
+
+    this._filmDetailsComponent.setWatchListClickHandler(this._handleWatchListClick);
+    this._filmDetailsComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
+    this._filmDetailsComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
+    this._filmDetailsComponent.setClickHandler(this._handleClickOnX);
+
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["render"])(this._bodyContainer, this._filmDetailsComponent);
+
     this._changeMode();
     this._mode = Mode.VIEWING;
-
-    for (let commentId of this._postDetailsComponent._post.comments) {
+    let comList = [];
+    for (let commentId of this._filmDetailsComponent._film.comments) {
       let comment = comments.find((item) => item.id === commentId);
       if (!comment) {
         continue;
       }
-      Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["render"])(this._postDetailsComponent.getElement().querySelector(`.film-details__comments-list`), new _view_comment_js__WEBPACK_IMPORTED_MODULE_2__["CommentView"](comment));
+      comList.push(comment);
     }
+
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["render"])(this._filmDetailsComponent.getElement().querySelector(`.film-details__bottom-container`), new _view_film_comments_js__WEBPACK_IMPORTED_MODULE_3__["FilmCommentsView"](comList));
+
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["render"])(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), new _view_new_comment_js__WEBPACK_IMPORTED_MODULE_2__["NewCommentView"]());
   }
 
-  _handleReturnToPost() {
+  _handleReturnToFilm() {
     this._bodyContainer.classList.remove(`hide-overflow`);
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_3__["remove"])(this._postDetailsComponent);
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_4__["remove"])(this._filmDetailsComponent);
     this._mode = Mode.DEFAULT;
   }
 
   _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
-      this._handleReturnToPost();
+      this._handleReturnToFilm();
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
     }
   }
@@ -412,28 +425,28 @@ class PostPresenter {
 
 /***/ }),
 
-/***/ "./src/presenter/sitePresenter.js":
-/*!****************************************!*\
-  !*** ./src/presenter/sitePresenter.js ***!
-  \****************************************/
+/***/ "./src/presenter/site-presenter.js":
+/*!*****************************************!*\
+  !*** ./src/presenter/site-presenter.js ***!
+  \*****************************************/
 /*! exports provided: SitePresenter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SitePresenter", function() { return SitePresenter; });
-/* harmony import */ var _view_mainSection_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../view/mainSection.js */ "./src/view/mainSection.js");
+/* harmony import */ var _view_main_section_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../view/main-section.js */ "./src/view/main-section.js");
 /* harmony import */ var _view_header_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../view/header.js */ "./src/view/header.js");
 /* harmony import */ var _view_footer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/footer.js */ "./src/view/footer.js");
 /* harmony import */ var _view_user_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../view/user.js */ "./src/view/user.js");
 /* harmony import */ var _view_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../view/filter.js */ "./src/view/filter.js");
 /* harmony import */ var _view_sort_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../view/sort.js */ "./src/view/sort.js");
-/* harmony import */ var _view_posts_container_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../view/posts-container.js */ "./src/view/posts-container.js");
-/* harmony import */ var _postPresenter_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./postPresenter.js */ "./src/presenter/postPresenter.js");
+/* harmony import */ var _view_films_container_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../view/films-container.js */ "./src/view/films-container.js");
+/* harmony import */ var _film_presenter_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./film-presenter.js */ "./src/presenter/film-presenter.js");
 /* harmony import */ var _view_button_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../view/button.js */ "./src/view/button.js");
 /* harmony import */ var _view_footer_stats_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../view/footer-stats.js */ "./src/view/footer-stats.js");
-/* harmony import */ var _view_posts_list_container_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../view/posts-list-container.js */ "./src/view/posts-list-container.js");
-/* harmony import */ var _view_no_posts_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../view/no-posts.js */ "./src/view/no-posts.js");
+/* harmony import */ var _view_films_list_container_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../view/films-list-container.js */ "./src/view/films-list-container.js");
+/* harmony import */ var _view_no_films_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../view/no-films.js */ "./src/view/no-films.js");
 /* harmony import */ var _utils_render_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../utils/render.js */ "./src/utils/render.js");
 /* harmony import */ var _utils_common_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../utils/common.js */ "./src/utils/common.js");
 
@@ -455,46 +468,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const POST_COUNT_PER_STEP = 5;
-const NUM_OF_EXTRA_POSTS = 2;
-
 
 class SitePresenter {
   constructor(bodyContainer, filters) {
     this._bodyContainer = bodyContainer;
-    this._renderedPostsCount = POST_COUNT_PER_STEP;
+    this._renderedFilmsCount = POST_COUNT_PER_STEP;
 
     this._filters = filters.slice();
-    this._postPresenter = {};
+    this._filmPresenter = {};
 
     this._headerComponent = new _view_header_js__WEBPACK_IMPORTED_MODULE_1__["HeaderView"]();
-    this._mainComponent = new _view_mainSection_js__WEBPACK_IMPORTED_MODULE_0__["MainView"]();
+    this._mainComponent = new _view_main_section_js__WEBPACK_IMPORTED_MODULE_0__["MainView"]();
     this._footerComponent = new _view_footer_js__WEBPACK_IMPORTED_MODULE_2__["FooterView"]();
     this._userComponent = new _view_user_js__WEBPACK_IMPORTED_MODULE_3__["UserView"]();
     this._sortComponent = new _view_sort_js__WEBPACK_IMPORTED_MODULE_5__["SortView"]();
     this._filterComponent = new _view_filter_js__WEBPACK_IMPORTED_MODULE_4__["FilterView"](this._filters);
-    this._postsContainerComponent = new _view_posts_container_js__WEBPACK_IMPORTED_MODULE_6__["PostsContainerView"]();
-    this._postsListContainerComponent = new _view_posts_list_container_js__WEBPACK_IMPORTED_MODULE_10__["PostListContainerView"]();
-    this._noPostsComponent = new _view_no_posts_js__WEBPACK_IMPORTED_MODULE_11__["NoPostsView"]();
-    this._postListMain = new _view_posts_list_container_js__WEBPACK_IMPORTED_MODULE_10__["PostListContainerView"](``, `visually-hidden`, `All movies. Upcoming`);
-    this._postListTopRated = new _view_posts_list_container_js__WEBPACK_IMPORTED_MODULE_10__["PostListContainerView"](`films-list--extra`, ``, `Top rated`);
-    this._postListMostCommented = new _view_posts_list_container_js__WEBPACK_IMPORTED_MODULE_10__["PostListContainerView"](`films-list--extra`, ``, `Most commented`);
-    this._footerStatsComponent = new _view_footer_stats_js__WEBPACK_IMPORTED_MODULE_9__["FooterStatsView"]();
+    this._filmsContainerComponent = new _view_films_container_js__WEBPACK_IMPORTED_MODULE_6__["FilmsContainerView"]();
+    this._noFilmsComponent = new _view_no_films_js__WEBPACK_IMPORTED_MODULE_11__["NoFilmsView"]();
 
+    this._filmsListContainer = new _view_films_list_container_js__WEBPACK_IMPORTED_MODULE_10__["FilmListContainerView"]().getElement().querySelector(`.films-list__container`);
     this._loadMoreButtonComponent = new _view_button_js__WEBPACK_IMPORTED_MODULE_8__["LoadMoreButtonView"]();
-    this._handlePostChange = this._handlePostChange.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
-  init(bodyPosts) {
-    this._bodyPosts = bodyPosts.slice();
+  init(bodyFilms) {
+    this._bodyFilms = bodyFilms.slice();
 
     Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._bodyContainer, this._headerComponent);
     Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._headerComponent, this._userComponent);
     Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._bodyContainer, this._mainComponent);
     Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._mainComponent, this._filterComponent);
     Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._mainComponent, this._sortComponent);
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._mainComponent, this._postsContainerComponent);
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._mainComponent, this._filmsContainerComponent);
     Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._bodyContainer, this._footerComponent);
 
     this._renderMain();
@@ -502,83 +509,74 @@ class SitePresenter {
 
   _handleModeChange() {
     Object
-      .values(this._postPresenter)
+      .values(this._filmPresenter)
       .forEach((presenter) => presenter.resetView());
   }
 
-  _handlePostChange(updatedTask) {
-    this._bodyPosts = Object(_utils_common_js__WEBPACK_IMPORTED_MODULE_13__["updateItem"])(this._bodyPosts, updatedTask);
-    this._postPresenter[updatedTask.id].init(updatedTask);
+  _handleFilmChange(updatedTask) {
+    this._bodyFilms = Object(_utils_common_js__WEBPACK_IMPORTED_MODULE_13__["updateItem"])(this._bodyFilms, updatedTask);
+    this._filmPresenter[updatedTask.id].init(updatedTask);
   }
 
-  _renderPost(postListContainer, bodyPost) {
-    const postPresenter = new _postPresenter_js__WEBPACK_IMPORTED_MODULE_7__["PostPresenter"](this._bodyContainer, postListContainer, this._handlePostChange, this._handleModeChange);
-    postPresenter.init(bodyPost);
-    this._postPresenter[bodyPost.id] = postPresenter;
+  _renderFilm(filmListContainer, bodyFilm) {
+    const filmPresenter = new _film_presenter_js__WEBPACK_IMPORTED_MODULE_7__["FilmPresenter"](this._bodyContainer, filmListContainer, this._handleFilmChange, this._handleModeChange);
+    filmPresenter.init(bodyFilm);
+    this._filmPresenter[bodyFilm.id] = filmPresenter;
   }
 
-  _clearPostList() {
+  _clearFilmList() {
     Object
-      .values(this._postPresenter)
+      .values(this._filmPresenter)
       .forEach((presenter) => presenter.destroy());
-    this._postPresenter = {};
-    this._renderedPostsCount = POST_COUNT_PER_STEP;
+    this._filmPresenter = {};
+    this._renderedFilmsCount = POST_COUNT_PER_STEP;
     Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["remove"])(this._loadMoreButtonComponent);
   }
 
-  _renderPosts(from, to) {
-    this._bodyPosts
+  _renderFilms(from, to) {
+    this._bodyFilms
      .slice(from, to)
-     .forEach((post) => this._renderPost(this._postListMain.getElement().children[1], post));
+     .forEach((film) => this._renderFilm(this._filmsListContainer, film));
   }
 
   _handleLoadMoreButtonClick() {
-    this._renderPosts(this._renderedPostsCount, this._renderedPostsCount + POST_COUNT_PER_STEP);
-    this._renderedPostsCount += POST_COUNT_PER_STEP;
+    this._renderFilms(this._renderedFilmsCount, this._renderedFilmsCount + POST_COUNT_PER_STEP);
+    this._renderedFilmsCount += POST_COUNT_PER_STEP;
 
-    if (this._renderedPostsCount >= this._bodyPosts.length) {
+    if (this._renderedFilmsCount >= this._bodyFilms.length) {
       Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["remove"])(this._loadMoreButtonComponent);
     }
   }
 
   _renderLoadMoreButton() {
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._postListMain.getElement().children[1], this._loadMoreButtonComponent, `afterend`);
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._filmsListContainer, this._loadMoreButtonComponent, `afterend`);
     this._loadMoreButtonComponent.setClickHandler(this._handleLoadMoreButtonClick);
   }
 
-  _renderNoPosts() {
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._postsContainerComponent, this._noPostsComponent);
+  _renderNoFilms() {
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._filmsContainerComponent, this._noFilmsComponent);
   }
 
-  _renderFooterStats(count) {
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._footerComponent, new _view_footer_stats_js__WEBPACK_IMPORTED_MODULE_9__["FooterStatsView"](count));
+  _renderFooterStats() {
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._footerComponent, new _view_footer_stats_js__WEBPACK_IMPORTED_MODULE_9__["FooterStatsView"](this._bodyFilms.length));
   }
 
   _renderMain() {
-    if (this._bodyPosts.length <= 0) {
-      this._renderNoPosts();
-      this._renderFooterStats(`0`);
+    this._renderFooterStats();
+    if (this._bodyFilms.length <= 0) {
+      this._renderNoFilms();
       return;
     }
 
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._postsContainerComponent, this._postListMain);
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._postsContainerComponent, this._postListTopRated);
-    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._postsContainerComponent, this._postListMostCommented);
+    Object(_utils_render_js__WEBPACK_IMPORTED_MODULE_12__["render"])(this._filmsContainerComponent, this._filmsListContainer);
 
     for (let i = 0; i < POST_COUNT_PER_STEP; i++) {
-      this._renderPost(this._postListMain.getElement().children[1], this._bodyPosts[i]);
+      this._renderFilm(this._filmsListContainer, this._bodyFilms[i]);
     }
 
-    if (this._bodyPosts.length > POST_COUNT_PER_STEP) {
+    if (this._bodyFilms.length > POST_COUNT_PER_STEP) {
       this._renderLoadMoreButton();
     }
-
-    for (let i = 0; i < NUM_OF_EXTRA_POSTS; i++) {
-      this._renderPost(this._postListTopRated.getElement().children[1], this._bodyPosts[i]);
-      this._renderPost(this._postListMostCommented.getElement().children[1], this._bodyPosts[i]);
-    }
-
-    this._renderFooterStats(`130 291`);
   }
 }
 
@@ -621,8 +619,8 @@ const generateDescription = () => {
   const description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`.slice(0, -1);
   const descriptions = description.split(`. `);
   const randomNumber = getRandomIntInclusive(1, descriptions.length - 1);
-  const postDescription = descriptions.slice(randomNumber, randomNumber + getRandomIntInclusive(1, 5));
-  return postDescription.join(`. `) + `.`;
+  const filmDescription = descriptions.slice(randomNumber, randomNumber + getRandomIntInclusive(1, 5));
+  return filmDescription.join(`. `) + `.`;
 };
 
 
@@ -790,44 +788,370 @@ class LoadMoreButtonView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["Abst
 
 /***/ }),
 
-/***/ "./src/view/comment.js":
-/*!*****************************!*\
-  !*** ./src/view/comment.js ***!
-  \*****************************/
-/*! exports provided: CommentView */
+/***/ "./src/view/film-comments.js":
+/*!***********************************!*\
+  !*** ./src/view/film-comments.js ***!
+  \***********************************/
+/*! exports provided: FilmCommentsView */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommentView", function() { return CommentView; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FilmCommentsView", function() { return FilmCommentsView; });
 /* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
 
 
-const createPostComment = (comment) => {
-  const {text, emotion, author, date} = comment;
-  return `<li class="film-details__comment">
-    <span class="film-details__comment-emoji">
-      <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
-    </span>
-    <div>
-      <p class="film-details__comment-text">${text}</p>
-      <p class="film-details__comment-info">
-        <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${date}</span>
-        <button class="film-details__comment-delete">Delete</button>
-      </p>
-    </div>
-  </li>`;
+const createFilmCommentsSection = (comments) => {
+  const createFilmComment = (comment) => {
+
+    return `<li class="film-details__comment">
+      <span class="film-details__comment-emoji">
+        <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
+      </span>
+      <div>
+        <p class="film-details__comment-text">${comment.text}</p>
+        <p class="film-details__comment-info">
+          <span class="film-details__comment-author">${comment.author}</span>
+          <span class="film-details__comment-day">${comment.date}</span>
+          <button class="film-details__comment-delete">Delete</button>
+        </p>
+      </div>
+    </li>`;
+  };
+
+  const commentsList = comments.map((comment) => createFilmComment(comment)).join(``);
+  return `<section class="film-details__comments-wrap">
+    <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+    <ul class="film-details__comments-list">${commentsList}</ul>
+  </section>`;
 };
 
-class CommentView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
-  constructor(comment) {
+class FilmCommentsView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
+  constructor(comments) {
     super();
-    this._comment = comment;
+    this._comments = comments;
   }
 
   getTemplate() {
-    return createPostComment(this._comment);
+    return createFilmCommentsSection(this._comments);
+  }
+}
+
+
+/***/ }),
+
+/***/ "./src/view/film-details.js":
+/*!**********************************!*\
+  !*** ./src/view/film-details.js ***!
+  \**********************************/
+/*! exports provided: FilmDetailsView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FilmDetailsView", function() { return FilmDetailsView; });
+/* harmony import */ var _utils_common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/common.js */ "./src/utils/common.js");
+/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
+
+
+
+const createFilmDetailsTemplate = (film) => {
+  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, isAddedtoWatchList, isWatched, isFavorite} = film;
+  const genresForm = Object(_utils_common_js__WEBPACK_IMPORTED_MODULE_0__["figureCorrectPluralForm"])(genres, `Genre`);
+
+  const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
+  const genreList = genres.map((item) => createGenresTemplate(item)).join(``);
+
+  return `<section class="film-details">
+  <form class="film-details__inner" action="" method="get">
+    <div class="film-details__top-container">
+      <div class="film-details__close">
+        <button class="film-details__close-btn" type="button">close</button>
+      </div>
+      <div class="film-details__info-wrap">
+        <div class="film-details__poster">
+          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+
+          <p class="film-details__age">${ageRestriction}</p>
+        </div>
+
+        <div class="film-details__info">
+          <div class="film-details__info-head">
+            <div class="film-details__title-wrap">
+              <h3 class="film-details__title">${title}</h3>
+              <p class="film-details__title-original">Original: ${originalTitle}</p>
+            </div>
+
+            <div class="film-details__rating">
+              <p class="film-details__total-rating">${rating}</p>
+            </div>
+          </div>
+
+          <table class="film-details__table">
+            <tr class="film-details__row">
+              <td class="film-details__term">Director</td>
+              <td class="film-details__cell">${director}</td>
+            </tr>
+            <tr class="film-details__row">
+              <td class="film-details__term">Writers</td>
+              <td class="film-details__cell">${writers}</td>
+            </tr>
+            <tr class="film-details__row">
+              <td class="film-details__term">Actors</td>
+              <td class="film-details__cell">${actors}</td>
+            </tr>
+            <tr class="film-details__row">
+              <td class="film-details__term">Release Date</td>
+              <td class="film-details__cell">${productionDate}</td>
+            </tr>
+            <tr class="film-details__row">
+              <td class="film-details__term">Runtime</td>
+              <td class="film-details__cell">${duration}</td>
+            </tr>
+            <tr class="film-details__row">
+              <td class="film-details__term">Country</td>
+              <td class="film-details__cell">${country}</td>
+            </tr>
+            <tr class="film-details__row">
+              <td class="film-details__term">${genresForm}</td>
+              <td class="film-details__cell">${genreList}</td>
+            </tr>
+          </table>
+
+          <p class="film-details__film-description">${description}</p>
+        </div>
+      </div>
+
+      <section class="film-details__controls">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isAddedtoWatchList ? `checked` : ``}>
+        <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
+        <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
+
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
+        <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
+      </section>
+    </div>
+
+    <div class="film-details__bottom-container"></div>
+  </form>
+</section>`;
+};
+
+class FilmDetailsView extends _abstract_js__WEBPACK_IMPORTED_MODULE_1__["AbstractView"] {
+  constructor(film) {
+    super();
+    this._film = film;
+    this._clickHandler = this._clickHandler.bind(this);
+    this._watchListClickHandler = this._watchListClickHandler.bind(this);
+    this._isWatchedClickHandler = this._isWatchedClickHandler.bind(this);
+    this._isFavoriteClickHandler = this._isFavoriteClickHandler.bind(this);
+
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  _clickHandler(evt) {
+    this._callback.click(evt);
+  }
+
+  _watchListClickHandler(evt) {
+    this._callback.watchListClick(evt);
+  }
+
+  _isWatchedClickHandler(evt) {
+    this._callback.isWatchedClick(evt);
+  }
+
+  _isFavoriteClickHandler(evt) {
+    this._callback.isFavoriteClick(evt);
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().addEventListener(`click`, this._clickHandler);
+  }
+
+  setWatchListClickHandler(callback) {
+    this._callback.watchListClick = callback;
+    this.getElement().addEventListener(`click`, this._watchListClickHandler);
+  }
+
+  setIsWatchedClickHandler(callback) {
+    this._callback.isWatchedClick = callback;
+    this.getElement().addEventListener(`click`, this._isWatchedClickHandler);
+  }
+
+  setIsFavoriteClickHandler(callback) {
+    this._callback.isFavoriteClick = callback;
+    this.getElement().addEventListener(`click`, this._isFavoriteClickHandler);
+  }
+}
+
+
+/***/ }),
+
+/***/ "./src/view/film.js":
+/*!**************************!*\
+  !*** ./src/view/film.js ***!
+  \**************************/
+/*! exports provided: FilmView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FilmView", function() { return FilmView; });
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
+
+
+
+const createFilmTemplate = (film) => {
+  const {title, rating, productionDate, duration, genres, poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = film;
+  const productionYear = dayjs__WEBPACK_IMPORTED_MODULE_0___default()(productionDate).format(`YYYY`);
+
+  const genreList = genres.join(`, `);
+
+  const favoriteClassName = isFavorite
+    ? `film-card__controls-item--active`
+    : ``;
+  const addToWatchlistClassName = isAddedtoWatchList
+    ? `film-card__controls-item--active`
+    : ``;
+  const markAswatchedClassName = isWatched
+    ? `film-card__controls-item--active`
+    : ``;
+
+  let shortDescription = description;
+  if (shortDescription.length > 140) {
+    shortDescription = shortDescription.slice(0, 139) + `...`;
+  }
+
+  return `<article class="film-card">
+          <h3 class="film-card__title">${title}</h3>
+          <p class="film-card__rating">${rating}</p>
+          <p class="film-card__info">
+            <span class="film-card__year">${productionYear}</span>
+            <span class="film-card__duration">${duration}</span>
+            <span class="film-card__genre">${genreList}</span>
+          </p>
+          <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+          <p class="film-card__description">${shortDescription}</p>
+          <a class="film-card__comments">${comments.length} comments</a>
+          <div class="film-card__controls">
+            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${addToWatchlistClassName}" type="button">Add to watchlist</button>
+            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${markAswatchedClassName}" type="button">Mark as watched</button>
+            <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassName}" type="button">Mark as favorite</button>
+          </div>
+        </article>`;
+};
+
+class FilmView extends _abstract_js__WEBPACK_IMPORTED_MODULE_1__["AbstractView"] {
+  constructor(film) {
+    super();
+    this._film = film;
+    this._clickHandler = this._clickHandler.bind(this);
+    this._watchListClickHandler = this._watchListClickHandler.bind(this);
+    this._isWatchedClickHandler = this._isWatchedClickHandler.bind(this);
+    this._isFavoriteClickHandler = this._isFavoriteClickHandler.bind(this);
+  }
+
+  getTemplate() {
+    return createFilmTemplate(this._film);
+  }
+
+  _clickHandler(evt) {
+    this._callback.click(evt);
+  }
+
+  _watchListClickHandler(evt) {
+    this._callback.watchListClick(evt);
+  }
+
+  _isWatchedClickHandler(evt) {
+    this._callback.isWatchedClick(evt);
+  }
+
+  _isFavoriteClickHandler(evt) {
+    this._callback.isFavoriteClick(evt);
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().addEventListener(`click`, this._clickHandler);
+  }
+
+  setWatchListClickHandler(callback) {
+    this._callback.watchListClick = callback;
+    this.getElement().addEventListener(`click`, this._watchListClickHandler);
+  }
+
+  setIsWatchedClickHandler(callback) {
+    this._callback.isWatchedClick = callback;
+    this.getElement().addEventListener(`click`, this._isWatchedClickHandler);
+  }
+
+  setIsFavoriteClickHandler(callback) {
+    this._callback.isFavoriteClick = callback;
+    this.getElement().addEventListener(`click`, this._isFavoriteClickHandler);
+  }
+}
+
+
+/***/ }),
+
+/***/ "./src/view/films-container.js":
+/*!*************************************!*\
+  !*** ./src/view/films-container.js ***!
+  \*************************************/
+/*! exports provided: FilmsContainerView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FilmsContainerView", function() { return FilmsContainerView; });
+/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
+
+
+const creatFilmsContainerTemplate = () => `<section class="films"></section>`;
+
+class FilmsContainerView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
+
+  getTemplate() {
+    return creatFilmsContainerTemplate();
+  }
+}
+
+
+/***/ }),
+
+/***/ "./src/view/films-list-container.js":
+/*!******************************************!*\
+  !*** ./src/view/films-list-container.js ***!
+  \******************************************/
+/*! exports provided: FilmListContainerView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FilmListContainerView", function() { return FilmListContainerView; });
+/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
+
+
+const createFilmsListContainerTemplate = () =>
+  `<section class="films-list">
+      <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
+      <div class="films-list__container"></div>
+  </section>`;
+
+
+class FilmListContainerView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
+  getTemplate() {
+    return createFilmsListContainerTemplate();
   }
 }
 
@@ -962,10 +1286,10 @@ class HeaderView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView
 
 /***/ }),
 
-/***/ "./src/view/mainSection.js":
-/*!*********************************!*\
-  !*** ./src/view/mainSection.js ***!
-  \*********************************/
+/***/ "./src/view/main-section.js":
+/*!**********************************!*\
+  !*** ./src/view/main-section.js ***!
+  \**********************************/
 /*! exports provided: MainView */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -987,353 +1311,82 @@ class MainView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"]
 
 /***/ }),
 
-/***/ "./src/view/no-posts.js":
-/*!******************************!*\
-  !*** ./src/view/no-posts.js ***!
-  \******************************/
-/*! exports provided: NoPostsView */
+/***/ "./src/view/new-comment.js":
+/*!*********************************!*\
+  !*** ./src/view/new-comment.js ***!
+  \*********************************/
+/*! exports provided: NewCommentView */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NoPostsView", function() { return NoPostsView; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NewCommentView", function() { return NewCommentView; });
 /* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
 
 
-const createNoPostsTemplate = () =>
+const createNewCommentTemplate = () => {
+  return `<div class="film-details__new-comment">
+  <div class="film-details__add-emoji-label"></div>
+
+  <label class="film-details__comment-label">
+    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+  </label>
+
+  <div class="film-details__emoji-list">
+    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
+    <label class="film-details__emoji-label" for="emoji-smile">
+      <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
+    </label>
+
+    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
+    <label class="film-details__emoji-label" for="emoji-sleeping">
+      <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
+    </label>
+
+    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+    <label class="film-details__emoji-label" for="emoji-puke">
+      <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
+    </label>
+
+    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
+    <label class="film-details__emoji-label" for="emoji-angry">
+      <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+    </label>
+  </div>
+</div>`;
+};
+
+class NewCommentView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
+  getTemplate() {
+    return createNewCommentTemplate();
+  }
+}
+
+
+/***/ }),
+
+/***/ "./src/view/no-films.js":
+/*!******************************!*\
+  !*** ./src/view/no-films.js ***!
+  \******************************/
+/*! exports provided: NoFilmsView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NoFilmsView", function() { return NoFilmsView; });
+/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
+
+
+const createNoFilmsTemplate = () =>
   `<section class="films-list">
     <h2 class="films-list__title">There are no movies in our database</h2>
     </section>`;
 
-class NoPostsView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
+class NoFilmsView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
 
   getTemplate() {
-    return createNoPostsTemplate();
-  }
-}
-
-
-/***/ }),
-
-/***/ "./src/view/post-details.js":
-/*!**********************************!*\
-  !*** ./src/view/post-details.js ***!
-  \**********************************/
-/*! exports provided: PostDetailsView */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostDetailsView", function() { return PostDetailsView; });
-/* harmony import */ var _utils_common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/common.js */ "./src/utils/common.js");
-/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
-
-
-
-const createPostDetailsTemplate = (post) => {
-  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
-  const genresForm = Object(_utils_common_js__WEBPACK_IMPORTED_MODULE_0__["figureCorrectPluralForm"])(genres, `Genre`);
-
-  const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
-  const genreList = genres.map((item) => createGenresTemplate(item)).join(``);
-
-  return `<section class="film-details">
-  <form class="film-details__inner" action="" method="get">
-    <div class="film-details__top-container">
-      <div class="film-details__close">
-        <button class="film-details__close-btn" type="button">close</button>
-      </div>
-      <div class="film-details__info-wrap">
-        <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
-
-          <p class="film-details__age">${ageRestriction}</p>
-        </div>
-
-        <div class="film-details__info">
-          <div class="film-details__info-head">
-            <div class="film-details__title-wrap">
-              <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${originalTitle}</p>
-            </div>
-
-            <div class="film-details__rating">
-              <p class="film-details__total-rating">${rating}</p>
-            </div>
-          </div>
-
-          <table class="film-details__table">
-            <tr class="film-details__row">
-              <td class="film-details__term">Director</td>
-              <td class="film-details__cell">${director}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${productionDate}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${country}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">${genresForm}</td>
-              <td class="film-details__cell">${genreList}</td>
-            </tr>
-          </table>
-
-          <p class="film-details__film-description">${description}</p>
-        </div>
-      </div>
-
-      <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isAddedtoWatchList ? `checked` : ``}>
-        <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
-
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
-        <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
-
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
-        <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
-      </section>
-    </div>
-
-    <div class="film-details__bottom-container">
-      <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-
-        <ul class="film-details__comments-list"></ul>
-
-        <div class="film-details__new-comment">
-          <div class="film-details__add-emoji-label"></div>
-
-          <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-          </label>
-
-          <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
-          </div>
-        </div>
-      </section>
-    </div>
-  </form>
-</section>`;
-};
-
-class PostDetailsView extends _abstract_js__WEBPACK_IMPORTED_MODULE_1__["AbstractView"] {
-  constructor(post) {
-    super();
-    this._post = post;
-    this._clickHandler = this._clickHandler.bind(this);
-    this._controlsPanelClickHandler = this._controlsPanelClickHandler.bind(this);
-
-  }
-
-  getTemplate() {
-    return createPostDetailsTemplate(this._post);
-  }
-
-  _clickHandler(evt) {
-    evt.preventDefault();
-    this._callback.click(evt);
-  }
-
-  _controlsPanelClickHandler(evt) {
-    evt.preventDefault(evt);
-    this._callback.controlsClick(evt);
-  }
-
-  setClickHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector(`.film-details__close`).addEventListener(`click`, this._clickHandler);
-  }
-
-  setPostControlsClickHandler(callback) {
-    this._callback.controlsClick = callback;
-    this.getElement().addEventListener(`click`, this._controlsPanelClickHandler);
-  }
-}
-
-
-/***/ }),
-
-/***/ "./src/view/post.js":
-/*!**************************!*\
-  !*** ./src/view/post.js ***!
-  \**************************/
-/*! exports provided: PostView */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostView", function() { return PostView; });
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
-
-
-
-const createPostTemplate = (post) => {
-  const {title, rating, productionDate, duration, genres, poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = post;
-  const productionYear = dayjs__WEBPACK_IMPORTED_MODULE_0___default()(productionDate).format(`YYYY`);
-
-  const genreList = genres.join(`, `);
-
-  const favoriteClassName = isFavorite
-    ? `film-card__controls-item--active`
-    : ``;
-  const addToWatchlistClassName = isAddedtoWatchList
-    ? `film-card__controls-item--active`
-    : ``;
-  const markAswatchedClassName = isWatched
-    ? `film-card__controls-item--active`
-    : ``;
-
-  let shortDescription = description;
-  if (shortDescription.length > 140) {
-    shortDescription = shortDescription.slice(0, 139) + `...`;
-  }
-
-  return `<article class="film-card">
-          <h3 class="film-card__title">${title}</h3>
-          <p class="film-card__rating">${rating}</p>
-          <p class="film-card__info">
-            <span class="film-card__year">${productionYear}</span>
-            <span class="film-card__duration">${duration}</span>
-            <span class="film-card__genre">${genreList}</span>
-          </p>
-          <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-          <p class="film-card__description">${shortDescription}</p>
-          <a class="film-card__comments">${comments.length} comments</a>
-          <div class="film-card__controls">
-            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${addToWatchlistClassName}" type="button">Add to watchlist</button>
-            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${markAswatchedClassName}" type="button">Mark as watched</button>
-            <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassName}" type="button">Mark as favorite</button>
-          </div>
-        </article>`;
-};
-
-class PostView extends _abstract_js__WEBPACK_IMPORTED_MODULE_1__["AbstractView"] {
-  constructor(post) {
-    super();
-    this._post = post;
-    this._clickHandler = this._clickHandler.bind(this);
-    this._controlsPanelClickHandler = this._controlsPanelClickHandler.bind(this);
-  }
-
-  getTemplate() {
-    return createPostTemplate(this._post);
-  }
-
-  _clickHandler(evt) {
-    evt.preventDefault(evt);
-    this._callback.click(evt);
-  }
-
-  _controlsPanelClickHandler(evt) {
-    evt.preventDefault(evt);
-    this._callback.controlsClick(evt);
-  }
-
-  setClickHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().addEventListener(`click`, this._clickHandler);
-  }
-
-  setPostControlsClickHandler(callback) {
-    this._callback.controlsClick = callback;
-    this.getElement().addEventListener(`click`, this._controlsPanelClickHandler);
-  }
-}
-
-
-/***/ }),
-
-/***/ "./src/view/posts-container.js":
-/*!*************************************!*\
-  !*** ./src/view/posts-container.js ***!
-  \*************************************/
-/*! exports provided: PostsContainerView */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostsContainerView", function() { return PostsContainerView; });
-/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
-
-
-const creatPostsContainerTemplate = () => `<section class="films"></section>`;
-
-class PostsContainerView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
-
-  getTemplate() {
-    return creatPostsContainerTemplate();
-  }
-}
-
-
-/***/ }),
-
-/***/ "./src/view/posts-list-container.js":
-/*!******************************************!*\
-  !*** ./src/view/posts-list-container.js ***!
-  \******************************************/
-/*! exports provided: PostListContainerView */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostListContainerView", function() { return PostListContainerView; });
-/* harmony import */ var _abstract_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract.js */ "./src/view/abstract.js");
-
-
-const createPostsListContainerTemplate = (sectionClass, headerClass, title) =>
-  `<section class="films-list ${sectionClass}">
-      <h2 class="films-list__title ${headerClass}">${title}</h2>
-      <div class="films-list__container"></div>
-  </section>`;
-
-
-class PostListContainerView extends _abstract_js__WEBPACK_IMPORTED_MODULE_0__["AbstractView"] {
-  constructor(sectionClass, headerClass, title) {
-    super();
-    this._sectionClass = sectionClass;
-    this._headerClass = headerClass;
-    this._title = title;
-  }
-
-  getTemplate() {
-    return createPostsListContainerTemplate(this._sectionClass, this._headerClass, this._title);
+    return createNoFilmsTemplate();
   }
 }
 
