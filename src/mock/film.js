@@ -1,5 +1,7 @@
 import {generateRandomItem, getRandomIntInclusive, generateDescription} from "../utils/common.js";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const titles = [`The Dance of Life`, `Sagebrush Trail`, `The Man with the Golden Arm`, `Santa Claus Conquers the Martians`, `Popeye the Sailor Meets Sindbad the Sailor`, `The Great Flamarion`];
 
 const posterTitles = [`made-for-each-other.png`, `popeye-meets-sinbad.png`, `sagebrush-trail.jpg`, `santa-claus-conquers-the-martians.jpg`, `the-dance-of-life.jpg`, `the-great-flamarion.jpg`, `the-man-with-the-golden-arm.jpg`];
@@ -15,9 +17,10 @@ const generateCommentsIds = () => {
   return commentsIds;
 };
 
-export const generatePost = () => {
+export const generateFilm = () => {
 
   return {
+    id: generateId(),
     poster: generateRandomItem(posterTitles),
     title: generateRandomItem(titles),
     originalTitle: generateRandomItem(titles),

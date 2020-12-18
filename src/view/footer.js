@@ -1,0 +1,13 @@
+import {AbstractView} from "./abstract.js";
+
+const createFooterTemplate = () =>
+  `<footer class="footer">
+    <section class="footer__logo logo logo--smaller">Cinemaddict</section>
+    </section>
+  </footer>`;
+
+export class FooterView extends AbstractView {
+  getTemplate() {
+    return createFooterTemplate();
+  }
+}

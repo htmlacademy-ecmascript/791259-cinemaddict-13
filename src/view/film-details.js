@@ -1,8 +1,8 @@
 import {figureCorrectPluralForm} from "../utils/common.js";
 import {AbstractView} from "./abstract.js";
 
-const createPostDetailsTemplate = (post) => {
-  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, comments} = post;
+const createFilmDetailsTemplate = (film) => {
+  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, isAddedtoWatchList, isWatched, isFavorite} = film;
   const genresForm = figureCorrectPluralForm(genres, `Genre`);
 
   const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
@@ -69,76 +69,70 @@ const createPostDetailsTemplate = (post) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isAddedtoWatchList ? `checked` : ``}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
 
-    <div class="film-details__bottom-container">
-      <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-
-        <ul class="film-details__comments-list"></ul>
-
-        <div class="film-details__new-comment">
-          <div class="film-details__add-emoji-label"></div>
-
-          <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-          </label>
-
-          <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
-          </div>
-        </div>
-      </section>
-    </div>
+    <div class="film-details__bottom-container"></div>
   </form>
 </section>`;
 };
 
-export class PostDetailsView extends AbstractView {
-  constructor(post) {
+export class FilmDetailsView extends AbstractView {
+  constructor(film) {
     super();
-    this._post = post;
+    this._film = film;
     this._clickHandler = this._clickHandler.bind(this);
+    this._watchListClickHandler = this._watchListClickHandler.bind(this);
+    this._isWatchedClickHandler = this._isWatchedClickHandler.bind(this);
+    this._isFavoriteClickHandler = this._isFavoriteClickHandler.bind(this);
+
   }
 
   getTemplate() {
-    return createPostDetailsTemplate(this._post);
+    return createFilmDetailsTemplate(this._film);
   }
 
   _clickHandler(evt) {
-    evt.preventDefault();
     this._callback.click(evt);
+  }
+
+  _watchListClickHandler(evt) {
+    this._callback.watchListClick(evt);
+  }
+
+  _isWatchedClickHandler(evt) {
+    this._callback.isWatchedClick(evt);
+  }
+
+  _isFavoriteClickHandler(evt) {
+    this._callback.isFavoriteClick(evt);
   }
 
   setClickHandler(callback) {
     this._callback.click = callback;
-    this.getElement().querySelector(`.film-details__close`).addEventListener(`click`, this._clickHandler);
+    this.getElement().addEventListener(`click`, this._clickHandler);
+  }
+
+  setWatchListClickHandler(callback) {
+    this._callback.watchListClick = callback;
+    this.getElement().addEventListener(`click`, this._watchListClickHandler);
+  }
+
+  setIsWatchedClickHandler(callback) {
+    this._callback.isWatchedClick = callback;
+    this.getElement().addEventListener(`click`, this._isWatchedClickHandler);
+  }
+
+  setIsFavoriteClickHandler(callback) {
+    this._callback.isFavoriteClick = callback;
+    this.getElement().addEventListener(`click`, this._isFavoriteClickHandler);
   }
 }
