@@ -93,6 +93,7 @@ export class FilmDetailsView extends AbstractView {
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._isWatchedClickHandler = this._isWatchedClickHandler.bind(this);
     this._isFavoriteClickHandler = this._isFavoriteClickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
 
   }
 
@@ -135,4 +136,15 @@ export class FilmDetailsView extends AbstractView {
     this._callback.isFavoriteClick = callback;
     this.getElement().addEventListener(`click`, this._isFavoriteClickHandler);
   }
+
+  _formSubmitHandler(evt) {
+    event.preventDefault();
+    this._callback.formSubmit(evt);
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
+  }
+
 }

@@ -4,6 +4,7 @@ import {NewCommentView} from "../view/new-comment.js";
 import {FilmCommentsView} from "../view/film-comments.js";
 import {render, remove, replace} from "../utils/render.js";
 import {generateComment} from "../mock/comment.js";
+import dayjs from "dayjs";
 
 const comments = new Array(5).fill().map((item, index) => generateComment(index));
 
@@ -11,6 +12,14 @@ const Mode = {
   DEFAULT: `DEFAULT`,
   VIEWING: `VIEWING`,
 };
+
+const emojies = {
+  smile: false,
+  sleeping: false,
+  angry: false,
+  puke: false,
+};
+
 
 export class FilmPresenter {
   constructor(bodyContainer, filmListContainer, changeData, changeMode) {
@@ -31,6 +40,15 @@ export class FilmPresenter {
     this._handleWatchListClick = this._handleWatchListClick.bind(this);
     this._handleIsWatchedClick = this._handleIsWatchedClick.bind(this);
     this._handleIsFavoriteClick = this._handleIsFavoriteClick.bind(this);
+    this._handleEmojiPick = this._handleEmojiPick.bind(this);
+    this._handleTextAreaInput = this._handleTextAreaInput.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._emotion = null;
+    this._description = null;
+
+
+
+
   }
 
   init(film) {
@@ -119,15 +137,40 @@ export class FilmPresenter {
     }
   }
 
+
+  _handleTextAreaInput(event) {
+    this._description = event.target.value;
+  }
+
+ _handleFormSubmit(event) {
+    if(!(event.keyCode == 13 && event.metaKey)) return;
+    if(event.target.form) {
+      event.target.form.submit();
+    }
+}
+
+  _handleEmojiPick(event) {
+    if (event.target.tagName === `INPUT`) {
+      this._emotion = event.target.value;
+      const emojiContainer = document.querySelector(`.film-details__add-emoji-label`);
+      emojiContainer.innerHTML = ``;
+      emojiContainer.insertAdjacentHTML(`beforeend`, `<img src="images/emoji/${event.target.value}.png" width="55" height="55" alt="emoji-${event.target.value}">`);
+    }
+  }
+
   _handleShowFilmDetails() {
     this._bodyContainer.classList.add(`hide-overflow`);
     this._filmDetailsComponent = new FilmDetailsView(this._film);
-    this._newCommentComponent = new NewCommentView();
+    this._newCommentComponent = new NewCommentView(emojies);
 
     this._filmDetailsComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmDetailsComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmDetailsComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
     this._filmDetailsComponent.setClickHandler(this._handleClickOnX);
+    this._filmDetailsComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._newCommentComponent.setEmojiClickHandler(this._handleEmojiPick);
+    this._newCommentComponent.setTextAreaClickHandler(this._handleTextAreaInput);
+
 
     render(this._bodyContainer, this._filmDetailsComponent);
 
@@ -144,7 +187,10 @@ export class FilmPresenter {
 
     render(this._filmDetailsComponent.getElement().querySelector(`.film-details__bottom-container`), new FilmCommentsView(comList));
 
-    render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), new NewCommentView());
+
+
+    render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._newCommentComponent);
+
   }
 
   _handleReturnToFilm() {
