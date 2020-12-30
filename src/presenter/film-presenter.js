@@ -224,7 +224,7 @@ export class FilmPresenter {
             this._film, {
               comments: this._commentsAssignedList
             }
-          )
+        )
     );
   }
 
@@ -241,7 +241,7 @@ export class FilmPresenter {
       const deleteCommentId = +event.target.closest(`.film-details__comment`).dataset.id;
       this._filmDetailsComponent._film.comments.splice(this._filmDetailsComponent._film.comments.indexOf(deleteCommentId), 1);
 
-      let commentIdToDelete = this._commentsAssignedList.findIndex((item) => item.id == deleteCommentId);
+      let commentIdToDelete = this._commentsAssignedList.findIndex((item) => item.id === deleteCommentId);
       this._commentsAssignedList.splice(commentIdToDelete, 1);
       this._filmCommentsComponent.updateData(this._commentsAssignedList);
     }
