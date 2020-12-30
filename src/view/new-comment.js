@@ -1,17 +1,18 @@
-import {AbstractView} from "./abstract.js";
+import {
+  SmartView
+} from "./smart.js";
 
-const createNewCommentTemplate = (emojies) => {
-  const {smile, sleeping, angry, puke} = emojies;
+const createNewCommentTemplate = () => {
 
   return `<div class="film-details__new-comment">
   <div class="film-details__add-emoji-label"></div>
 
   <label class="film-details__comment-label">
-    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" type="submit"></textarea>
   </label>
 
   <div class="film-details__emoji-list">
-    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${smile ? `checked` : ``}>
+    <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
     <label class="film-details__emoji-label" for="emoji-smile">
       <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-value="smile">
     </label>
@@ -34,19 +35,20 @@ const createNewCommentTemplate = (emojies) => {
 </div>`;
 };
 
-export class NewCommentView extends AbstractView {
-  constructor(emojies) {
+export class NewCommentView extends SmartView {
+  constructor() {
     super();
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._textAreaClickHandler = this._textAreaClickHandler.bind(this);
-    this._emojies = emojies;
+    this.restoreHandlers = this.restoreHandlers.bind(this);
+
   }
   getTemplate() {
-    return createNewCommentTemplate(this._emojies);
+    return createNewCommentTemplate();
   }
 
   _emojiClickHandler(evt) {
-    event.preventDefault();
+    evt.preventDefault();
     this._callback.emojiClick(evt);
   }
 
@@ -56,12 +58,25 @@ export class NewCommentView extends AbstractView {
   }
 
   _textAreaClickHandler(evt) {
-    event.preventDefault();
+    evt.preventDefault();
     this._callback.textAreaClick(evt);
   }
 
   setTextAreaClickHandler(callback) {
     this._callback.textAreaClick = callback;
     this.getElement().querySelector(`textarea`).addEventListener(`change`, this._textAreaClickHandler);
+  }
+
+  updateData() {
+    this.updateElement();
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`textarea`).addEventListener(`change`, this._textAreaClickHandler);
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiClickHandler);
   }
 }

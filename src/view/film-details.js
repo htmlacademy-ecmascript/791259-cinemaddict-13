@@ -80,7 +80,9 @@ const createFilmDetailsTemplate = (film) => {
       </section>
     </div>
 
-    <div class="film-details__bottom-container"></div>
+    <div class="film-details__bottom-container">
+      <section class="film-details__comments-wrap"></section>
+    </div>
   </form>
 </section>`;
 };
@@ -93,7 +95,7 @@ export class FilmDetailsView extends AbstractView {
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._isWatchedClickHandler = this._isWatchedClickHandler.bind(this);
     this._isFavoriteClickHandler = this._isFavoriteClickHandler.bind(this);
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+ this._formSubmitHandler = this._formSubmitHandler.bind(this);
 
   }
 
@@ -138,7 +140,7 @@ export class FilmDetailsView extends AbstractView {
   }
 
   _formSubmitHandler(evt) {
-    event.preventDefault();
+
     this._callback.formSubmit(evt);
   }
 

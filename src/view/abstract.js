@@ -1,6 +1,5 @@
 import {createElement} from "../utils/render.js";
 
-
 export class AbstractView {
   constructor() {
     if (new.target === AbstractView) {

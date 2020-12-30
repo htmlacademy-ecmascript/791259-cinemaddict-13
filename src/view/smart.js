@@ -1,27 +1,8 @@
-import Abstract from "./abstract";
+import {AbstractView} from "./abstract";
 
-export default class Smart extends Abstract {
+export class SmartView extends AbstractView {
   constructor() {
     super();
-    this._data = {};
-  }
-
-  updateData(update, justDataUpdating) {
-    if (!update) {
-      return;
-    }
-
-    this._data = Object.assign(
-        {},
-        this._data,
-        update
-    );
-
-    if (justDataUpdating) {
-      return;
-    }
-
-    this.updateElement();
   }
 
   updateElement() {
@@ -36,7 +17,11 @@ export default class Smart extends Abstract {
     this.restoreHandlers();
   }
 
+  updateData() {
+    throw new Error(`AbstractView method not implemented: resetHandlers`);
+  }
+
   restoreHandlers() {
-    throw new Error(`Abstract method not implemented: resetHandlers`);
+    throw new Error(`AbstractView method not implemented: resetHandlers`);
   }
 }
