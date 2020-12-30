@@ -95,8 +95,7 @@ export class FilmDetailsView extends AbstractView {
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._isWatchedClickHandler = this._isWatchedClickHandler.bind(this);
     this._isFavoriteClickHandler = this._isFavoriteClickHandler.bind(this);
- this._formSubmitHandler = this._formSubmitHandler.bind(this);
-
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {

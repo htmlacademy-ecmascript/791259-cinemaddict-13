@@ -16,7 +16,6 @@ import {
   replace
 } from "../utils/render.js";
 import {
-  generateId,
   generateRandomItem
 } from "../utils/common.js";
 import {
@@ -107,11 +106,11 @@ export class FilmPresenter {
   _handleWatchListClick(event) {
     if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || event.target.classList.contains(`film-details__control-label--watchlist`)) {
       this._changeData(
-        Object.assign({},
-          this._film, {
-            isAddedtoWatchList: !this._film.isAddedtoWatchList
-          }
-        )
+          Object.assign({},
+              this._film, {
+                isAddedtoWatchList: !this._film.isAddedtoWatchList
+              }
+          )
       );
     }
   }
@@ -119,11 +118,11 @@ export class FilmPresenter {
   _handleIsWatchedClick() {
     if (event.target.classList.contains(`film-card__controls-item--mark-as-watched`) || event.target.classList.contains(`film-details__control-label--watched`)) {
       this._changeData(
-        Object.assign({},
-          this._film, {
-            isWatched: !this._film.isWatched
-          }
-        )
+          Object.assign({},
+              this._film, {
+                isWatched: !this._film.isWatched
+              }
+          )
       );
     }
   }
@@ -131,11 +130,11 @@ export class FilmPresenter {
   _handleIsFavoriteClick() {
     if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
       this._changeData(
-        Object.assign({},
-          this._film, {
-            isFavorite: !this._film.isFavorite
-          }
-        )
+          Object.assign({},
+              this._film, {
+                isFavorite: !this._film.isFavorite
+              }
+          )
       );
     }
   }
@@ -151,14 +150,16 @@ export class FilmPresenter {
   }
 
   _handleFormSubmit(event) {
-    if (!(event.keyCode == 13 && event.metaKey)) return;
+    if (!(event.keyCode === 13 && event.metaKey)) {
+      return;
+    }
 
     const newComment = {
       id: comments.length,
       author: generateRandomItem([`Tim Macoveev`, `John Doe`, `Andre Right`, `Greg Malkovich`]),
       text: this._commentText,
       emotion: this._commentEmotion,
-      date: dayjs().format('DD/MM/YYYY HH:MM'),
+      date: dayjs().format(`DD/MM/YYYY HH:MM`),
     };
 
     this._commentsAssignedList.push(newComment);
@@ -219,11 +220,11 @@ export class FilmPresenter {
     remove(this._filmDetailsComponent);
     this._mode = Mode.DEFAULT;
     this._changeData(
-      Object.assign({},
-        this._film, {
-          comments: this._commentsAssignedList
-        }
-      )
+        Object.assign({},
+            this._film, {
+              comments: this._commentsAssignedList
+            }
+          )
     );
   }
 
