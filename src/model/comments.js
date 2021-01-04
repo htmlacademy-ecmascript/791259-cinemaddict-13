@@ -1,4 +1,6 @@
-import {Observer} from "../utils/observer.js";
+import {
+  Observer
+} from "../utils/observer.js";
 
 export class CommentsModel extends Observer {
   constructor() {
@@ -15,13 +17,13 @@ export class CommentsModel extends Observer {
   }
 
   addComment(updateType, update) {
-  this._comments = [
-    update,
-    ...this._comments
-  ];
+    this._comments = [
+      update,
+      ...this._comments
+    ];
 
-  this._notify(updateType, update);
-}
+    this._notify(updateType, update);
+  }
 
   deleteComment(updateType, update) {
     const index = this._comments.findIndex((comment) => comment.id === update.id);

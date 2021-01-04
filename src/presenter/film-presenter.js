@@ -108,8 +108,8 @@ export class FilmPresenter {
   _handleWatchListClick(event) {
     if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || event.target.classList.contains(`film-details__control-label--watchlist`)) {
       this._changeData(
-        UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+          UserAction.UPDATE_FILM,
+          UpdateType.MINOR,
           Object.assign({},
               this._film, {
                 isAddedtoWatchList: !this._film.isAddedtoWatchList
@@ -227,8 +227,8 @@ export class FilmPresenter {
     remove(this._filmDetailsComponent);
     this._mode = Mode.DEFAULT;
     this._changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign({},
             this._film, {
               comments: this._commentsAssignedList

@@ -15,7 +15,7 @@ import {NoFilmsView} from "../view/no-films.js";
 
 
 import {render, remove} from "../utils/render.js";
-import {SortType, UpdateType, UserAction} from "../const.js"
+import {SortType, UpdateType, UserAction} from "../const.js";
 const FILM_COUNT_PER_STEP = 5;
 import dayjs from "dayjs";
 
@@ -67,9 +67,9 @@ export class SitePresenter {
   _getFilms() {
     switch (this._currentSortType) {
       case SortType.DATE:
-        return this._filmsModel.getFilms().slice().sort( (filmA, filmB) => dayjs(filmB.productionDate).format(`YYYY`) - dayjs(filmA.productionDate).format(`YYYY`));
+        return this._filmsModel.getFilms().slice().sort((filmA, filmB) => dayjs(filmB.productionDate).format(`YYYY`) - dayjs(filmA.productionDate).format(`YYYY`));
       case SortType.RATING:
-        return this._filmsModel.getFilms().slice().sort( (filmA, filmB) => filmB.rating - filmA.rating);
+        return this._filmsModel.getFilms().slice().sort((filmA, filmB) => filmB.rating - filmA.rating);
     }
     return this._filmsModel.getFilms();
   }
@@ -84,12 +84,12 @@ export class SitePresenter {
   _handleFilmEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.MINOR:
-      this._filmPresenter[data.id].init(data);
-      break;
+        this._filmPresenter[data.id].init(data);
+        break;
       case UpdateType.MAJOR:
-      this._clearBoard({resetSortType: true});
-      this._renderBoard();
-      break;
+        this._clearBoard({resetSortType: true});
+        this._renderBoard();
+        break;
     }
   }
 

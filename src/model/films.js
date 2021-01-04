@@ -26,6 +26,6 @@ export class FilmsModel extends Observer {
       ...this._films.slice(index + 1)
     ];
 
-     this._notify(updateType, update);
+    this._notify(updateType, update);
   }
 }
