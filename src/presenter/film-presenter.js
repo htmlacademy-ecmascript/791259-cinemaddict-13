@@ -22,8 +22,12 @@ import {
   generateComment
 } from "../mock/comment.js";
 import dayjs from "dayjs";
+import {CommentsModel} from "../model/comments.js";
+import {UserAction, UpdateType} from "../const.js";
 
 const comments = new Array(5).fill().map((item, index) => generateComment(index));
+const commentsModel = new CommentsModel();
+commentsModel.setComments(comments);
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -66,7 +70,6 @@ export class FilmPresenter {
 
     this._filmComponent = new FilmView(film);
     this._filmComponent.setClickHandler(this._handleClickOnFilm);
-
     this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
@@ -84,7 +87,6 @@ export class FilmPresenter {
 
   destroy() {
     remove(this._filmComponent);
-    remove(this._filmDetailsComponent);
   }
 
   _handleClickOnFilm(event) {
@@ -106,6 +108,8 @@ export class FilmPresenter {
   _handleWatchListClick(event) {
     if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || event.target.classList.contains(`film-details__control-label--watchlist`)) {
       this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
           Object.assign({},
               this._film, {
                 isAddedtoWatchList: !this._film.isAddedtoWatchList
@@ -118,6 +122,8 @@ export class FilmPresenter {
   _handleIsWatchedClick() {
     if (event.target.classList.contains(`film-card__controls-item--mark-as-watched`) || event.target.classList.contains(`film-details__control-label--watched`)) {
       this._changeData(
+          UserAction.UPDATE_FILM,
+          UpdateType.MINOR,
           Object.assign({},
               this._film, {
                 isWatched: !this._film.isWatched
@@ -130,6 +136,8 @@ export class FilmPresenter {
   _handleIsFavoriteClick() {
     if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
       this._changeData(
+          UserAction.UPDATE_FILM,
+          UpdateType.MINOR,
           Object.assign({},
               this._film, {
                 isFavorite: !this._film.isFavorite
@@ -195,7 +203,6 @@ export class FilmPresenter {
     this._newCommentComponent = new NewCommentView();
     this._filmCommentsComponent = new FilmCommentsView(this._commentsAssignedList);
     this._filmCommentsComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
-
     this._filmDetailsComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmDetailsComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmDetailsComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
@@ -220,6 +227,8 @@ export class FilmPresenter {
     remove(this._filmDetailsComponent);
     this._mode = Mode.DEFAULT;
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
         Object.assign({},
             this._film, {
               comments: this._commentsAssignedList
