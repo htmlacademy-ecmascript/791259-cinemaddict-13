@@ -2,7 +2,7 @@ import {MainView} from "../view/main-section.js";
 import {HeaderView} from "../view/header.js";
 import {FooterView} from "../view/footer.js";
 import {UserView} from "../view/user.js";
-import {FilterView} from "../view/filter.js";
+
 import {SortView} from "../view/sort.js";
 import {FilmsContainerView} from "../view/films-container.js";
 import {FilmPresenter} from "./film-presenter.js";
@@ -18,22 +18,29 @@ import {render, remove} from "../utils/render.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
 const FILM_COUNT_PER_STEP = 5;
 import dayjs from "dayjs";
+import {filter} from "../utils/filter.js";
+import {FilterPresenter} from "./filter.js";
+
+
 
 export class SitePresenter {
-  constructor(bodyContainer, filters, filmsModel) {
+  constructor(bodyContainer, filmsModel, filterModel) {
     this._filmsModel = filmsModel;
+    this._filterModel = filterModel;
+
+
     this._bodyContainer = bodyContainer;
     this._renderedFilmsCount = FILM_COUNT_PER_STEP;
 
-    this._filters = filters.slice();
     this._filmPresenter = {};
 
     this._headerComponent = new HeaderView();
     this._mainComponent = new MainView();
+    this._filterPresenter = new FilterPresenter(this._mainComponent, this._filterModel, this._filmsModel);
     this._footerComponent = new FooterView();
 
     this._userComponent = new UserView();
-    this._filterComponent = new FilterView(this._filters);
+
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
     this._filmsContainerComponent = new FilmsContainerView();
@@ -50,6 +57,7 @@ export class SitePresenter {
     this._handleViewAction = this._handleViewAction.bind(this);
 
     this._filmsModel.addObserver(this._handleFilmEvent);
+    this._filterModel.addObserver(this._handleFilmEvent);
   }
 
   init() {
@@ -57,7 +65,6 @@ export class SitePresenter {
     render(this._bodyContainer, this._headerComponent);
     render(this._headerComponent, this._userComponent);
     render(this._bodyContainer, this._mainComponent);
-    render(this._mainComponent, this._filterComponent);
     render(this._mainComponent, this._filmsContainerComponent);
     render(this._bodyContainer, this._footerComponent);
 
@@ -65,13 +72,17 @@ export class SitePresenter {
   }
 
   _getFilms() {
+    const filterType = this._filterModel.getFilter();
+    const films = this._filmsModel.getFilms();
+    const filtredFilms = filter[filterType](films);
+
     switch (this._currentSortType) {
       case SortType.DATE:
-        return this._filmsModel.getFilms().slice().sort((filmA, filmB) => dayjs(filmB.productionDate).format(`YYYY`) - dayjs(filmA.productionDate).format(`YYYY`));
+        return filtredFilms.slice().sort((filmA, filmB) => dayjs(filmB.productionDate).format(`YYYY`) - dayjs(filmA.productionDate).format(`YYYY`));
       case SortType.RATING:
-        return this._filmsModel.getFilms().slice().sort((filmA, filmB) => filmB.rating - filmA.rating);
+        return filtredFilms.slice().sort((filmA, filmB) => filmB.rating - filmA.rating);
     }
-    return this._filmsModel.getFilms();
+    return filtredFilms;
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -173,11 +184,13 @@ export class SitePresenter {
     }
 
     this._sortComponent = new SortView(this._currentSortType);
-    render(this._filterComponent, this._sortComponent, `afterend`);
+    render(this._mainComponent.getElement().firstChild, this._sortComponent, `afterend`);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderBoard() {
+
+    this._filterPresenter.init();
     const films = this._getFilms();
     const filmCount = films.length;
 
