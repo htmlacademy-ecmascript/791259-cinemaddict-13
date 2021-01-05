@@ -64,24 +64,24 @@ export class FilterPresenter {
     const films = this._filmsModel.getFilms();
 
     return [{
-        type: FilterType.ALL,
-        name: `All Movies`,
-        count: filter[FilterType.ALL](films).length
+      type: FilterType.ALL,
+      name: `All Movies`,
+      count: filter[FilterType.ALL](films).length
       },
       {
-        type: FilterType.WATCHLIST,
-        name: `Watchlist`,
-        count: filter[FilterType.WATCHLIST](films).length
+      type: FilterType.WATCHLIST,
+      name: `Watchlist`,
+      count: filter[FilterType.WATCHLIST](films).length
       },
       {
-        type: FilterType.HISTORY,
-        name: `History`,
-        count: filter[FilterType.HISTORY](films).length
+      type: FilterType.HISTORY,
+      name: `History`,
+      count: filter[FilterType.HISTORY](films).length
       },
       {
-        type: FilterType.FAVORITES,
-        name: `Favorites`,
-        count: filter[FilterType.FAVORITES](films).length
+      type: FilterType.FAVORITES,
+      name: `Favorites`,
+      count: filter[FilterType.FAVORITES](films).length
       },
     ];
   }

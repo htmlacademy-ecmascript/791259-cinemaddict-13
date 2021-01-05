@@ -21,8 +21,6 @@ import dayjs from "dayjs";
 import {filter} from "../utils/filter.js";
 import {FilterPresenter} from "./filter.js";
 
-
-
 export class SitePresenter {
   constructor(bodyContainer, filmsModel, filterModel) {
     this._filmsModel = filmsModel;
