@@ -16,13 +16,8 @@ import {
   replace
 } from "../utils/render.js";
 import {
-  generateRandomItem,
-  generateId
-} from "../utils/common.js";
-import {
   generateComment
 } from "../mock/comment.js";
-import dayjs from "dayjs";
 import {CommentsModel} from "../model/comments.js";
 import {UserAction, UpdateType} from "../const.js";
 
@@ -164,7 +159,6 @@ export class FilmPresenter {
   }
 
   _handleFormSubmit(event) {
-    const comments = this._commentsModel.getComments();
     if (!(event.keyCode === 13 && event.metaKey)) {
       return;
     }
@@ -185,7 +179,6 @@ export class FilmPresenter {
     this._bodyContainer.classList.add(`hide-overflow`);
     this._filmDetailsComponent = new FilmDetailsView(this._film);
     const comments = this._commentsModel.getComments();
-    console.log(comments);
 
     for (let commentId of this._filmDetailsComponent._film.comments) {
       let comment = comments.find((item) => item.id === commentId);
@@ -244,7 +237,7 @@ export class FilmPresenter {
   _handleDeleteCommentClick(event) {
     if (event.target.tagName === `BUTTON`) {
       const deleteCommentId = +event.target.closest(`.film-details__comment`).dataset.id;
-     this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, deleteCommentId);
+      this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, deleteCommentId);
     }
   }
 
