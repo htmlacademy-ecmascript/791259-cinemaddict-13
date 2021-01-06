@@ -92,11 +92,15 @@ export class SitePresenter {
 
   _handleFilmEvent(updateType, data) {
     switch (updateType) {
-      case UpdateType.MINOR:
+      case UpdateType.PATCH:
         this._filmPresenter[data.id].init(data);
         break;
-      case UpdateType.MAJOR:
+      case UpdateType.MINOR:
         this._clearBoard({resetSortType: true});
+        this._renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
         break;
     }
@@ -120,17 +124,18 @@ export class SitePresenter {
   }
 
   _renderFilm(filmListContainer, film) {
-    const filmPresenter = new FilmPresenter(this._bodyContainer, filmListContainer, this._handleViewAction, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(this._bodyContainer, filmListContainer, this._handleViewAction, this._handleModeChange, this._filterModel);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
 
-  _clearBoard({resetSortType = false} = {}) {
+  _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
+    const filmCount = this._getFilms().length;
     Object
       .values(this._filmPresenter)
       .forEach((presenter) => presenter.destroy());
     this._filmPresenter = {};
-    this._renderedFilmsCount = FILM_COUNT_PER_STEP;
+
     remove(this._sortComponent);
     remove(this._noFilmsComponent);
     remove(this._footerStatsComponent);
@@ -138,6 +143,12 @@ export class SitePresenter {
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
+    }
+
+    if (resetRenderedFilmCount) {
+      this._renderedFilmsCount = FILM_COUNT_PER_STEP;
+    } else {
+      this._renderedFilmsCount = Math.min(filmCount, this._renderedFilmsCount);
     }
   }
 

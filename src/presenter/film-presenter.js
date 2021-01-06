@@ -16,7 +16,8 @@ import {
   replace
 } from "../utils/render.js";
 import {
-  generateRandomItem
+  generateRandomItem,
+  generateId
 } from "../utils/common.js";
 import {
   generateComment
@@ -26,8 +27,6 @@ import {CommentsModel} from "../model/comments.js";
 import {UserAction, UpdateType} from "../const.js";
 
 const comments = new Array(5).fill().map((item, index) => generateComment(index));
-const commentsModel = new CommentsModel();
-commentsModel.setComments(comments);
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -35,12 +34,14 @@ const Mode = {
 };
 
 export class FilmPresenter {
-  constructor(bodyContainer, filmListContainer, changeData, changeMode) {
+  constructor(bodyContainer, filmListContainer, changeData, changeMode, filterModel) {
     this._bodyContainer = bodyContainer;
     this._filmListContainer = filmListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
-
+    this._filterModel = filterModel;
+    this._commentsModel = new CommentsModel();
+    this._commentsModel.setComments(comments);
     this._filmComponent = null;
     this._filmDetailsComponent = null;
     this._mode = Mode.DEFAULT;
@@ -61,6 +62,8 @@ export class FilmPresenter {
     this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
     this._commentEmotion = null;
     this._commentText = null;
+    this._handleCommentEvent = this._handleCommentEvent.bind(this);
+    this._commentsModel.addObserver(this._handleCommentEvent);
   }
 
   init(film) {
@@ -106,10 +109,11 @@ export class FilmPresenter {
   }
 
   _handleWatchListClick(event) {
+    const activeFilter = this._filterModel.getFilter();
     if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || event.target.classList.contains(`film-details__control-label--watchlist`)) {
       this._changeData(
           UserAction.UPDATE_FILM,
-          UpdateType.MINOR,
+          activeFilter === `all` ? UpdateType.PATCH : UpdateType.MINOR,
           Object.assign({},
               this._film, {
                 isAddedtoWatchList: !this._film.isAddedtoWatchList
@@ -120,10 +124,11 @@ export class FilmPresenter {
   }
 
   _handleIsWatchedClick() {
+    const activeFilter = this._filterModel.getFilter();
     if (event.target.classList.contains(`film-card__controls-item--mark-as-watched`) || event.target.classList.contains(`film-details__control-label--watched`)) {
       this._changeData(
           UserAction.UPDATE_FILM,
-          UpdateType.MINOR,
+          activeFilter === `all` ? UpdateType.PATCH : UpdateType.MINOR,
           Object.assign({},
               this._film, {
                 isWatched: !this._film.isWatched
@@ -134,10 +139,11 @@ export class FilmPresenter {
   }
 
   _handleIsFavoriteClick() {
+    const activeFilter = this._filterModel.getFilter();
     if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
       this._changeData(
           UserAction.UPDATE_FILM,
-          UpdateType.MINOR,
+          activeFilter === `all` ? UpdateType.PATCH : UpdateType.MINOR,
           Object.assign({},
               this._film, {
                 isFavorite: !this._film.isFavorite
@@ -158,24 +164,12 @@ export class FilmPresenter {
   }
 
   _handleFormSubmit(event) {
+    const comments = this._commentsModel.getComments();
     if (!(event.keyCode === 13 && event.metaKey)) {
       return;
     }
 
-    const newComment = {
-      id: comments.length,
-      author: generateRandomItem([`Tim Macoveev`, `John Doe`, `Andre Right`, `Greg Malkovich`]),
-      text: this._commentText,
-      emotion: this._commentEmotion,
-      date: dayjs().format(`DD/MM/YYYY HH:MM`),
-    };
-
-    this._commentsAssignedList.push(newComment);
-
-    comments.push(newComment);
-
-    this._filmCommentsComponent.updateData(this._commentsAssignedList);
-    this._newCommentComponent.updateData();
+    this._commentsModel.addComment(UserAction.ADD_COMMENT, this._commentText, this._commentEmotion);
   }
 
   _handleEmojiPick(event) {
@@ -190,6 +184,8 @@ export class FilmPresenter {
   _handleShowFilmDetails() {
     this._bodyContainer.classList.add(`hide-overflow`);
     this._filmDetailsComponent = new FilmDetailsView(this._film);
+    const comments = this._commentsModel.getComments();
+    console.log(comments);
 
     for (let commentId of this._filmDetailsComponent._film.comments) {
       let comment = comments.find((item) => item.id === commentId);
@@ -228,7 +224,7 @@ export class FilmPresenter {
     this._mode = Mode.DEFAULT;
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign({},
             this._film, {
               comments: this._commentsAssignedList
@@ -248,11 +244,23 @@ export class FilmPresenter {
   _handleDeleteCommentClick(event) {
     if (event.target.tagName === `BUTTON`) {
       const deleteCommentId = +event.target.closest(`.film-details__comment`).dataset.id;
-      this._filmDetailsComponent._film.comments.splice(this._filmDetailsComponent._film.comments.indexOf(deleteCommentId), 1);
+     this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, deleteCommentId);
+    }
+  }
 
-      let commentIdToDelete = this._commentsAssignedList.findIndex((item) => item.id === deleteCommentId);
-      this._commentsAssignedList.splice(commentIdToDelete, 1);
-      this._filmCommentsComponent.updateData(this._commentsAssignedList);
+  _handleCommentEvent(userAction, update) {
+    switch (userAction) {
+      case UserAction.ADD_COMMENT:
+        this._commentsAssignedList.push(update);
+        this._filmCommentsComponent.updateData(this._commentsAssignedList);
+        this._newCommentComponent.updateData();
+        break;
+
+      case UserAction.DELETE_COMMENT:
+        let commentIdToDelete = this._commentsAssignedList.findIndex((item) => item.id === update);
+        this._commentsAssignedList.splice(commentIdToDelete, 1);
+        this._filmCommentsComponent.updateData(this._commentsAssignedList);
+        break;
     }
   }
 }

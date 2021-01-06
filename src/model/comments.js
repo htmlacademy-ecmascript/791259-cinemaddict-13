@@ -1,6 +1,14 @@
 import {
   Observer
 } from "../utils/observer.js";
+import {
+  generateRandomItem,
+  generateId
+} from "../utils/common.js";
+import {
+  generateComment
+} from "../mock/comment.js";
+import dayjs from "dayjs";
 
 export class CommentsModel extends Observer {
   constructor() {
@@ -16,17 +24,29 @@ export class CommentsModel extends Observer {
     return this._comments;
   }
 
-  addComment(updateType, update) {
+  addComment(userAction, text, emotion) {
+    this._commentText = text;
+    this._commentEmotion = emotion;
+
+    const newComment = {
+      id: generateId(),
+      author: generateRandomItem([`Tim Macoveev`, `John Doe`, `Andre Right`, `Greg Malkovich`]),
+      text: this._commentText,
+      emotion: this._commentEmotion,
+      date: dayjs().format(`DD/MM/YYYY HH:MM`),
+    };
+
     this._comments = [
-      update,
+      newComment,
       ...this._comments
     ];
 
-    this._notify(updateType, update);
+    this._notify(userAction, newComment);
   }
 
-  deleteComment(updateType, update) {
-    const index = this._comments.findIndex((comment) => comment.id === update.id);
+  deleteComment(userAction, update) {
+
+    const index = this._comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {
       throw new Error(`Can't delete unexisting comment`);
@@ -37,6 +57,6 @@ export class CommentsModel extends Observer {
       ...this._comments.slice(index + 1)
     ];
 
-    this._notify(updateType);
+    this._notify(userAction, update);
   }
 }

@@ -1,6 +1,7 @@
 import {
   SmartView
 } from "./smart.js";
+import he from "he";
 
 const createFilmCommentsSection = (comments) => {
   const createFilmComment = (comment) => {
@@ -10,7 +11,7 @@ const createFilmCommentsSection = (comments) => {
         <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
       </span>
       <div>
-        <p class="film-details__comment-text">${comment.text}</p>
+        <p class="film-details__comment-text">${he.encode(comment.text)}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
           <span class="film-details__comment-day">${comment.date}</span>
