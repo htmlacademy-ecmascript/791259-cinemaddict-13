@@ -21,7 +21,7 @@ import {
 import {CommentsModel} from "../model/comments.js";
 import {UserAction, UpdateType} from "../const.js";
 
-const comments = new Array(5).fill().map((item, index) => generateComment(index));
+const mockComments = new Array(5).fill().map((item, index) => generateComment(index));
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -36,7 +36,7 @@ export class FilmPresenter {
     this._changeMode = changeMode;
     this._filterModel = filterModel;
     this._commentsModel = new CommentsModel();
-    this._commentsModel.setComments(comments);
+    this._commentsModel.setComments(mockComments);
     this._filmComponent = null;
     this._filmDetailsComponent = null;
     this._mode = Mode.DEFAULT;
