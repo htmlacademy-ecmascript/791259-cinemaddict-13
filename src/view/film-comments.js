@@ -1,14 +1,17 @@
-import {AbstractView} from "./abstract.js";
+import {
+  SmartView
+} from "./smart.js";
+import he from "he";
 
 const createFilmCommentsSection = (comments) => {
   const createFilmComment = (comment) => {
 
-    return `<li class="film-details__comment">
+    return `<li data-id="${comment.id}" class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
       </span>
       <div>
-        <p class="film-details__comment-text">${comment.text}</p>
+        <p class="film-details__comment-text">${he.encode(comment.text)}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
           <span class="film-details__comment-day">${comment.date}</span>
@@ -19,19 +22,44 @@ const createFilmCommentsSection = (comments) => {
   };
 
   const commentsList = comments.map((comment) => createFilmComment(comment)).join(``);
-  return `<section class="film-details__comments-wrap">
+  return `<div>
     <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
     <ul class="film-details__comments-list">${commentsList}</ul>
-  </section>`;
+  </div>`;
 };
 
-export class FilmCommentsView extends AbstractView {
+export class FilmCommentsView extends SmartView {
   constructor(comments) {
     super();
     this._comments = comments;
+    this._deleteCommentClickHandler = this._deleteCommentClickHandler.bind(this);
+    this.restoreHandlers = this.restoreHandlers.bind(this);
+  }
+
+  updateData(update) {
+    this._comments = update;
+    this.updateElement();
   }
 
   getTemplate() {
     return createFilmCommentsSection(this._comments);
+  }
+
+  _deleteCommentClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteCommentClick(evt);
+  }
+
+  setDeleteCommentClickHandler(callback) {
+    this._callback.deleteCommentClick = callback;
+    this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, this._deleteCommentClickHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, this._deleteCommentClickHandler);
   }
 }

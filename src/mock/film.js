@@ -1,6 +1,4 @@
-import {generateRandomItem, getRandomIntInclusive, generateDescription} from "../utils/common.js";
-
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+import {generateRandomItem, getRandomIntInclusive, generateDescription, generateId} from "../utils/common.js";
 
 const titles = [`The Dance of Life`, `Sagebrush Trail`, `The Man with the Golden Arm`, `Santa Claus Conquers the Martians`, `Popeye the Sailor Meets Sindbad the Sailor`, `The Great Flamarion`];
 
