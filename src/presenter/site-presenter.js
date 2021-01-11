@@ -12,6 +12,7 @@ import {FooterStatsView} from "../view/footer-stats.js";
 
 import {FilmListContainerView} from "../view/films-list-container.js";
 import {NoFilmsView} from "../view/no-films.js";
+import {LoadingView} from "../view/loading.js";
 
 
 import {render, remove} from "../utils/render.js";
@@ -22,11 +23,12 @@ import {filter} from "../utils/filter.js";
 import {FilterPresenter} from "./filter.js";
 
 export class SitePresenter {
-  constructor(bodyContainer, filmsModel, filterModel) {
+  constructor(bodyContainer, filmsModel, filterModel, api) {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
+    this._api = api;
 
-
+    this._isLoading = true;
     this._bodyContainer = bodyContainer;
     this._renderedFilmsCount = FILM_COUNT_PER_STEP;
 
@@ -43,6 +45,7 @@ export class SitePresenter {
     this._currentSortType = SortType.DEFAULT;
     this._filmsContainerComponent = new FilmsContainerView();
     this._noFilmsComponent = new NoFilmsView();
+    this._loadingComponent = new LoadingView();
 
     this._filmsListContainer = new FilmListContainerView().getElement().querySelector(`.films-list__container`);
     this._loadMoreButtonComponent = null;
@@ -76,9 +79,9 @@ export class SitePresenter {
 
     switch (this._currentSortType) {
       case SortType.DATE:
-        return filtredFilms.slice().sort((filmA, filmB) => dayjs(filmB.productionDate).format(`YYYY`) - dayjs(filmA.productionDate).format(`YYYY`));
+        return filtredFilms.slice().sort((filmA, filmB) => dayjs(filmB.release.date).format(`YYYY`) - dayjs(filmA.release.date).format(`YYYY`));
       case SortType.RATING:
-        return filtredFilms.slice().sort((filmA, filmB) => filmB.rating - filmA.rating);
+        return filtredFilms.slice().sort((filmA, filmB) => filmB.total_rating - filmA.total_rating);
     }
     return filtredFilms;
   }
@@ -87,7 +90,8 @@ export class SitePresenter {
     if (actionType !== UserAction.UPDATE_FILM) {
       return;
     }
-    this._filmsModel.updateFilm(updateType, update);
+    this._api.updateFilm(update).then((response) => this._filmsModel.updateFilm(updateType, response));
+
   }
 
   _handleFilmEvent(updateType, data) {
@@ -102,6 +106,11 @@ export class SitePresenter {
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
+        break;
+      case UpdateType.INIT:
+      this._isLoading = false;
+      remove(this._loadingComponent);
+      this._renderBoard();
         break;
     }
   }
@@ -140,6 +149,7 @@ export class SitePresenter {
     remove(this._noFilmsComponent);
     remove(this._footerStatsComponent);
     remove(this._loadMoreButtonComponent);
+    remove(this._loadingComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -197,11 +207,21 @@ export class SitePresenter {
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
+  _renderLoading() {
+    render(this._filmsContainerComponent, this._loadingComponent);
+  }
+
   _renderBoard() {
+
 
     this._filterPresenter.init();
     const films = this._getFilms();
     const filmCount = films.length;
+
+    if (this._isLoading === true) {
+      this._renderLoading();
+      return;
+    }
 
     if (filmCount === 0) {
       this._renderNoFilms();

@@ -2,10 +2,10 @@ import dayjs from "dayjs";
 import {AbstractView} from "./abstract.js";
 
 const createFilmTemplate = (film) => {
-  const {title, rating, productionDate, duration, genres, poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = film;
-  const productionYear = dayjs(productionDate).format(`YYYY`);
+  const {title, total_rating, release, runtime, genre, poster, description, comments, isAddedtoWatchList, isWatched, isFavorite} = film;
+  const productionYear = dayjs(release.date).format(`YYYY`);
 
-  const genreList = genres.join(`, `);
+  const genreList = genre.join(`, `);
 
   const favoriteClassName = isFavorite
     ? `film-card__controls-item--active`
@@ -24,13 +24,13 @@ const createFilmTemplate = (film) => {
 
   return `<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
-          <p class="film-card__rating">${rating}</p>
+          <p class="film-card__rating">${total_rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${productionYear}</span>
-            <span class="film-card__duration">${duration}</span>
+            <span class="film-card__duration">${runtime}</span>
             <span class="film-card__genre">${genreList}</span>
           </p>
-          <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+          <img src="./${poster}" alt="${title} film poster" class="film-card__poster">
           <p class="film-card__description">${shortDescription}</p>
           <a class="film-card__comments">${comments.length} comments</a>
           <div class="film-card__controls">
