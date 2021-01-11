@@ -1,4 +1,3 @@
-
 import {generateFilm} from "./mock/film.js";
 import {SitePresenter} from "./presenter/site-presenter.js";
 import {FilmsModel} from "./model/films.js";
