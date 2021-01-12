@@ -79,9 +79,9 @@ export class SitePresenter {
 
     switch (this._currentSortType) {
       case SortType.DATE:
-        return filtredFilms.slice().sort((filmA, filmB) => dayjs(filmB.release.date).format(`YYYY`) - dayjs(filmA.release.date).format(`YYYY`));
+        return filtredFilms.slice().sort((filmA, filmB) => dayjs(filmB.productionDate).format(`YYYY`) - dayjs(filmA.productionDate).format(`YYYY`));
       case SortType.RATING:
-        return filtredFilms.slice().sort((filmA, filmB) => filmB.total_rating - filmA.total_rating);
+        return filtredFilms.slice().sort((filmA, filmB) => filmB.rating - filmA.rating);
     }
     return filtredFilms;
   }
@@ -91,7 +91,7 @@ export class SitePresenter {
       return;
     }
     this._api.updateFilm(update).then((response) => this._filmsModel.updateFilm(updateType, response));
-
+//this._filmsModel.updateFilm(updateType, update);
   }
 
   _handleFilmEvent(updateType, data) {
@@ -133,7 +133,7 @@ export class SitePresenter {
   }
 
   _renderFilm(filmListContainer, film) {
-    const filmPresenter = new FilmPresenter(this._bodyContainer, filmListContainer, this._handleViewAction, this._handleModeChange, this._filterModel);
+    const filmPresenter = new FilmPresenter(this._bodyContainer, filmListContainer, this._handleViewAction, this._handleModeChange, this._filterModel, this._api);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }

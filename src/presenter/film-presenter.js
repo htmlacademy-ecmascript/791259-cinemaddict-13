@@ -15,13 +15,13 @@ import {
   remove,
   replace
 } from "../utils/render.js";
-import {
-  generateComment
-} from "../mock/comment.js";
+
 import {CommentsModel} from "../model/comments.js";
 import {UserAction, UpdateType} from "../const.js";
 
-const mockComments = new Array(5).fill().map((item, index) => generateComment(index));
+
+
+
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -29,18 +29,19 @@ const Mode = {
 };
 
 export class FilmPresenter {
-  constructor(bodyContainer, filmListContainer, changeData, changeMode, filterModel) {
+  constructor(bodyContainer, filmListContainer, changeData, changeMode, filterModel, api) {
     this._bodyContainer = bodyContainer;
     this._filmListContainer = filmListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._filterModel = filterModel;
+    this._api = api;
     this._commentsModel = new CommentsModel();
-    this._commentsModel.setComments(mockComments);
     this._filmComponent = null;
     this._filmDetailsComponent = null;
     this._mode = Mode.DEFAULT;
     this._commentsAssignedList = [];
+
 
     this._handleShowFilmDetails = this._handleShowFilmDetails.bind(this);
     this._handleReturnToFilm = this._handleReturnToFilm.bind(this);
@@ -71,6 +72,7 @@ export class FilmPresenter {
     this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
+    this._api.getComments(this._film).then((comments) => this._commentsModel.setComments(comments));
 
     render(this._filmListContainer, this._filmComponent);
 
@@ -178,8 +180,9 @@ export class FilmPresenter {
   _handleShowFilmDetails() {
     this._bodyContainer.classList.add(`hide-overflow`);
     this._filmDetailsComponent = new FilmDetailsView(this._film);
-    const comments = this._commentsModel.getComments();
 
+    const filmComments = this._commentsModel.getComments();
+/*
     for (let commentId of this._filmDetailsComponent._film.comments) {
       let comment = comments.find((item) => item.id === commentId);
       if (!comment) {
@@ -188,9 +191,9 @@ export class FilmPresenter {
 
       this._commentsAssignedList.push(comment);
     }
-
+*/
     this._newCommentComponent = new NewCommentView();
-    this._filmCommentsComponent = new FilmCommentsView(this._commentsAssignedList);
+    this._filmCommentsComponent = new FilmCommentsView(filmComments);
     this._filmCommentsComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
     this._filmDetailsComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmDetailsComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);

@@ -1,12 +1,15 @@
-import {figureCorrectPluralForm} from "../utils/common.js";
 import {AbstractView} from "./abstract.js";
+import dayjs from "dayjs";
+import {getRuntime} from "../utils/common.js";
+
 
 const createFilmDetailsTemplate = (film) => {
-  const {title, alternative_title, total_rating, director, writers, actors, release, runtime, genre, poster, age_rating, description, isAddedtoWatchList, isWatched, isFavorite} = film;
-  const genresForm = figureCorrectPluralForm(genre, `Genre`);
+  const {title, alternativeTitle, rating, director, writers, actors, country, productionDate, runtime, genre, poster, ageRestriction, description, isAddedtoWatchList, isWatched, isFavorite} = film;
 
   const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
-  const genreList = genre.map((item) => createGenresTemplate(item)).join(``);
+  const genreList = genre.map((item) => createGenresTemplate(item)).join(` `);
+  const writersList = writers.join(`, `);
+  const actorsList = actors.join(`, `);
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -18,18 +21,18 @@ const createFilmDetailsTemplate = (film) => {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="./${poster}" alt="${title} film poster">
 
-          <p class="film-details__age">${age_rating}+</p>
+          <p class="film-details__age">${ageRestriction}+</p>
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${alternative_title}</p>
+              <p class="film-details__title-original">Original: ${alternativeTitle}</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${total_rating}</p>
+              <p class="film-details__total-rating">${rating}</p>
             </div>
           </div>
 
@@ -40,26 +43,26 @@ const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${writersList}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${actorsList}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${release.date}</td>
+              <td class="film-details__cell">${dayjs(productionDate).format(`DD MMMM YYYY`)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${runtime}</td>
+              <td class="film-details__cell">${getRuntime(runtime)} m</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${release.release_country}</td>
+              <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genresForm}</td>
+              <td class="film-details__term">${genreList.length > 1 ? `Genres` : `Genre`}</td>
               <td class="film-details__cell">${genreList}</td>
             </tr>
           </table>

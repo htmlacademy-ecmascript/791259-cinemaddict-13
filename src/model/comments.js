@@ -21,14 +21,14 @@ export class CommentsModel extends Observer {
     return this._comments;
   }
 
-  addComment(userAction, text, emotion) {
-    this._commentText = text;
+  addComment(userAction, comment, emotion) {
+    this._commentText = comment;
     this._commentEmotion = emotion;
 
     const newComment = {
       id: generateId(),
       author: generateRandomItem([`Tim Macoveev`, `John Doe`, `Andre Right`, `Greg Malkovich`]),
-      text: this._commentText,
+      comment: this._commentText,
       emotion: this._commentEmotion,
       date: dayjs().format(`DD/MM/YYYY HH:MM`),
     };
@@ -56,4 +56,5 @@ export class CommentsModel extends Observer {
 
     this._notify(userAction, update);
   }
+
 }

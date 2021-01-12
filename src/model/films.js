@@ -1,4 +1,7 @@
-import {Observer} from "../utils/observer.js";
+import {
+  Observer
+} from "../utils/observer.js";
+
 
 export class FilmsModel extends Observer {
   constructor() {
@@ -31,15 +34,19 @@ export class FilmsModel extends Observer {
   }
 
   static adaptToClient(film) {
-    const adaptedFilm = Object.assign(
-      {},
+    const adaptedFilm = Object.assign({},
       film,
       film.film_info,
-      film.user_details,
-      {
+      film.user_details, {
         isWatched: film.user_details.already_watched,
         isFavorite: film.user_details.favorite,
         isAddedtoWatchList: film.user_details.watchlist,
+        watchingDate: film.user_details.watching_date,
+        ageRestriction: film.film_info.age_rating,
+        alternativeTitle: film.film_info.alternative_title,
+        country: film.film_info.release.release_country,
+        productionDate: film.film_info.release.date,
+        rating: film.film_info.total_rating,
       }
     );
     delete adaptedFilm.film_info;
@@ -47,35 +54,44 @@ export class FilmsModel extends Observer {
     delete adaptedFilm.already_watched;
     delete adaptedFilm.favorite;
     delete adaptedFilm.watchlist;
+    delete adaptedFilm.watching_date;
+    delete adaptedFilm.age_rating;
+    delete adaptedFilm.alternative_title;
+    delete adaptedFilm.release;
+    delete adaptedFilm.total_rating;
+
     return adaptedFilm;
   }
 
   static adaptToServer(film) {
-/*    const film_info = Object.assign({}, film, {release: {date: new Date(film.release.date).toISOString(), release_contry: film.release.country}});
-
-    delete film_info.isWatched;
-    delete film_info.isFavorite;
-    delete film_info.isAddedtoWatchList;
-    delete film_info.id;
-    delete film_info.comments;
-*/
-    const user_details = {
-      already_watched: film.isWatched,
-      favorite: film.isFavorite,
-      watchlist: film.isWatched,
-      watching_date: null,
-    };
-
-/*    const adaptedFilm = Object.assign(
-      {},
-      {id: film.id},
-      {comments: film.comments},
-      {film_info},
-      {user_details},
-    );
-
+    const adaptedFilm = {
+      comments: film.comments,
+      film_info: {
+        title: film.title,
+        alternative_title: film.alternativeTitle,
+        total_rating: film.rating,
+        poster: film.poster,
+        age_rating: film.ageResctriction,
+        director: film.director,
+        writers: film.writers,
+        actors: film.actors,
+        release: {
+          date: film.productionDate,
+          release_country: film.country,
+        },
+        runtime: film.runtime,
+        genre: film.genre,
+        description: film.description,
+      },
+      user_details: {
+        watchlist: film.isAddedtoWatchList,
+        already_watched: film.isWatched,
+        watching_date: film.watchingDate !== null ? new Date(film.watchingDate).toISOString() : null,
+        favorite: film.isFavorite,
+      },
+    }
+        console.log(JSON.stringify(adaptedFilm));
     return adaptedFilm;
-    */
-    return user_details;
+
   }
 }

@@ -1,10 +1,14 @@
-import {FilmsModel} from "./model/films.js";
-
+import {
+  FilmsModel
+} from "./model/films.js";
+import {
+  CommentsModel
+} from "./model/comments.js";
 const Method = {
   GET: `GET`,
   PUT: `PUT`,
-/*  POST: `POST`,
-  DELETE: `DELETE`*/
+  /*  POST: `POST`,
+    DELETE: `DELETE`*/
 };
 
 const SuccessHTTPStatusRange = {
@@ -19,39 +23,48 @@ export class Api {
   }
 
   getFilms() {
-    return this._load({url: `movies`})
+    return this._load({
+        url: `movies`
+      })
       .then(Api.toJSON)
       .then((films) => films.map(FilmsModel.adaptToClient));
   }
 
+  getComments(film) {
+    return this._load({
+        url: `comments/${film.id}`
+      })
+      .then(Api.toJSON)
+  }
+
   updateFilm(film) {
     return this._load({
-      url: `movies/${film.id}`,
-      method: Method.PUT,
-      body: JSON.stringify(FilmsModel.adaptToServer(film)),
-    })
+        url: `movies/${film.id}`,
+        method: Method.PUT,
+        body: JSON.stringify(FilmsModel.adaptToServer(film)),
+      })
       .then(Api.toJSON)
       .then(FilmsModel.adaptToClient);
   }
 
-/*  addFilm(film) {
-    return this._load({
-      url: `films`,
-      method: Method.POST,
-      body: JSON.stringify(film),
-      headers: new Headers({"Content-Type": `application/json`})
-    })
-      .then(Api.toJSON)
-//      .then(FilmsModel.adaptToClient);
-  }
+  /*  addFilm(film) {
+      return this._load({
+        url: `films`,
+        method: Method.POST,
+        body: JSON.stringify(film),
+        headers: new Headers({"Content-Type": `application/json`})
+      })
+        .then(Api.toJSON)
+  //      .then(FilmsModel.adaptToClient);
+    }
 
-  deleteFilm(film) {
-    return this._load({
-      url: `films/${film.id}`,
-      method: Method.DELETE
-    });
-  }
-*/
+    deleteFilm(film) {
+      return this._load({
+        url: `films/${film.id}`,
+        method: Method.DELETE
+      });
+    }
+  */
   _load({
     url,
     method = Method.GET,
@@ -61,9 +74,12 @@ export class Api {
     headers.append(`Authorization`, this._authorization);
 
     return fetch(
-        `${this._endPoint}/${url}`,
-        {method, body, headers}
-    )
+        `${this._endPoint}/${url}`, {
+          method,
+          body,
+          headers
+        }
+      )
       .then(Api.checkStatus)
       .catch(Api.catchError);
   }
