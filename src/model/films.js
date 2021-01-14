@@ -71,7 +71,7 @@ export class FilmsModel extends Observer {
         alternative_title: film.alternativeTitle,
         total_rating: film.rating,
         poster: film.poster,
-        age_rating: film.ageResctriction,
+        age_rating: film.ageRestriction,
         director: film.director,
         writers: film.writers,
         actors: film.actors,
@@ -90,7 +90,7 @@ export class FilmsModel extends Observer {
         favorite: film.isFavorite,
       },
     }
-        console.log(JSON.stringify(adaptedFilm));
+
     return adaptedFilm;
 
   }

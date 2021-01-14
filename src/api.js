@@ -7,8 +7,8 @@ import {
 const Method = {
   GET: `GET`,
   PUT: `PUT`,
-  /*  POST: `POST`,
-    DELETE: `DELETE`*/
+  POST: `POST`,
+  DELETE: `DELETE`
 };
 
 const SuccessHTTPStatusRange = {
@@ -42,29 +42,36 @@ export class Api {
         url: `movies/${film.id}`,
         method: Method.PUT,
         body: JSON.stringify(FilmsModel.adaptToServer(film)),
+        headers: new Headers({"Content-Type": `application/json`})
       })
       .then(Api.toJSON)
       .then(FilmsModel.adaptToClient);
   }
 
-  /*  addFilm(film) {
+    addComment(film, comment, emotion) {
+      const newComment = {
+        comment: comment,
+        date: new Date().toISOString(),
+        emotion: emotion,
+      }
+
       return this._load({
-        url: `films`,
+        url: `comments/${film.id}`,
         method: Method.POST,
-        body: JSON.stringify(film),
+        body: JSON.stringify(newComment),
         headers: new Headers({"Content-Type": `application/json`})
       })
         .then(Api.toJSON)
-  //      .then(FilmsModel.adaptToClient);
+        .then(CommentsModel.adaptToClient);
     }
 
-    deleteFilm(film) {
+    deleteComment(commentId) {
       return this._load({
-        url: `films/${film.id}`,
+        url: `comments/${commentId}`,
         method: Method.DELETE
       });
     }
-  */
+
   _load({
     url,
     method = Method.GET,

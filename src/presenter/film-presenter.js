@@ -18,9 +18,7 @@ import {
 
 import {CommentsModel} from "../model/comments.js";
 import {UserAction, UpdateType} from "../const.js";
-
-
-
+import {CommentLoadingErrorView} from "../view/comment-loading-error.js";
 
 
 const Mode = {
@@ -41,6 +39,7 @@ export class FilmPresenter {
     this._filmDetailsComponent = null;
     this._mode = Mode.DEFAULT;
     this._commentsAssignedList = [];
+    this._commentLoadingErrorComponent = null;
 
 
     this._handleShowFilmDetails = this._handleShowFilmDetails.bind(this);
@@ -72,7 +71,7 @@ export class FilmPresenter {
     this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
-    this._api.getComments(this._film).then((comments) => this._commentsModel.setComments(comments));
+//    this._api.getComments(this._film).then((comments) => this._commentsModel.setComments(comments));
 
     render(this._filmListContainer, this._filmComponent);
 
@@ -164,8 +163,10 @@ export class FilmPresenter {
     if (!(event.keyCode === 13 && event.metaKey)) {
       return;
     }
-
-    this._commentsModel.addComment(UserAction.ADD_COMMENT, this._commentText, this._commentEmotion);
+    this._api.addComment(this._film, this._commentText, this._commentEmotion).then((result) => {
+        this._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments);
+    }
+);
   }
 
   _handleEmojiPick(event) {
@@ -180,9 +181,20 @@ export class FilmPresenter {
   _handleShowFilmDetails() {
     this._bodyContainer.classList.add(`hide-overflow`);
     this._filmDetailsComponent = new FilmDetailsView(this._film);
+    this._commentLoadingErrorComponent = new CommentLoadingErrorView();
 
-    const filmComments = this._commentsModel.getComments();
+
+   this._api.getComments(this._film).then((comments) => {
+     this._commentsModel.setComments(comments);
+     const filmComments = this._commentsModel.getComments();
+     this._filmCommentsComponent = new FilmCommentsView(filmComments);
+    render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._filmCommentsComponent, `afterbegin`);
+    this._filmCommentsComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
+  }).catch((error) => {
+  render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._commentLoadingErrorComponent, `afterbegin`)});;
+
 /*
+
     for (let commentId of this._filmDetailsComponent._film.comments) {
       let comment = comments.find((item) => item.id === commentId);
       if (!comment) {
@@ -193,8 +205,7 @@ export class FilmPresenter {
     }
 */
     this._newCommentComponent = new NewCommentView();
-    this._filmCommentsComponent = new FilmCommentsView(filmComments);
-    this._filmCommentsComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
+//    this._filmCommentsComponent = new FilmCommentsView(filmComments);
     this._filmDetailsComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmDetailsComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmDetailsComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
@@ -209,7 +220,7 @@ export class FilmPresenter {
     this._changeMode();
     this._mode = Mode.VIEWING;
 
-    render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._filmCommentsComponent);
+//    render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._filmCommentsComponent);
 
     render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._newCommentComponent);
   }
@@ -240,22 +251,23 @@ export class FilmPresenter {
   _handleDeleteCommentClick(event) {
     if (event.target.tagName === `BUTTON`) {
       const deleteCommentId = +event.target.closest(`.film-details__comment`).dataset.id;
-      this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, deleteCommentId);
+
+      this._api.deleteComment(deleteCommentId).then((result) => {
+        this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, deleteCommentId);
+      });
     }
   }
 
   _handleCommentEvent(userAction, update) {
     switch (userAction) {
       case UserAction.ADD_COMMENT:
-        this._commentsAssignedList.push(update);
-        this._filmCommentsComponent.updateData(this._commentsAssignedList);
+        this._filmCommentsComponent.updateData(update);
         this._newCommentComponent.updateData();
+        console.log(this._comments);
         break;
 
       case UserAction.DELETE_COMMENT:
-        let commentIdToDelete = this._commentsAssignedList.findIndex((item) => item.id === update);
-        this._commentsAssignedList.splice(commentIdToDelete, 1);
-        this._filmCommentsComponent.updateData(this._commentsAssignedList);
+        this._filmCommentsComponent.updateData(update);
         break;
     }
   }

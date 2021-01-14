@@ -55,7 +55,7 @@ const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${getRuntime(runtime)} m</td>
+              <td class="film-details__cell">${getRuntime(runtime)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>

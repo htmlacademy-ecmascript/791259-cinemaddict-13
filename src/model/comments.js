@@ -21,29 +21,15 @@ export class CommentsModel extends Observer {
     return this._comments;
   }
 
-  addComment(userAction, comment, emotion) {
-    this._commentText = comment;
-    this._commentEmotion = emotion;
+  addComment(userAction, update) {
 
-    const newComment = {
-      id: generateId(),
-      author: generateRandomItem([`Tim Macoveev`, `John Doe`, `Andre Right`, `Greg Malkovich`]),
-      comment: this._commentText,
-      emotion: this._commentEmotion,
-      date: dayjs().format(`DD/MM/YYYY HH:MM`),
-    };
-
-    this._comments = [
-      newComment,
-      ...this._comments
-    ];
-
-    this._notify(userAction, newComment);
+    this._comments = update;
+    this._notify(userAction, update);
   }
 
   deleteComment(userAction, update) {
 
-    const index = this._comments.findIndex((comment) => comment.id === update);
+    let index = this._comments.findIndex((comment) => +comment.id === update);
 
     if (index === -1) {
       throw new Error(`Can't delete unexisting comment`);
@@ -54,7 +40,7 @@ export class CommentsModel extends Observer {
       ...this._comments.slice(index + 1)
     ];
 
-    this._notify(userAction, update);
+    this._notify(userAction, this._comments);
   }
 
 }
