@@ -48,7 +48,7 @@ export class FilmsModel extends Observer {
           country: film.film_info.release.release_country,
           productionDate: film.film_info.release.date,
           rating: film.film_info.total_rating,
-      }
+        }
     );
 
     delete adaptedFilm.film_info;
@@ -68,12 +68,12 @@ export class FilmsModel extends Observer {
   static adaptToServer(film) {
     const adaptedFilm = {
       comments: film.comments,
-      film_info: {
+      "film_info": {
         title: film.title,
-        alternative_title: film.alternativeTitle,
-        total_rating: film.rating,
+        "alternative_title": film.alternativeTitle,
+        "total_rating": film.rating,
         poster: film.poster,
-        age_rating: film.ageRestriction,
+        "age_rating": film.ageRestriction,
         director: film.director,
         writers: film.writers,
         actors: film.actors,
@@ -87,7 +87,7 @@ export class FilmsModel extends Observer {
       },
       user_details: {
         watchlist: film.isAddedtoWatchList,
-        already_watched: film.isWatched,
+        `already_watched`: film.isWatched,
         watching_date: film.watchingDate !== null ? new Date(film.watchingDate).toISOString() : null,
         favorite: film.isFavorite,
       },

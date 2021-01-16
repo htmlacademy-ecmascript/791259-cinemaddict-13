@@ -164,7 +164,7 @@ export class FilmPresenter {
     }
 
     this._api.addComment(this._film, this._commentText, this._commentEmotion)
-    .then((result) => tis._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments));
+    .then((result) => this._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments));
   }
 
   _handleEmojiPick(event) {
