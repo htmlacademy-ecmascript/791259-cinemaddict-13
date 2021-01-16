@@ -67,29 +67,29 @@ export class FilmsModel extends Observer {
 
   static adaptToServer(film) {
     const adaptedFilm = {
-      comments: film.comments,
-      "film_info": {
-        title: film.title,
-        "alternative_title": film.alternativeTitle,
-        "total_rating": film.rating,
-        poster: film.poster,
+      'comments': film.comments,
+      'film_info': {
+        'title': film.title,
+        'alternative_title': film.alternativeTitle,
+        'total_rating': film.rating,
+        'poster': film.poster,
         "age_rating": film.ageRestriction,
-        director: film.director,
-        writers: film.writers,
-        actors: film.actors,
-        release: {
-          date: film.productionDate,
-          release_country: film.country,
+        'director': film.director,
+        'writers': film.writers,
+        'actors': film.actors,
+        'release': {
+          'date': film.productionDate,
+          'release_country': film.country,
         },
-        runtime: film.runtime,
-        genre: film.genre,
-        description: film.description,
+        'runtime': film.runtime,
+        'genre': film.genre,
+        'description': film.description,
       },
-      user_details: {
-        watchlist: film.isAddedtoWatchList,
-        "already_watched": film.isWatched,
-        watching_date: film.watchingDate !== null ? new Date(film.watchingDate).toISOString() : null,
-        favorite: film.isFavorite,
+      'user_details': {
+        'watchlist': film.isAddedtoWatchList,
+        'already_watched': film.isWatched,
+        'watching_date': film.watchingDate !== null ? new Date(film.watchingDate).toISOString() : null,
+        'favorite': film.isFavorite,
       },
     };
 
