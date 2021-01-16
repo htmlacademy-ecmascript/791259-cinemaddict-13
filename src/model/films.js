@@ -87,7 +87,7 @@ export class FilmsModel extends Observer {
       },
       user_details: {
         watchlist: film.isAddedtoWatchList,
-        `already_watched`: film.isWatched,
+        "already_watched": film.isWatched,
         watching_date: film.watchingDate !== null ? new Date(film.watchingDate).toISOString() : null,
         favorite: film.isFavorite,
       },
