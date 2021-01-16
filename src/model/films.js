@@ -35,18 +35,19 @@ export class FilmsModel extends Observer {
 
   static adaptToClient(film) {
     const adaptedFilm = Object.assign({},
-      film,
-      film.film_info,
-      film.user_details, {
-        isWatched: film.user_details.already_watched,
-        isFavorite: film.user_details.favorite,
-        isAddedtoWatchList: film.user_details.watchlist,
-        watchingDate: film.user_details.watching_date,
-        ageRestriction: film.film_info.age_rating,
-        alternativeTitle: film.film_info.alternative_title,
-        country: film.film_info.release.release_country,
-        productionDate: film.film_info.release.date,
-        rating: film.film_info.total_rating,
+        film,
+        film.film_info,
+        film.user_details,
+        {
+          isWatched: film.user_details.already_watched,
+          isFavorite: film.user_details.favorite,
+          isAddedtoWatchList: film.user_details.watchlist,
+          watchingDate: film.user_details.watching_date,
+          ageRestriction: film.film_info.age_rating,
+          alternativeTitle: film.film_info.alternative_title,
+          country: film.film_info.release.release_country,
+          productionDate: film.film_info.release.date,
+          rating: film.film_info.total_rating,
       }
     );
 
@@ -90,7 +91,7 @@ export class FilmsModel extends Observer {
         watching_date: film.watchingDate !== null ? new Date(film.watchingDate).toISOString() : null,
         favorite: film.isFavorite,
       },
-    }
+    };
 
     return adaptedFilm;
 

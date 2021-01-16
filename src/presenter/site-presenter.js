@@ -90,8 +90,8 @@ export class SitePresenter {
     if (actionType !== UserAction.UPDATE_FILM) {
       return;
     }
+
     this._api.updateFilm(update).then((response) => this._filmsModel.updateFilm(updateType, response));
-//this._filmsModel.updateFilm(updateType, update);
   }
 
   _handleFilmEvent(updateType, data) {
@@ -108,9 +108,9 @@ export class SitePresenter {
         this._renderBoard();
         break;
       case UpdateType.INIT:
-      this._isLoading = false;
-      remove(this._loadingComponent);
-      this._renderBoard();
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderBoard();
         break;
     }
   }

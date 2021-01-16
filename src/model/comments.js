@@ -1,11 +1,7 @@
 import {
   Observer
 } from "../utils/observer.js";
-import {
-  generateRandomItem,
-  generateId
-} from "../utils/common.js";
-import dayjs from "dayjs";
+
 
 export class CommentsModel extends Observer {
   constructor() {

@@ -162,10 +162,9 @@ export class FilmPresenter {
     if (!(event.keyCode === 13 && event.metaKey)) {
       return;
     }
-    this._api.addComment(this._film, this._commentText, this._commentEmotion).then((result) => {
-        this._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments);
-    }
-);
+
+    this._api.addComment(this._film, this._commentText, this._commentEmotion)
+    .then((result) => tis._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments));
   }
 
   _handleEmojiPick(event) {
@@ -183,15 +182,16 @@ export class FilmPresenter {
     this._commentLoadingErrorComponent = new CommentLoadingErrorView();
 
 
-   this._api.getComments(this._film).then((comments) => {
-     this._commentsModel.setComments(comments);
-     const filmComments = this._commentsModel.getComments();
-     this._filmCommentsComponent = new FilmCommentsView(filmComments);
-    render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._filmCommentsComponent, `afterbegin`);
-    this._filmCommentsComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
-  }).catch((error) => {
-  render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._commentLoadingErrorComponent, `afterbegin`)
-});
+    this._api.getComments(this._film).then((comments) => {
+      this._commentsModel.setComments(comments);
+      const filmComments = this._commentsModel.getComments();
+      this._filmCommentsComponent = new FilmCommentsView(filmComments);
+      render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._filmCommentsComponent, `afterbegin`);
+      this._filmCommentsComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
+    })
+    .catch(() => {
+      render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._commentLoadingErrorComponent, `afterbegin`);
+    });
 
     this._newCommentComponent = new NewCommentView();
     this._filmDetailsComponent.setWatchListClickHandler(this._handleWatchListClick);
@@ -238,7 +238,7 @@ export class FilmPresenter {
     if (event.target.tagName === `BUTTON`) {
       const deleteCommentId = +event.target.closest(`.film-details__comment`).dataset.id;
 
-      this._api.deleteComment(deleteCommentId).then((result) => {
+      this._api.deleteComment(deleteCommentId).then(() => {
         this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, deleteCommentId);
       });
     }
