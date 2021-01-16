@@ -49,6 +49,7 @@ export class FilmsModel extends Observer {
         rating: film.film_info.total_rating,
       }
     );
+
     delete adaptedFilm.film_info;
     delete adaptedFilm.user_details;
     delete adaptedFilm.already_watched;

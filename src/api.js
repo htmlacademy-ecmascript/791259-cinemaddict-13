@@ -42,35 +42,39 @@ export class Api {
         url: `movies/${film.id}`,
         method: Method.PUT,
         body: JSON.stringify(FilmsModel.adaptToServer(film)),
-        headers: new Headers({"Content-Type": `application/json`})
+        headers: new Headers({
+          "Content-Type": `application/json`
+        })
       })
       .then(Api.toJSON)
       .then(FilmsModel.adaptToClient);
   }
 
-    addComment(film, comment, emotion) {
-      const newComment = {
-        comment: comment,
-        date: new Date().toISOString(),
-        emotion: emotion,
-      }
+  addComment(film, comment, emotion) {
+    const newComment = {
+      comment: comment,
+      date: new Date().toISOString(),
+      emotion: emotion,
+    }
 
-      return this._load({
+    return this._load({
         url: `comments/${film.id}`,
         method: Method.POST,
         body: JSON.stringify(newComment),
-        headers: new Headers({"Content-Type": `application/json`})
+        headers: new Headers({
+          "Content-Type": `application/json`
+        })
       })
-        .then(Api.toJSON)
-        .then(CommentsModel.adaptToClient);
-    }
+      .then(Api.toJSON)
+      .then(CommentsModel.adaptToClient);
+  }
 
-    deleteComment(commentId) {
-      return this._load({
-        url: `comments/${commentId}`,
-        method: Method.DELETE
-      });
-    }
+  deleteComment(commentId) {
+    return this._load({
+      url: `comments/${commentId}`,
+      method: Method.DELETE
+    });
+  }
 
   _load({
     url,

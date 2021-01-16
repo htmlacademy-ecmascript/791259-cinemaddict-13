@@ -71,7 +71,6 @@ export class FilmPresenter {
     this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
-//    this._api.getComments(this._film).then((comments) => this._commentsModel.setComments(comments));
 
     render(this._filmListContainer, this._filmComponent);
 
@@ -191,21 +190,10 @@ export class FilmPresenter {
     render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._filmCommentsComponent, `afterbegin`);
     this._filmCommentsComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
   }).catch((error) => {
-  render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._commentLoadingErrorComponent, `afterbegin`)});;
+  render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._commentLoadingErrorComponent, `afterbegin`)
+});
 
-/*
-
-    for (let commentId of this._filmDetailsComponent._film.comments) {
-      let comment = comments.find((item) => item.id === commentId);
-      if (!comment) {
-        continue;
-      }
-
-      this._commentsAssignedList.push(comment);
-    }
-*/
     this._newCommentComponent = new NewCommentView();
-//    this._filmCommentsComponent = new FilmCommentsView(filmComments);
     this._filmDetailsComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmDetailsComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmDetailsComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
@@ -219,8 +207,6 @@ export class FilmPresenter {
 
     this._changeMode();
     this._mode = Mode.VIEWING;
-
-//    render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._filmCommentsComponent);
 
     render(this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`), this._newCommentComponent);
   }
@@ -263,7 +249,6 @@ export class FilmPresenter {
       case UserAction.ADD_COMMENT:
         this._filmCommentsComponent.updateData(update);
         this._newCommentComponent.updateData();
-        console.log(this._comments);
         break;
 
       case UserAction.DELETE_COMMENT:
