@@ -1,4 +1,6 @@
 import {createElement} from "../utils/render.js";
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 
 export class AbstractView {
   constructor() {
@@ -23,4 +25,11 @@ export class AbstractView {
   removeElement() {
     this._element = null;
   }
+
+  shake() {
+     this.getElement().querySelector(`form`).style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+     setTimeout(() => {
+       this.getElement().querySelector(`form`).style.animation = ``;
+     }, SHAKE_ANIMATION_TIMEOUT);
+   }
 }

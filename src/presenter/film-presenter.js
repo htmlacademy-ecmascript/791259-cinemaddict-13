@@ -163,8 +163,16 @@ export class FilmPresenter {
       return;
     }
 
+
     this._api.addComment(this._film, this._commentText, this._commentEmotion)
-    .then((result) => this._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments));
+    .then((result) => {
+      this._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments);
+    })
+    .catch(() => {this._filmDetailsComponent.shake();
+      if (this._commentEmotion !== null) {
+        this._newCommentComponent.updateData();
+      }
+    });
   }
 
   _handleEmojiPick(event) {
@@ -180,7 +188,6 @@ export class FilmPresenter {
     this._bodyContainer.classList.add(`hide-overflow`);
     this._filmDetailsComponent = new FilmDetailsView(this._film);
     this._commentLoadingErrorComponent = new CommentLoadingErrorView();
-
 
     this._api.getComments(this._film).then((comments) => {
       this._commentsModel.setComments(comments);
@@ -238,17 +245,34 @@ export class FilmPresenter {
     if (event.target.tagName === `BUTTON`) {
       const deleteCommentId = +event.target.closest(`.film-details__comment`).dataset.id;
 
-      this._api.deleteComment(deleteCommentId).then(() => {
+      event.target.setAttribute(`disabled`, ``);
+      event.target.innerHTML = `Deleting`;
+
+      this._api.deleteComment(deleteCommentId)
+      .then(() => {
         this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, deleteCommentId);
-      });
+      })
+      .catch(() => event.target.classList.add(`shake`));
     }
   }
 
   _handleCommentEvent(userAction, update) {
     switch (userAction) {
       case UserAction.ADD_COMMENT:
+
+        for (let element of document.forms[0].elements) {
+          element.disabled = true;
+           }
+
         this._filmCommentsComponent.updateData(update);
         this._newCommentComponent.updateData();
+
+        for (let element of document.forms[0].elements) {
+          element.disabled = false;
+           }
+
+        this._commentText = null;
+        this._commentEmotion = null;
         break;
 
       case UserAction.DELETE_COMMENT:

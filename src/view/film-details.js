@@ -6,6 +6,9 @@ import {getRuntime} from "../utils/common.js";
 const createFilmDetailsTemplate = (film) => {
   const {title, alternativeTitle, rating, director, writers, actors, country, productionDate, runtime, genre, poster, ageRestriction, description, isAddedtoWatchList, isWatched, isFavorite} = film;
 
+  const createGenresTemplate = (singleGenre) => `<span class="film-details__genre">${singleGenre}</span>`;
+  const genreList = genre.map((item) => createGenresTemplate(item)).join(` `);
+
   const writersList = writers.join(`, `);
   const actorsList = actors.join(`, `);
 
@@ -61,7 +64,7 @@ const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">${genre.length > 1 ? `Genres` : `Genre`}</td>
-              <td class="film-details__cell">${genre.join(`, `)}</td>
+              <td class="film-details__cell">${genreList}</td>
             </tr>
           </table>
 
