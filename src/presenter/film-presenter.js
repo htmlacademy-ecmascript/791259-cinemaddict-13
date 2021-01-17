@@ -168,7 +168,8 @@ export class FilmPresenter {
     .then((result) => {
       this._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments);
     })
-    .catch(() => {this._filmDetailsComponent.shake();
+    .catch(() => {
+      this._filmDetailsComponent.shake();
       if (this._commentEmotion !== null) {
         this._newCommentComponent.updateData();
       }
@@ -262,14 +263,14 @@ export class FilmPresenter {
 
         for (let element of document.forms[0].elements) {
           element.disabled = true;
-           }
+        }
 
         this._filmCommentsComponent.updateData(update);
         this._newCommentComponent.updateData();
 
         for (let element of document.forms[0].elements) {
           element.disabled = false;
-           }
+        }
 
         this._commentText = null;
         this._commentEmotion = null;

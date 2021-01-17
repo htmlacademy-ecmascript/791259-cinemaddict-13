@@ -27,9 +27,9 @@ export class AbstractView {
   }
 
   shake() {
-     this.getElement().querySelector(`form`).style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-     setTimeout(() => {
-       this.getElement().querySelector(`form`).style.animation = ``;
-     }, SHAKE_ANIMATION_TIMEOUT);
-   }
+    this.getElement().querySelector(`form`).style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      this.getElement().querySelector(`form`).style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
 }
