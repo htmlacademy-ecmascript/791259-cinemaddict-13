@@ -21,5 +21,9 @@ export const FilterType = {
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`,
-
 }
+
+export const MenuStats = {
+  MOVIES: `MOVIES`,
+  STATISTICS: `STATISTICS`,
+};

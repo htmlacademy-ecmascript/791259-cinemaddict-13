@@ -41,7 +41,6 @@ export class FilmPresenter {
     this._commentsAssignedList = [];
     this._commentLoadingErrorComponent = null;
 
-
     this._handleShowFilmDetails = this._handleShowFilmDetails.bind(this);
     this._handleReturnToFilm = this._handleReturnToFilm.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -50,13 +49,9 @@ export class FilmPresenter {
     this._handleWatchListClick = this._handleWatchListClick.bind(this);
     this._handleIsWatchedClick = this._handleIsWatchedClick.bind(this);
     this._handleIsFavoriteClick = this._handleIsFavoriteClick.bind(this);
-    this._handleEmojiPick = this._handleEmojiPick.bind(this);
-    this._handleTextAreaInput = this._handleTextAreaInput.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
 
     this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
-    this._commentEmotion = null;
-    this._commentText = null;
     this._handleCommentEvent = this._handleCommentEvent.bind(this);
     this._commentsModel.addObserver(this._handleCommentEvent);
   }
@@ -87,25 +82,25 @@ export class FilmPresenter {
     remove(this._filmComponent);
   }
 
-  _handleClickOnFilm(event) {
+  _handleClickOnFilm(evt) {
     const filmClickableItems = [`film-card__poster`, `film-card__title`, `film-card__comments`];
     for (let item of filmClickableItems) {
-      if (event.target.classList.contains(item)) {
+      if (evt.target.classList.contains(item)) {
         this._handleShowFilmDetails();
         document.addEventListener(`keydown`, this._handleEscKeyDown);
       }
     }
   }
 
-  _handleClickOnX(event) {
-    if (event.target.classList.contains(`film-details__close-btn`)) {
+  _handleClickOnX(evt) {
+    if (evt.target.classList.contains(`film-details__close-btn`)) {
       this._handleReturnToFilm();
     }
   }
 
-  _handleWatchListClick(event) {
+  _handleWatchListClick(evt) {
     const activeFilter = this._filterModel.getFilter();
-    if (event.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || event.target.classList.contains(`film-details__control-label--watchlist`)) {
+    if (evt.target.classList.contains(`film-card__controls-item--add-to-watchlist`) || evt.target.classList.contains(`film-details__control-label--watchlist`)) {
       this._changeData(
           UserAction.UPDATE_FILM,
           activeFilter === `all` ? UpdateType.PATCH : UpdateType.MINOR,
@@ -118,9 +113,9 @@ export class FilmPresenter {
     }
   }
 
-  _handleIsWatchedClick() {
+  _handleIsWatchedClick(evt) {
     const activeFilter = this._filterModel.getFilter();
-    if (event.target.classList.contains(`film-card__controls-item--mark-as-watched`) || event.target.classList.contains(`film-details__control-label--watched`)) {
+    if (evt.target.classList.contains(`film-card__controls-item--mark-as-watched`) || evt.target.classList.contains(`film-details__control-label--watched`)) {
       this._changeData(
           UserAction.UPDATE_FILM,
           activeFilter === `all` ? UpdateType.PATCH : UpdateType.MINOR,
@@ -133,9 +128,9 @@ export class FilmPresenter {
     }
   }
 
-  _handleIsFavoriteClick() {
+  _handleIsFavoriteClick(evt) {
     const activeFilter = this._filterModel.getFilter();
-    if (event.target.classList.contains(`film-card__controls-item--favorite`) || event.target.classList.contains(`film-details__control-label--favorite`)) {
+    if (evt.target.classList.contains(`film-card__controls-item--favorite`) || evt.target.classList.contains(`film-details__control-label--favorite`)) {
       this._changeData(
           UserAction.UPDATE_FILM,
           activeFilter === `all` ? UpdateType.PATCH : UpdateType.MINOR,
@@ -154,35 +149,21 @@ export class FilmPresenter {
     }
   }
 
-  _handleTextAreaInput(event) {
-    this._commentText = event.target.value;
-  }
+  _handleFormSubmit(comment) {
+    this._newCommentComponent.disableForm();
 
-  _handleFormSubmit(event) {
-    if (!(event.keyCode === 13 && event.metaKey)) {
-      return;
-    }
-
-
-    this._api.addComment(this._film, this._commentText, this._commentEmotion)
+    this._api.addComment(this._film.id, comment)
     .then((result) => {
-      this._commentsModel.addComment(UserAction.ADD_COMMENT, result.comments);
+      this._commentsModel.addComment(result.comments);
     })
     .catch(() => {
       this._filmDetailsComponent.shake();
-      if (this._commentEmotion !== null) {
+      this._newCommentComponent.enableForm();
+
+      if (this._newCommentComponent.getElement().querySelector(`.film-details__add-emoji-label`).innerHTML !== ``) {
         this._newCommentComponent.updateData();
       }
     });
-  }
-
-  _handleEmojiPick(event) {
-    if (event.target.tagName === `INPUT`) {
-      this._commentEmotion = event.target.value;
-      const emojiContainer = document.querySelector(`.film-details__add-emoji-label`);
-      emojiContainer.innerHTML = ``;
-      emojiContainer.insertAdjacentHTML(`beforeend`, `<img src="images/emoji/${event.target.value}.png" width="55" height="55" alt="emoji-${event.target.value}">`);
-    }
   }
 
   _handleShowFilmDetails() {
@@ -206,10 +187,9 @@ export class FilmPresenter {
     this._filmDetailsComponent.setIsWatchedClickHandler(this._handleIsWatchedClick);
     this._filmDetailsComponent.setIsFavoriteClickHandler(this._handleIsFavoriteClick);
     this._filmDetailsComponent.setClickHandler(this._handleClickOnX);
-    this._filmDetailsComponent.setFormSubmitHandler(this._handleFormSubmit);
 
-    this._newCommentComponent.setEmojiClickHandler(this._handleEmojiPick);
-    this._newCommentComponent.setTextAreaClickHandler(this._handleTextAreaInput);
+    this._newCommentComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._newCommentComponent.restoreHandlers();
 
     render(this._bodyContainer, this._filmDetailsComponent);
 
@@ -242,43 +222,24 @@ export class FilmPresenter {
     }
   }
 
-  _handleDeleteCommentClick(event) {
-    if (event.target.tagName === `BUTTON`) {
-      const deleteCommentId = +event.target.closest(`.film-details__comment`).dataset.id;
+  _handleDeleteCommentClick(evt, deleteCommentId) {
+    evt.target.setAttribute(`disabled`, ``);
+    evt.target.innerHTML = `Deleting`;
 
-      event.target.setAttribute(`disabled`, ``);
-      event.target.innerHTML = `Deleting`;
+    this._api.deleteComment(deleteCommentId)
+    .then(() => {
+      this._commentsModel.deleteComment(deleteCommentId);
+    })
+    .catch(() => {
+      this._filmCommentsComponent.shake()
+      evt.target.removeAttribute(`disabled`, ``);
+      evt.target.innerHTML = `Delete`;
+    });
 
-      this._api.deleteComment(deleteCommentId)
-      .then(() => {
-        this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, deleteCommentId);
-      })
-      .catch(() => event.target.classList.add(`shake`));
-    }
   }
 
-  _handleCommentEvent(userAction, update) {
-    switch (userAction) {
-      case UserAction.ADD_COMMENT:
-
-        for (let element of document.forms[0].elements) {
-          element.disabled = true;
-        }
-
-        this._filmCommentsComponent.updateData(update);
-        this._newCommentComponent.updateData();
-
-        for (let element of document.forms[0].elements) {
-          element.disabled = false;
-        }
-
-        this._commentText = null;
-        this._commentEmotion = null;
-        break;
-
-      case UserAction.DELETE_COMMENT:
-        this._filmCommentsComponent.updateData(update);
-        break;
-    }
+  _handleCommentEvent(update) {
+    this._filmCommentsComponent.updateData(update);
+    this._newCommentComponent.updateData();
   }
 }

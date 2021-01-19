@@ -47,7 +47,16 @@ export class FilmCommentsView extends SmartView {
 
   _deleteCommentClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteCommentClick(evt);
+    if (evt.target.tagName !== `BUTTON`) {
+      return;
+    }
+
+    const commentToDelete = evt.target.closest(`.film-details__comment`);
+
+    const deleteCommentId = +evt.target.closest(`.film-details__comment`).dataset.id;
+    const deleteButton = evt.target;
+
+    this._callback.deleteCommentClick(evt, deleteCommentId);
   }
 
   setDeleteCommentClickHandler(callback) {

@@ -2,6 +2,7 @@ import {MainView} from "../view/main-section.js";
 import {HeaderView} from "../view/header.js";
 import {FooterView} from "../view/footer.js";
 import {UserView} from "../view/user.js";
+import {StatsView} from "../view/statistics.js";
 
 import {SortView} from "../view/sort.js";
 import {FilmsContainerView} from "../view/films-container.js";
@@ -16,7 +17,7 @@ import {LoadingView} from "../view/loading.js";
 
 
 import {render, remove} from "../utils/render.js";
-import {SortType, UpdateType, UserAction} from "../const.js";
+import {SortType, UpdateType, UserAction, MenuStats} from "../const.js";
 const FILM_COUNT_PER_STEP = 5;
 import dayjs from "dayjs";
 import {filter} from "../utils/filter.js";
@@ -36,7 +37,9 @@ export class SitePresenter {
 
     this._headerComponent = new HeaderView();
     this._mainComponent = new MainView();
-    this._filterPresenter = new FilterPresenter(this._mainComponent, this._filterModel, this._filmsModel);
+    this._statsComponent = null;
+
+    this._filterPresenter = new FilterPresenter(this._mainComponent, this._filterModel, this._filmsModel, this._changeMenuState);
     this._footerComponent = new FooterView();
 
     this._userComponent = new UserView();
@@ -56,9 +59,8 @@ export class SitePresenter {
 
     this._handleFilmEvent = this._handleFilmEvent.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
+    this._changeMenuState = this._changeMenuState.bind(this);
 
-    this._filmsModel.addObserver(this._handleFilmEvent);
-    this._filterModel.addObserver(this._handleFilmEvent);
   }
 
   init() {
@@ -69,8 +71,50 @@ export class SitePresenter {
     render(this._mainComponent, this._filmsContainerComponent);
     render(this._bodyContainer, this._footerComponent);
 
+    this._filmsModel.addObserver(this._handleFilmEvent);
+    this._filterModel.addObserver(this._handleFilmEvent);
+
     this._renderBoard();
+
   }
+
+
+  _changeMenuState(action) {
+
+    switch (action) {
+      case MenuStats.MOVIES:
+      console.log(this._mainComponent);
+      this.destroy();
+
+
+        break;
+      case MenuStats.STATISTICS:
+        const films = this._filmsModel.getFilms();
+
+        const watchedFilms = filter[`history`](films);
+
+        this._statsComponent = new StatsView(watchedFilms);
+        render(document.querySelector(`.main`), this._statsComponent);
+        this._statsComponent.restoreHandlers();
+        break;
+      }
+  }
+
+  _statsClick(evt) {
+    console.log(evt);
+  }
+
+  destroy() {
+    this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
+
+
+    remove(this._filmsContainerComponent);
+    remove(this._filmsListContainer);
+
+    this._filmsModel.removeObserver(this._handleFilmEvent);
+    this._filterModel.removeObserver(this._handleFilmEvent);
+  }
+
 
   _getFilms() {
     const filterType = this._filterModel.getFilter();
@@ -114,6 +158,8 @@ export class SitePresenter {
         break;
     }
   }
+
+
 
   _handleModeChange() {
     Object
@@ -211,9 +257,8 @@ export class SitePresenter {
     render(this._filmsContainerComponent, this._loadingComponent);
   }
 
+
   _renderBoard() {
-
-
     this._filterPresenter.init();
     const films = this._getFilms();
     const filmCount = films.length;
@@ -239,4 +284,5 @@ export class SitePresenter {
 
     this._renderFooterStats();
   }
+
 }

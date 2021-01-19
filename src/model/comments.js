@@ -17,13 +17,13 @@ export class CommentsModel extends Observer {
     return this._comments;
   }
 
-  addComment(userAction, update) {
+  addComment(update) {
 
     this._comments = update;
-    this._notify(userAction, update);
+    this._notify(update);
   }
 
-  deleteComment(userAction, update) {
+  deleteComment(update) {
 
     let index = this._comments.findIndex((comment) => +comment.id === update);
 
@@ -36,7 +36,7 @@ export class CommentsModel extends Observer {
       ...this._comments.slice(index + 1)
     ];
 
-    this._notify(userAction, this._comments);
+    this._notify(this._comments);
   }
 
 }

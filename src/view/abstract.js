@@ -27,9 +27,18 @@ export class AbstractView {
   }
 
   shake() {
-    this.getElement().querySelector(`form`).style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     setTimeout(() => {
-      this.getElement().querySelector(`form`).style.animation = ``;
+      this.getElement().style.animation = ``;
     }, SHAKE_ANIMATION_TIMEOUT);
   }
+/*
+  show() {
+    this.getElement().classList.remove(`visually-hidden`);
+  }
+
+  hide() {
+    this.getElement().classList.add(`visually-hidden`);
+  }
+  */
 }

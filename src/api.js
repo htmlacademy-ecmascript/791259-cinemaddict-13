@@ -50,17 +50,12 @@ export class Api {
       .then(FilmsModel.adaptToClient);
   }
 
-  addComment(film, comment, emotion) {
-    const newComment = {
-      comment: comment,
-      date: new Date().toISOString(),
-      emotion: emotion,
-    }
+  addComment(id, comment) {
 
     return this._load({
-        url: `comments/${film.id}`,
+        url: `comments/${id}`,
         method: Method.POST,
-        body: JSON.stringify(newComment),
+        body: JSON.stringify(comment),
         headers: new Headers({
           "Content-Type": `application/json`
         })
