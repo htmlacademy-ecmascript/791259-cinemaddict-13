@@ -22,7 +22,7 @@ export class FilterPresenter {
     this._changeMenuState = changeMenuState;
     this._filmsModel = filmsModel;
     this._currentFilter = null;
-    this._currentStatusPage = MenuStats.MOVIES;
+    this._currentStatusPage = MenuStats.FILMS;
 
     this._filterComponent = null;
 
@@ -64,12 +64,12 @@ export class FilterPresenter {
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-    this._changeMenuState(MenuStats.MOVIES);
-    this._currentStatusPage = MenuStats.MOVIES;
+    this._changeMenuState(MenuStats.FILMS);
+    this._currentStatusPage = MenuStats.FILMS;
     this.init();
   }
 
-  _handleStatsClick(evt) {
+  _handleStatsClick() {
     this._changeMenuState(MenuStats.STATISTICS);
     this._currentStatusPage = MenuStats.STATISTICS;
     this.init();

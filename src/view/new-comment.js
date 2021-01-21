@@ -86,7 +86,7 @@ export class NewCommentView extends SmartView {
 
   }
 
-  disableForm(){
+  disableForm() {
     this.getElement().querySelector(`textarea`).setAttribute(`disable`, ``);
     this.getElement().querySelectorAll(`input`).forEach((el) => el.setAttribute(`disable`, ``));
   }
@@ -106,7 +106,7 @@ export class NewCommentView extends SmartView {
       comment: this._commentText,
       date: new Date().toISOString(),
       emotion: this._commentEmotion,
-    }
+    };
 
 
     this._callback.formSubmit(newComment);

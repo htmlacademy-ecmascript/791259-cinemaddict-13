@@ -4,7 +4,7 @@ import {MenuStats} from "../const.js";
 
 const createFilterItemTemplate = (filter, currentFilterType, currentStatusPage) => {
   const {type, name, count} = filter;
-  return `<a href="#${name.toLowerCase()}" data-filter-type=${type} class="main-navigation__item ${type === currentFilterType && currentStatusPage === MenuStats.MOVIES ? `main-navigation__item--active` : ``}">${name}${type !== `all` ? `<span class="main-navigation__item-count">${count}</span>` : ``}</a>`;
+  return `<a href="#${name.toLowerCase()}" data-filter-type=${type} class="main-navigation__item ${type === currentFilterType && currentStatusPage === MenuStats.FILMS ? `main-navigation__item--active` : ``}">${name}${type !== `all` ? `<span class="main-navigation__item-count">${count}</span>` : ``}</a>`;
 };
 
 const createFilterTemplate = (filterItems, currentFilterType, currentStatusPage) => {

@@ -15,6 +15,7 @@ import {
   remove,
   replace
 } from "../utils/render.js";
+import dayjs from "dayjs";
 
 import {CommentsModel} from "../model/comments.js";
 import {UserAction, UpdateType} from "../const.js";
@@ -121,7 +122,8 @@ export class FilmPresenter {
           activeFilter === `all` ? UpdateType.PATCH : UpdateType.MINOR,
           Object.assign({},
               this._film, {
-                isWatched: !this._film.isWatched
+                isWatched: !this._film.isWatched,
+                watchingDate: dayjs().toISOString(),
               }
           )
       );
@@ -231,7 +233,7 @@ export class FilmPresenter {
       this._commentsModel.deleteComment(deleteCommentId);
     })
     .catch(() => {
-      this._filmCommentsComponent.shake()
+      this._filmCommentsComponent.shake();
       evt.target.removeAttribute(`disabled`, ``);
       evt.target.innerHTML = `Delete`;
     });

@@ -42,7 +42,7 @@ export class SitePresenter {
     this._filterPresenter = new FilterPresenter(this._mainComponent, this._filterModel, this._filmsModel, this._changeMenuState);
     this._footerComponent = new FooterView();
 
-    this._userComponent = new UserView();
+    this._userComponent = null;
 
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
@@ -60,13 +60,11 @@ export class SitePresenter {
     this._handleFilmEvent = this._handleFilmEvent.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._changeMenuState = this._changeMenuState.bind(this);
-
   }
 
   init() {
 
     render(this._bodyContainer, this._headerComponent);
-    render(this._headerComponent, this._userComponent);
     render(this._bodyContainer, this._mainComponent);
     render(this._mainComponent, this._filmsContainerComponent);
     render(this._bodyContainer, this._footerComponent);
@@ -75,38 +73,27 @@ export class SitePresenter {
     this._filterModel.addObserver(this._handleFilmEvent);
 
     this._renderBoard();
-
   }
 
-
   _changeMenuState(action) {
-
     switch (action) {
-      case MenuStats.MOVIES:
-      console.log(this._mainComponent);
-      this.destroy();
-
-
+      case MenuStats.FILMS:
+      console.log(`films`);
+        this.destroy();
         break;
       case MenuStats.STATISTICS:
+      console.log(`stats`);
         const films = this._filmsModel.getFilms();
-
         const watchedFilms = filter[`history`](films);
-
         this._statsComponent = new StatsView(watchedFilms);
         render(document.querySelector(`.main`), this._statsComponent);
         this._statsComponent.restoreHandlers();
         break;
-      }
-  }
-
-  _statsClick(evt) {
-    console.log(evt);
+    }
   }
 
   destroy() {
     this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
-
 
     remove(this._filmsContainerComponent);
     remove(this._filmsListContainer);
@@ -114,7 +101,6 @@ export class SitePresenter {
     this._filmsModel.removeObserver(this._handleFilmEvent);
     this._filterModel.removeObserver(this._handleFilmEvent);
   }
-
 
   _getFilms() {
     const filterType = this._filterModel.getFilter();
@@ -154,12 +140,11 @@ export class SitePresenter {
       case UpdateType.INIT:
         this._isLoading = false;
         remove(this._loadingComponent);
+        this._renderUser(this._getFilms().filter((film) => film.isWatched));
         this._renderBoard();
         break;
     }
   }
-
-
 
   _handleModeChange() {
     Object
@@ -255,6 +240,15 @@ export class SitePresenter {
 
   _renderLoading() {
     render(this._filmsContainerComponent, this._loadingComponent);
+  }
+
+  _renderUser(films) {
+    if (this._userComponent !== null) {
+      this._userComponent === null;
+    }
+
+    this._userComponent = new UserView(films);
+    render(this._headerComponent, this._userComponent);
   }
 
 

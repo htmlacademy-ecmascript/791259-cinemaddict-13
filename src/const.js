@@ -24,6 +24,14 @@ export const FilterType = {
 }
 
 export const MenuStats = {
-  MOVIES: `MOVIES`,
+  FILMS: `FILMS`,
   STATISTICS: `STATISTICS`,
+};
+
+export const StatsPeriods = {
+  ALL_TIME: `all time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`,
 };
