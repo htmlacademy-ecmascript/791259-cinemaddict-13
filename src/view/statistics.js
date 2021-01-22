@@ -10,6 +10,7 @@ import {
 import {
   getRank
 } from "../utils/common.js";
+import {filter} from "../utils/filter.js";
 
 let isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
@@ -126,7 +127,7 @@ const renderChart = (statisticCtx, films) => {
   });
 }
 
-const createStatsTemplate = (data) => {
+const createStatsTemplate = (films, data) => {
   const {
     watchedFilms,
     checkedItem
@@ -137,7 +138,7 @@ const createStatsTemplate = (data) => {
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${getRank(watchedFilms)}</span>
+      <span class="statistic__rank-label">${getRank(films)}</span>
     </p>` : ``
   }
 
@@ -186,9 +187,10 @@ const createStatsTemplate = (data) => {
 
 
 export class StatsView extends SmartView {
-  constructor(watchedFilms) {
+  constructor(films) {
     super();
-    this._watchedFilms = watchedFilms;
+    this._films = films;
+    this._watchedFilms = filter[`history`](films);
 
     this._data = {
       watchedFilms: this._watchedFilms,
@@ -200,7 +202,7 @@ export class StatsView extends SmartView {
   }
 
   getTemplate() {
-    return createStatsTemplate(this._data);
+    return createStatsTemplate(this._films, this._data);
   }
 
   _handlePeriodChange(evt) {

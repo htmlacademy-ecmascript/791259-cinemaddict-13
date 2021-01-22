@@ -29,6 +29,7 @@ export class SitePresenter {
     this._filterModel = filterModel;
     this._api = api;
 
+
     this._isLoading = true;
     this._bodyContainer = bodyContainer;
     this._renderedFilmsCount = FILM_COUNT_PER_STEP;
@@ -38,7 +39,7 @@ export class SitePresenter {
     this._headerComponent = new HeaderView();
     this._mainComponent = new MainView();
     this._statsComponent = null;
-
+    this._changeMenuState = this._changeMenuState.bind(this);
     this._filterPresenter = new FilterPresenter(this._mainComponent, this._filterModel, this._filmsModel, this._changeMenuState);
     this._footerComponent = new FooterView();
 
@@ -46,6 +47,8 @@ export class SitePresenter {
 
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
+
+
     this._filmsContainerComponent = new FilmsContainerView();
     this._noFilmsComponent = new NoFilmsView();
     this._loadingComponent = new LoadingView();
@@ -59,7 +62,7 @@ export class SitePresenter {
 
     this._handleFilmEvent = this._handleFilmEvent.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
-    this._changeMenuState = this._changeMenuState.bind(this);
+
   }
 
   init() {
@@ -78,14 +81,16 @@ export class SitePresenter {
   _changeMenuState(action) {
     switch (action) {
       case MenuStats.FILMS:
-      console.log(`films`);
         this.destroy();
+        this.init();
+        if (this._statsComponent !== null) remove(this._statsComponent);
+        this._statsComponent = null;
         break;
+
       case MenuStats.STATISTICS:
-      console.log(`stats`);
+        this.destroy();
         const films = this._filmsModel.getFilms();
-        const watchedFilms = filter[`history`](films);
-        this._statsComponent = new StatsView(watchedFilms);
+        this._statsComponent = new StatsView(films);
         render(document.querySelector(`.main`), this._statsComponent);
         this._statsComponent.restoreHandlers();
         break;
@@ -96,7 +101,6 @@ export class SitePresenter {
     this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
 
     remove(this._filmsContainerComponent);
-    remove(this._filmsListContainer);
 
     this._filmsModel.removeObserver(this._handleFilmEvent);
     this._filterModel.removeObserver(this._handleFilmEvent);
