@@ -40,8 +40,14 @@ export const getRuntime = (minutesCount) => {
 
 export const getRank = (watchedFilms) => {
   let rank;
-  if (watchedFilms.length <= 10) rank = `Novice`;
-  if  (watchedFilms.length > 11 || watchedFilms.length <= 20) rank = `Fan`;
-  if ( watchedFilms.length > 21 ) rank = `Movie Buff`;
+  if (watchedFilms.length <= 10) {
+    rank = `Novice`;
+  }
+  if (watchedFilms.length > 11 || watchedFilms.length <= 20) {
+    rank = `Fan`;
+  }
+  if (watchedFilms.length > 21) {
+    rank = `Movie Buff`;
+  }
   return rank;
-}
+};

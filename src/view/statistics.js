@@ -10,9 +10,10 @@ import {
 import {
   getRank
 } from "../utils/common.js";
-import {filter} from "../utils/filter.js";
-
-let isBetween = require('dayjs/plugin/isBetween');
+import {
+  filter
+} from "../utils/filter.js";
+import * as isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 
 
@@ -88,8 +89,8 @@ const renderChart = (statisticCtx, films) => {
             size: 20
           },
           color: `#ffffff`,
-          anchor: 'start',
-          align: 'start',
+          anchor: `start`,
+          align: `start`,
           offset: 40,
         }
       },
@@ -125,7 +126,7 @@ const renderChart = (statisticCtx, films) => {
       }
     }
   });
-}
+};
 
 const createStatsTemplate = (films, data) => {
   const {
@@ -182,9 +183,6 @@ const createStatsTemplate = (films, data) => {
 
   </section>`;
 };
-
-
-
 
 export class StatsView extends SmartView {
   constructor(films) {

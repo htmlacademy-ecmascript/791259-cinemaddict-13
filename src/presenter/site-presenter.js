@@ -83,7 +83,9 @@ export class SitePresenter {
       case MenuStats.FILMS:
         this.destroy();
         this.init();
-        if (this._statsComponent !== null) remove(this._statsComponent);
+        if (this._statsComponent !== null) {
+          remove(this._statsComponent);
+        }
         this._statsComponent = null;
         break;
 
