@@ -39,12 +39,12 @@ const getAllGenres = (watchedFilms) => {
 };
 
 const getTotalDuration = (watchedFilms) => {
-  if (watchedFilms === undefined || watchedFilms.length == 0) {
+  if (watchedFilms === undefined || watchedFilms.length === 0) {
     return {
       hours: `0`,
       minutes: `0`
-    }
-}
+    };
+  }
 
   let allDurations = [];
   for (let film of watchedFilms) {
