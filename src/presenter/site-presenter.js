@@ -250,7 +250,7 @@ export class SitePresenter {
 
   _renderUser(films) {
     if (this._userComponent !== null) {
-      this._userComponent === null;
+      this._userComponent = null;
     }
 
     this._userComponent = new UserView(films);

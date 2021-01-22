@@ -29,7 +29,7 @@ export const MenuStats = {
 };
 
 export const StatsPeriods = {
-  ALL_TIME: `all time`,
+  ALL_TIME: `all-time`,
   TODAY: `today`,
   WEEK: `week`,
   MONTH: `month`,

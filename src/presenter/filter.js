@@ -72,7 +72,9 @@ export class FilterPresenter {
   _handleStatsClick() {
     this._changeMenuState(MenuStats.STATISTICS);
     this._currentStatusPage = MenuStats.STATISTICS;
+
     this.init();
+    this._currentFilter = null;
   }
 
   _getFilters() {

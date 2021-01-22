@@ -39,6 +39,12 @@ const getAllGenres = (watchedFilms) => {
 };
 
 const getTotalDuration = (watchedFilms) => {
+  if (watchedFilms === undefined || watchedFilms.length == 0) {
+    return {
+      hours: `0`,
+      minutes: `0`
+    }
+}
 
   let allDurations = [];
   for (let film of watchedFilms) {
@@ -64,13 +70,19 @@ const getTopGenre = (films) => {
       return film;
     }
   }
+  return ``;
 
 };
 
 
 const renderChart = (statisticCtx, films) => {
-  const chartDataGenres = Object.keys(getAllGenres(films));
-  const chartDataCount = Object.values(getAllGenres(films));
+
+  const data = getAllGenres(films);
+  const chartDataGenres = Object.keys(data);
+  const chartDataCount = Object.values(data);
+
+
+  statisticCtx.height = BAR_HEIGHT * chartDataGenres.length;
 
   return new Chart(statisticCtx, {
     plugins: [ChartDataLabels],
@@ -175,7 +187,7 @@ const createStatsTemplate = (films, data) => {
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">${getTopGenre(watchedFilms) ? getTopGenre(watchedFilms) : ``}</p>
+        <p class="statistic__item-text">${getTopGenre(watchedFilms)}</p>
       </li>
     </ul>
 
@@ -267,7 +279,6 @@ export class StatsView extends SmartView {
 
   _setChart() {
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
-    statisticCtx.height = BAR_HEIGHT * Object.keys(getAllGenres(this._data.watchedFilms)).length;
 
     renderChart(statisticCtx, this._data.watchedFilms);
   }
