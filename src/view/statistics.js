@@ -54,14 +54,17 @@ const getTotalDuration = (watchedFilms) => {
 };
 
 const getTopGenre = (films) => {
+
   const data = getAllGenres(films);
   let dataCount = Object.values(data);
   const maxCount = Math.max(...dataCount);
+
   for (let film in data) {
     if (data[film] === maxCount) {
       return film;
     }
   }
+
 };
 
 
@@ -135,13 +138,12 @@ const createStatsTemplate = (films, data) => {
   } = data;
 
   return `<section class="statistic">
-  ${ (watchedFilms) ?  `
+  ${(watchedFilms) ? `
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
       <span class="statistic__rank-label">${getRank(films)}</span>
-    </p>` : ``
-  }
+    </p>` : ``}
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
@@ -269,4 +271,4 @@ export class StatsView extends SmartView {
 
     renderChart(statisticCtx, this._data.watchedFilms);
   }
-};
+}
