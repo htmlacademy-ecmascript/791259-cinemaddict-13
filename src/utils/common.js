@@ -8,13 +8,6 @@ export const generateRandomItem = (arr) => arr[getRandomIntInclusive(0, arr.leng
 
 export const generateRandomDate = (start, end) => new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 
-export const figureCorrectPluralForm = (arr, str) => { // string in singular form required
-  if (arr.length > 2) {
-    str += `s`;
-  }
-  return str;
-};
-
 export const generateDescription = () => {
   const description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`.slice(0, -1);
   const descriptions = description.split(`. `);
@@ -37,4 +30,24 @@ export const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1)
   ];
+};
+
+export const getRuntime = (minutesCount) => {
+  const hours = Math.floor(minutesCount / 60);
+  const minutes = minutesCount % 60;
+  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+};
+
+export const getRank = (watchedFilms) => {
+  let rank;
+  if (watchedFilms.length <= 10) {
+    rank = `Novice`;
+  }
+  if (watchedFilms.length > 11 || watchedFilms.length <= 20) {
+    rank = `Fan`;
+  }
+  if (watchedFilms.length > 21) {
+    rank = `Movie Buff`;
+  }
+  return rank;
 };

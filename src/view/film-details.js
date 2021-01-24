@@ -1,12 +1,16 @@
-import {figureCorrectPluralForm} from "../utils/common.js";
 import {AbstractView} from "./abstract.js";
+import dayjs from "dayjs";
+import {getRuntime} from "../utils/common.js";
+
 
 const createFilmDetailsTemplate = (film) => {
-  const {title, originalTitle, country, rating, director, writers, actors, productionDate, duration, genres, poster, ageRestriction, description, isAddedtoWatchList, isWatched, isFavorite} = film;
-  const genresForm = figureCorrectPluralForm(genres, `Genre`);
+  const {title, alternativeTitle, rating, director, writers, actors, country, productionDate, runtime, genre, poster, ageRestriction, description, isAddedtoWatchList, isWatched, isFavorite} = film;
 
-  const createGenresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
-  const genreList = genres.map((item) => createGenresTemplate(item)).join(``);
+  const createGenresTemplate = (singleGenre) => `<span class="film-details__genre">${singleGenre}</span>`;
+  const genreList = genre.map((item) => createGenresTemplate(item)).join(` `);
+
+  const writersList = writers.join(`, `);
+  const actorsList = actors.join(`, `);
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -16,16 +20,16 @@ const createFilmDetailsTemplate = (film) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+          <img class="film-details__poster-img" src="./${poster}" alt="${title} film poster">
 
-          <p class="film-details__age">${ageRestriction}</p>
+          <p class="film-details__age">${ageRestriction}+</p>
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${originalTitle}</p>
+              <p class="film-details__title-original">Original: ${alternativeTitle}</p>
             </div>
 
             <div class="film-details__rating">
@@ -40,26 +44,26 @@ const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${writersList}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${actorsList}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${productionDate}</td>
+              <td class="film-details__cell">${dayjs(productionDate).format(`DD MMMM YYYY`)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${getRuntime(runtime)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">${genresForm}</td>
+              <td class="film-details__term">${genre.length > 1 ? `Genres` : `Genre`}</td>
               <td class="film-details__cell">${genreList}</td>
             </tr>
           </table>
@@ -95,7 +99,6 @@ export class FilmDetailsView extends AbstractView {
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._isWatchedClickHandler = this._isWatchedClickHandler.bind(this);
     this._isFavoriteClickHandler = this._isFavoriteClickHandler.bind(this);
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
@@ -136,16 +139,6 @@ export class FilmDetailsView extends AbstractView {
   setIsFavoriteClickHandler(callback) {
     this._callback.isFavoriteClick = callback;
     this.getElement().addEventListener(`click`, this._isFavoriteClickHandler);
-  }
-
-  _formSubmitHandler(evt) {
-
-    this._callback.formSubmit(evt);
-  }
-
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
   }
 
 }

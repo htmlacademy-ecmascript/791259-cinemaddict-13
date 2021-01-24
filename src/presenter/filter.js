@@ -11,20 +11,24 @@ import {
 } from "../utils/filter.js";
 import {
   FilterType,
-  UpdateType
+  UpdateType,
+  MenuStats
 } from "../const.js";
 
 export class FilterPresenter {
-  constructor(filterContainer, filterModel, filmsModel) {
+  constructor(filterContainer, filterModel, filmsModel, changeMenuState) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
+    this._changeMenuState = changeMenuState;
     this._filmsModel = filmsModel;
     this._currentFilter = null;
+    this._currentStatusPage = MenuStats.FILMS;
 
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._handleStatsClick = this._handleStatsClick.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -36,8 +40,10 @@ export class FilterPresenter {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterView(filters, this._currentFilter);
+    this._filterComponent = new FilterView(filters, this._currentFilter, this._currentStatusPage);
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setStatsClickHandler(this._handleStatsClick);
+
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, `afterbegin`);
@@ -58,6 +64,17 @@ export class FilterPresenter {
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._changeMenuState(MenuStats.FILMS);
+    this._currentStatusPage = MenuStats.FILMS;
+    this.init();
+  }
+
+  _handleStatsClick() {
+    this._changeMenuState(MenuStats.STATISTICS);
+    this._currentStatusPage = MenuStats.STATISTICS;
+
+    this.init();
+    this._currentFilter = null;
   }
 
   _getFilters() {

@@ -38,9 +38,14 @@ const createNewCommentTemplate = () => {
 export class NewCommentView extends SmartView {
   constructor() {
     super();
+
+    this._commentEmotion = null;
+    this._commentText = null;
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._textAreaClickHandler = this._textAreaClickHandler.bind(this);
     this.restoreHandlers = this.restoreHandlers.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+
 
   }
   getTemplate() {
@@ -49,22 +54,20 @@ export class NewCommentView extends SmartView {
 
   _emojiClickHandler(evt) {
     evt.preventDefault();
-    this._callback.emojiClick(evt);
-  }
 
-  setEmojiClickHandler(callback) {
-    this._callback.emojiClick = callback;
-    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiClickHandler);
+    if (evt.target.tagName !== `INPUT`) {
+      return;
+    }
+
+    this._commentEmotion = evt.target.value;
+    const emojiContainer = document.querySelector(`.film-details__add-emoji-label`);
+    emojiContainer.innerHTML = ``;
+    emojiContainer.insertAdjacentHTML(`beforeend`, `<img src="images/emoji/${evt.target.value}.png" width="55" height="55" alt="emoji-${evt.target.value}">`);
   }
 
   _textAreaClickHandler(evt) {
     evt.preventDefault();
-    this._callback.textAreaClick(evt);
-  }
-
-  setTextAreaClickHandler(callback) {
-    this._callback.textAreaClick = callback;
-    this.getElement().querySelector(`textarea`).addEventListener(`change`, this._textAreaClickHandler);
+    this._commentText = evt.target.value;
   }
 
   updateData() {
@@ -78,5 +81,43 @@ export class NewCommentView extends SmartView {
   _setInnerHandlers() {
     this.getElement().querySelector(`textarea`).addEventListener(`change`, this._textAreaClickHandler);
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiClickHandler);
+    this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
+    this.getElement().querySelector(`textarea`).addEventListener(`change`, this._textAreaClickHandler);
+
+  }
+
+  disableForm() {
+    this.getElement().querySelector(`textarea`).setAttribute(`disable`, ``);
+    this.getElement().querySelectorAll(`input`).forEach((el) => el.setAttribute(`disable`, ``));
+  }
+
+  enableForm() {
+    this.getElement().querySelector(`textarea`).removeAttribute(`disable`);
+    this.getElement().querySelectorAll(`input`).forEach((el) => el.removeAttribute(`disable`));
+
+  }
+
+  _formSubmitHandler(evt) {
+    if (!(evt.keyCode === 13 && evt.metaKey)) { //
+      return;
+    }
+
+    const newComment = {
+      comment: this._commentText,
+      date: new Date().toISOString(),
+      emotion: this._commentEmotion,
+    };
+
+
+    this._callback.formSubmit(newComment);
+
+    this._commentText = null;
+    this._commentEmotion = null;
+
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
   }
 }
