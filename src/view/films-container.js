@@ -7,4 +7,4 @@ export class FilmsContainerView extends AbstractView {
   getTemplate() {
     return creatFilmsContainerTemplate();
   }
-}
+};

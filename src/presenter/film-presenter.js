@@ -21,7 +21,6 @@ import {CommentsModel} from "../model/comments.js";
 import {UserAction, UpdateType} from "../const.js";
 import {CommentLoadingErrorView} from "../view/comment-loading-error.js";
 
-
 const Mode = {
   DEFAULT: `DEFAULT`,
   VIEWING: `VIEWING`,

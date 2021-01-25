@@ -16,7 +16,6 @@ import {
 import * as isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 
-
 const BAR_HEIGHT = 50;
 
 const getAllGenres = (watchedFilms) => {
@@ -71,16 +70,13 @@ const getTopGenre = (films) => {
     }
   }
   return ``;
-
 };
-
 
 const renderChart = (statisticCtx, films) => {
 
   const data = getAllGenres(films);
   const chartDataGenres = Object.keys(data);
   const chartDataCount = Object.values(data);
-
 
   statisticCtx.height = BAR_HEIGHT * chartDataGenres.length;
 

@@ -2,7 +2,6 @@ import {AbstractView} from "./abstract.js";
 import dayjs from "dayjs";
 import {getRuntime} from "../utils/common.js";
 
-
 const createFilmDetailsTemplate = (film) => {
   const {title, alternativeTitle, rating, director, writers, actors, country, productionDate, runtime, genre, poster, ageRestriction, description, isAddedtoWatchList, isWatched, isFavorite} = film;
 

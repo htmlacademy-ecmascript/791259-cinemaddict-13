@@ -15,7 +15,6 @@ import {FilmListContainerView} from "../view/films-list-container.js";
 import {NoFilmsView} from "../view/no-films.js";
 import {LoadingView} from "../view/loading.js";
 
-
 import {render, remove} from "../utils/render.js";
 import {SortType, UpdateType, UserAction, MenuStats} from "../const.js";
 const FILM_COUNT_PER_STEP = 5;
@@ -256,7 +255,6 @@ export class SitePresenter {
     this._userComponent = new UserView(films);
     render(this._headerComponent, this._userComponent);
   }
-
 
   _renderBoard() {
     this._filterPresenter.init();
