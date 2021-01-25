@@ -45,9 +45,8 @@ export class NewCommentView extends SmartView {
     this._textAreaClickHandler = this._textAreaClickHandler.bind(this);
     this.restoreHandlers = this.restoreHandlers.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
-
-
   }
+
   getTemplate() {
     return createNewCommentTemplate();
   }
@@ -83,7 +82,6 @@ export class NewCommentView extends SmartView {
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiClickHandler);
     this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
     this.getElement().querySelector(`textarea`).addEventListener(`change`, this._textAreaClickHandler);
-
   }
 
   disableForm() {
@@ -94,7 +92,6 @@ export class NewCommentView extends SmartView {
   enableForm() {
     this.getElement().querySelector(`textarea`).removeAttribute(`disable`);
     this.getElement().querySelectorAll(`input`).forEach((el) => el.removeAttribute(`disable`));
-
   }
 
   _formSubmitHandler(evt) {

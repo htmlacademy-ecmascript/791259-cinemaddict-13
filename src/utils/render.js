@@ -7,7 +7,6 @@ export const createElement = (template) => {
   return newElement.firstChild;
 };
 
-
 export const render = (element, child, place = `beforeend`) => {
   if (element instanceof AbstractView) {
     element = element.getElement();

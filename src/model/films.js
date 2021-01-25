@@ -2,7 +2,6 @@ import {
   Observer
 } from "../utils/observer.js";
 
-
 export class FilmsModel extends Observer {
   constructor() {
     super();

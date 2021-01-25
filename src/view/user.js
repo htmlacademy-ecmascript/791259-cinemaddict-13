@@ -13,6 +13,7 @@ export class UserView extends AbstractView {
     super();
     this._watchedFilms = films;
   }
+
   getTemplate() {
     return createUserTemplate(this._watchedFilms);
   }
