@@ -84,7 +84,7 @@ export class FilmPresenter {
 
   _handleClickOnFilm(evt) {
     const filmClickableItems = [`film-card__poster`, `film-card__title`, `film-card__comments`];
-    for (let item of filmClickableItems) {
+    for (const item of filmClickableItems) {
       if (evt.target.classList.contains(item)) {
         this._handleShowFilmDetails();
         document.addEventListener(`keydown`, this._handleEscKeyDown);

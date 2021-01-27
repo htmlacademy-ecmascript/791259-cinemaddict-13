@@ -17,9 +17,8 @@ sitePresenter.init();
 
 api.getFilms()
   .then((films) => {
-  filmsModel.setFilms(UpdateType.INIT, films);
-
-})
+    filmsModel.setFilms(UpdateType.INIT, films);
+  })
   .catch(() => {
-  filmsModel.setFilms(UpdateType.INIT, []);
-});
+    filmsModel.setFilms(UpdateType.INIT, []);
+  });
