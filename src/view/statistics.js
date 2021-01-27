@@ -20,7 +20,7 @@ const BAR_HEIGHT = 50;
 
 const getAllGenres = (watchedFilms) => {
   let allGenres = [];
-  for (let film of watchedFilms) {
+  for (const film of watchedFilms) {
     allGenres = allGenres.concat(film.genre);
   }
 
@@ -46,10 +46,10 @@ const getTotalDuration = (watchedFilms) => {
   }
 
   let allDurations = [];
-  for (let film of watchedFilms) {
+  for (const film of watchedFilms) {
     allDurations = allDurations.concat(film.runtime);
   }
-  let result = allDurations.reduce((sum, current) => sum + current);
+  const result = allDurations.reduce((sum, current) => sum + current);
   const hours = Math.floor(result / 60);
   const minutes = result % 60;
   return {
@@ -61,10 +61,10 @@ const getTotalDuration = (watchedFilms) => {
 const getTopGenre = (films) => {
 
   const data = getAllGenres(films);
-  let dataCount = Object.values(data);
+  const dataCount = Object.values(data);
   const maxCount = Math.max(...dataCount);
 
-  for (let film in data) {
+  for (const film in data) {
     if (data[film] === maxCount) {
       return film;
     }

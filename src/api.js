@@ -25,41 +25,41 @@ export class Api {
 
   getFilms() {
     return this._load({
-        url: `movies`
-      })
+      url: `movies`
+    })
       .then(Api.toJSON)
       .then((films) => films.map(FilmsModel.adaptToClient));
   }
 
   getComments(film) {
     return this._load({
-        url: `comments/${film.id}`
-      })
-      .then(Api.toJSON)
+      url: `comments/${film.id}`
+    })
+      .then(Api.toJSON);
   }
 
   updateFilm(film) {
     return this._load({
-        url: `movies/${film.id}`,
-        method: Method.PUT,
-        body: JSON.stringify(FilmsModel.adaptToServer(film)),
-        headers: new Headers({
-          "Content-Type": `application/json`
-        })
+      url: `movies/${film.id}`,
+      method: Method.PUT,
+      body: JSON.stringify(FilmsModel.adaptToServer(film)),
+      headers: new Headers({
+        "Content-Type": `application/json`
       })
+    })
       .then(Api.toJSON)
       .then(FilmsModel.adaptToClient);
   }
 
   addComment(id, comment) {
     return this._load({
-        url: `comments/${id}`,
-        method: Method.POST,
-        body: JSON.stringify(comment),
-        headers: new Headers({
-          "Content-Type": `application/json`
-        })
+      url: `comments/${id}`,
+      method: Method.POST,
+      body: JSON.stringify(comment),
+      headers: new Headers({
+        "Content-Type": `application/json`
       })
+    })
       .then(Api.toJSON)
       .then(CommentsModel.adaptToClient);
   }
@@ -85,7 +85,7 @@ export class Api {
           body,
           headers
         }
-      )
+    )
       .then(Api.checkStatus)
       .catch(Api.catchError);
   }
