@@ -1,19 +1,19 @@
-import {MainView} from "../view/main-section.js";
-import {HeaderView} from "../view/header.js";
-import {FooterView} from "../view/footer.js";
-import {UserView} from "../view/user.js";
-import {StatsView} from "../view/statistics.js";
+import {MainView} from "../view/main-section-view.js";
+import {HeaderView} from "../view/header-view.js";
+import {FooterView} from "../view/footer-view.js";
+import {UserView} from "../view/user-view.js";
+import {StatsView} from "../view/statistics-view.js";
 
-import {SortView} from "../view/sort.js";
-import {FilmsContainerView} from "../view/films-container.js";
+import {SortView} from "../view/sort-view.js";
+import {FilmsContainerView} from "../view/films-container-view.js";
 import {FilmPresenter} from "./film-presenter.js";
 
-import {LoadMoreButtonView} from "../view/button.js";
-import {FooterStatsView} from "../view/footer-stats.js";
+import {LoadMoreButtonView} from "../view/load-more-button-view.js";
+import {FooterStatsView} from "../view/footer-stats-view.js";
 
-import {FilmListContainerView} from "../view/films-list-container.js";
-import {NoFilmsView} from "../view/no-films.js";
-import {LoadingView} from "../view/loading.js";
+import {FilmListContainerView} from "../view/films-list-container-view.js";
+import {NoFilmsView} from "../view/no-films-view.js";
+import {LoadingView} from "../view/loading-view.js";
 
 import {render, remove} from "../utils/render.js";
 import {SortType, UpdateType, UserAction, MenuStats} from "../const.js";
@@ -122,6 +122,7 @@ export class SitePresenter {
   }
 
   _handleViewAction(actionType, updateType, update) {
+
     if (actionType !== UserAction.UPDATE_FILM) {
       return;
     }
@@ -133,6 +134,8 @@ export class SitePresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this._filmPresenter[data.id].init(data);
+        remove(this._userComponent);
+        this._renderUser(this._getFilms().filter((film) => film.isWatched));
         break;
       case UpdateType.MINOR:
         this._clearBoard({resetSortType: true});
@@ -257,9 +260,10 @@ export class SitePresenter {
   }
 
   _renderBoard() {
-    this._filterPresenter.init();
     const films = this._getFilms();
     const filmCount = films.length;
+
+    this._filterPresenter.init();
 
     if (this._isLoading === true) {
       this._renderLoading();

@@ -1,4 +1,4 @@
-import {AbstractView} from "./abstract.js";
+import {AbstractView} from "./abstract-view.js";
 const createCommentLoadingErrorTemplate = () => {
   return `<h2 class="films-list__title">Something went wrong. Try reloading the page.</h2>`;
 };

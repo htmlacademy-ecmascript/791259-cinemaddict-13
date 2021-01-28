@@ -1,15 +1,15 @@
 import {
   FilmView
-} from "../view/film.js";
+} from "../view/film-view.js";
 import {
   FilmDetailsView
-} from "../view/film-details.js";
+} from "../view/film-details-view.js";
 import {
   NewCommentView
-} from "../view/new-comment.js";
+} from "../view/new-comment-view.js";
 import {
   FilmCommentsView
-} from "../view/film-comments.js";
+} from "../view/film-comments-view.js";
 import {
   render,
   remove,
@@ -19,7 +19,7 @@ import dayjs from "dayjs";
 
 import {CommentsModel} from "../model/comments.js";
 import {UserAction, UpdateType} from "../const.js";
-import {CommentLoadingErrorView} from "../view/comment-loading-error.js";
+import {CommentLoadingErrorView} from "../view/comment-loading-error-view.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,

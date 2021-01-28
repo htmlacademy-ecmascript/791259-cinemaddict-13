@@ -1,6 +1,6 @@
 import {
   SmartView
-} from "./smart.js";
+} from "./smart-view.js";
 import he from "he";
 import dayjs from "dayjs";
 const createFilmCommentsSection = (comments) => {
