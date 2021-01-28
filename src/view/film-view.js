@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {AbstractView} from "./abstract.js";
+import {AbstractView} from "./abstract-view.js";
 import {getRuntime} from "../utils/common.js";
 
 const createFilmTemplate = (film) => {
@@ -18,9 +18,10 @@ const createFilmTemplate = (film) => {
     ? `film-card__controls-item--active`
     : ``;
 
+  const EXCERPT_LENGTH = 140;
   let shortDescription = description;
-  if (shortDescription.length > 140) {
-    shortDescription = shortDescription.slice(0, 139) + `...`;
+  if (shortDescription.length > EXCERPT_LENGTH) {
+    shortDescription = shortDescription.slice(0, EXCERPT_LENGTH - 1) + `...`;
   }
 
   return `<article class="film-card">

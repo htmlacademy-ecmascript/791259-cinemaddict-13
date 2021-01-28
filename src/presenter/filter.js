@@ -1,6 +1,6 @@
 import {
   FilterView
-} from "../view/filter.js";
+} from "../view/filter-view.js";
 import {
   render,
   replace,

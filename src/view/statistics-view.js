@@ -1,6 +1,6 @@
 import {
   SmartView
-} from "./smart.js";
+} from "./smart-view.js";
 import dayjs from "dayjs";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -150,7 +150,7 @@ const createStatsTemplate = (films, data) => {
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${getRank(films)}</span>
+      <span class="statistic__rank-label">${getRank(films.filter((film) => film.isWatched))}</span>
     </p>` : ``}
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">

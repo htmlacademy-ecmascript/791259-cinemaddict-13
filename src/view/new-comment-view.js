@@ -1,6 +1,6 @@
 import {
   SmartView
-} from "./smart.js";
+} from "./smart-view.js";
 
 const createNewCommentTemplate = () => {
 
