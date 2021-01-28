@@ -28,7 +28,6 @@ export class SitePresenter {
     this._filterModel = filterModel;
     this._api = api;
 
-
     this._isLoading = true;
     this._bodyContainer = bodyContainer;
     this._renderedFilmsCount = FILM_COUNT_PER_STEP;
@@ -47,7 +46,6 @@ export class SitePresenter {
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
 
-
     this._filmsContainerComponent = new FilmsContainerView();
     this._noFilmsComponent = new NoFilmsView();
     this._loadingComponent = new LoadingView();
@@ -61,7 +59,6 @@ export class SitePresenter {
 
     this._handleFilmEvent = this._handleFilmEvent.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
-
   }
 
   init() {
