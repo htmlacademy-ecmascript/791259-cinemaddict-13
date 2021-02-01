@@ -144,7 +144,6 @@ export class SitePresenter {
       case UpdateType.INIT:
         this._isLoading = false;
         remove(this._loadingComponent);
-        this._renderUser(this._getFilms().filter((film) => film.isWatched));
         this._renderBoard();
         break;
     }
