@@ -1,4 +1,6 @@
-import {AbstractView} from "./abstract-view.js";
+import {
+  AbstractView
+} from "./abstract-view.js";
 
 export class SmartView extends AbstractView {
   constructor() {
@@ -17,8 +19,21 @@ export class SmartView extends AbstractView {
     this.restoreHandlers();
   }
 
-  updateData() {
-    throw new Error(`AbstractView method not implemented: resetHandlers`);
+  updateData(update, justDataUpdating) {
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign({},
+        this._data,
+        update
+    );
+
+    if (justDataUpdating) {
+      return;
+    }
+
+    this.updateElement();
   }
 
   restoreHandlers() {
