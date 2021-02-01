@@ -25,8 +25,8 @@ export class SmartView extends AbstractView {
     }
 
     this._data = Object.assign({},
-      this._data,
-      update
+        this._data,
+        update
     );
 
     if (justDataUpdating) {

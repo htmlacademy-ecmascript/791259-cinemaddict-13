@@ -27,7 +27,7 @@ export class SitePresenter {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._api = api;
-    this._userComponent = null;
+
     this._isLoading = true;
     this._bodyContainer = bodyContainer;
     this._renderedFilmsCount = FILM_COUNT_PER_STEP;
@@ -36,22 +36,23 @@ export class SitePresenter {
 
     this._headerComponent = new HeaderView();
     this._mainComponent = new MainView();
-    this._statsComponent = null;
+
     this._changeMenuState = this._changeMenuState.bind(this);
     this._filterPresenter = new FilterPresenter(this._mainComponent, this._filterModel, this._filmsModel, this._changeMenuState);
-    this._footerComponent = new FooterView();
 
-
-
+    this._userComponent = null;
     this._sortComponent = null;
+
     this._currentSortType = SortType.DEFAULT;
 
     this._filmsContainerComponent = new FilmsContainerView();
-    this._noFilmsComponent = new NoFilmsView();
     this._loadingComponent = new LoadingView();
+    this._noFilmsComponent = new NoFilmsView();
+    this._footerComponent = new FooterView();
+    this._loadMoreButtonComponent = null;
+    this._statsComponent = null;
 
     this._filmsListContainer = new FilmListContainerView().getElement().querySelector(`.films-list__container`);
-    this._loadMoreButtonComponent = null;
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
@@ -146,7 +147,7 @@ export class SitePresenter {
         this._renderUser(this._getFilms().filter((film) => film.isWatched));
         this._renderBoard();
         break;
-      }
+    }
 
     this._renderUser(this._filmsModel.getFilms().filter((film) => film.isWatched));
   }
