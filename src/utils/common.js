@@ -13,11 +13,11 @@ export const getRank = (watchedFilms) => {
     rank = `Novice`;
   }
 
-  if (watchedFilms.length >= FILM_COUNT_LOW + 1 && watchedFilms.length <= FILM_COUNT_HIGH) {
+  if (watchedFilms.length > FILM_COUNT_LOW && watchedFilms.length <= FILM_COUNT_HIGH) {
     rank = `Fan`;
   }
 
-  if (watchedFilms.length >= FILM_COUNT_HIGH + 1) {
+  if (watchedFilms.length > FILM_COUNT_HIGH) {
     rank = `Movie Buff`;
   }
 
